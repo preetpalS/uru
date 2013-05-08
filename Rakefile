@@ -8,6 +8,7 @@ S7ZIP_EXE = 'C:/tools/7za.exe'
 
 task :default => :all
 
+ARCH = ENV['GOARCH'] || '386'
 BUILD = 'build'
 PKG = File.expand_path('pkg')
 
@@ -24,7 +25,7 @@ def dev_null
 end
 
 desc 'build all OS/arch flavors'
-task :all => ['build:windows_386','build:linux_386','build:darwin_386']
+task :all => %W[build:windows_#{ARCH} build:linux_#{ARCH} build:darwin_#{ARCH}]
 
 namespace :all do
   desc 'build and shrink all exes'
@@ -43,7 +44,7 @@ namespace :all do
 end
 
 namespace :build do
-  %w[windows:386:0 linux:386:0 darwin:386:0].each do |tgt|
+  %W[windows:#{ARCH}:0 linux:#{ARCH}:0 darwin:#{ARCH}:0].each do |tgt|
     os, arch, cgo = tgt.split(':')
     ext = (os == 'windows' ? '.exe' : '')
 
