@@ -59,11 +59,12 @@ func initCommandParser() {
 	ctx.SetCmdRegex(`add`, `\Aadd\z`)
 	ctx.SetCmdRegex(`gem`, `\Agem\z`)
 	ctx.SetCmdRegex(`help`, `\Ahelp\z`)
+	ctx.SetCmdRegex(`install`, `\Ainstall|in\z`)
 	ctx.SetCmdRegex(`ls`, `\Als|list\z`)
 	ctx.SetCmdRegex(`rm`, `\Arm|del\z`)
 	ctx.SetCmdRegex(`ruby`, `\Aruby|rb\z`)
-	ctx.SetCmdRegex(`install`, `\Ainstall|in\z`)
 	ctx.SetCmdRegex(`use`, `\A\d{2}|sys`)
+	ctx.SetCmdRegex(`version`, `\Aver(?:sion)?\z`)
 }
 
 // Import all installed rubies that have been registered with uru.

@@ -18,6 +18,10 @@ func main() {
 	if len(os.Args) == 1 || *help == true {
 		command.Help(&ctx)
 	}
+	if *version == true {
+		command.Version(&ctx)
+		os.Exit(0)
+	}
 
 	cmd := flag.Arg(0)
 	ctx.SetCmdAndArgs(cmd, flag.Args()[1:])
@@ -35,6 +39,8 @@ func main() {
 		command.Ruby(&ctx)
 	case ctx.CmdRegex(`use`).MatchString(cmd):
 		command.Use(&ctx, ``)
+	case ctx.CmdRegex(`version`).MatchString(cmd):
+		command.Version(&ctx)
 	default:
 		fmt.Printf("[ERROR] I don't understand the `%s` command\n\n", cmd)
 		ctx.SetCmdAndArgs(``, nil)
