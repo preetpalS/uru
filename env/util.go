@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -72,11 +73,16 @@ func PathListForTag(ctx *Context, tag string) (path []string, err error) {
 		// system ruby already on base PATH so set new PATH to base PATH
 		path = tail
 	} else {
+		gemBinDir := filepath.Join(newRb.GemHome, `bin`)
+		if runtime.GOOS == `windows` {
+			// assume windows users always install gems to ruby installation
+			// so do not prepend a generated GEM_HOME bindir to PATH
+			gemBinDir = ``
+		}
+
 		// prepend base PATH with computed GEM_HOME/bin, new ruby PATH,
 		// and a canary initiator
-		// TODO honor user specified GEM_HOME
-		head := []string{filepath.Join(newRb.GemHome, `bin`), newRb.Home,
-			string(os.PathListSeparator)}
+		head := []string{gemBinDir, newRb.Home, string(os.PathListSeparator)}
 		path = append(head, tail...)
 	}
 	log.Printf("[DEBUG] %v\n", path)

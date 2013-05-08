@@ -65,9 +65,19 @@ func adminAdd(ctx *env.Context) {
 		fmt.Printf("---> Unable to register %s due to missing ruby info\n", rbPath)
 		return
 	}
+
+	// assume the vast majority of windows users install gems into the ruby
+	// installation; clear GEM_HOME value source to prevent persisting a
+	// GEM_HOME value for the ruby being registered.
+	// XXX potential usage bug
+	if runtime.GOOS == `windows` {
+		rbInfo.GemHome = ``
+	}
+
+	// patch up if adding a system ruby
 	if loc == `system` {
 		tag = `system`
-		rbInfo.GemHome = ``
+		rbInfo.GemHome = os.Getenv(`GEM_HOME`) // user configured value or empty
 	}
 
 	// TODO allow overwriting or force rm/add cycle?
@@ -78,6 +88,7 @@ func adminAdd(ctx *env.Context) {
 
 	ctx.Rubies[tag] = rbInfo
 
+	// persist the new and existing registered rubies to the filesystem
 	err = env.MarshalRubies(ctx)
 	if err != nil {
 		fmt.Printf("---> Failed to register `%s`, try again\n", rbPath)
