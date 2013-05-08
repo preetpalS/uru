@@ -67,6 +67,7 @@ func adminAdd(ctx *env.Context) {
 	}
 	if loc == `system` {
 		tag = `system`
+		rbInfo.GemHome = ``
 	}
 
 	// TODO allow overwriting or force rm/add cycle?
@@ -81,4 +82,6 @@ func adminAdd(ctx *env.Context) {
 	if err != nil {
 		fmt.Printf("---> Failed to register `%s`, try again\n", rbPath)
 	}
+
+	fmt.Printf("---> Registered %s at `%s` as `%s`\n", rbInfo.Exe, rbInfo.Home, tag)
 }
