@@ -37,6 +37,7 @@ func main() {
 		command.Use(&ctx, ``)
 	default:
 		fmt.Printf("[ERROR] I don't understand the `%s` command\n\n", cmd)
+		ctx.SetCmdAndArgs(``, nil)
 		command.Help(&ctx)
 	}
 

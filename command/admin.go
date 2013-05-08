@@ -34,6 +34,7 @@ func Admin(ctx *env.Context) {
 		adminRemove(ctx)
 	default:
 		fmt.Printf("[ERROR] I don't understand the `%s` admin sub-command\n\n", subCmd)
+		ctx.SetCmdAndArgs(``, nil)
 		Help(ctx)
 	}
 }
