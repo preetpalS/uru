@@ -72,7 +72,7 @@ func CreateScript(ctx *env.Context, path *[]string, gemHome string) {
 	// hackishly modify the bash script template to suppress GEM_HOME creation
 	// when nonexistent
 	var content string
-	if scriptType == `bash`  {
+	if scriptType == `bash` {
 		if gemHome != `` {
 			script = strings.Join([]string{script, "NEW_GEM_HOME=%s\n"}, ``)
 			content = fmt.Sprintf(script, strings.Join(*path, string(os.PathListSeparator)), gemHome)
@@ -80,6 +80,8 @@ func CreateScript(ctx *env.Context, path *[]string, gemHome string) {
 			script = strings.Join([]string{script, "UNSET_GEM_HOME=yes\n"}, ``)
 			content = fmt.Sprintf(script, strings.Join(*path, string(os.PathListSeparator)))
 		}
+	} else {
+		content = fmt.Sprintf(script, strings.Join(*path, string(os.PathListSeparator)), gemHome)
 	}
 
 	_, err = f.WriteString(content)
