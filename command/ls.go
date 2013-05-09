@@ -26,9 +26,9 @@ func List(ctx *env.Context) {
 		return
 	}
 
-	tag, _, err := env.CurrentRubyInfo()
+	tag, _, err := env.CurrentRubyInfo(ctx)
 	if err != nil {
-		fmt.Printf("---> Unable to list rubies; try again.")
+		fmt.Printf("---> Unable to list rubies; try again.\n")
 		os.Exit(1)
 	}
 

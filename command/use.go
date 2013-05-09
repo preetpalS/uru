@@ -36,7 +36,6 @@ func Use(ctx *env.Context, msg string) {
 	}
 
 	// create and execute the environment changing runner script
-	// TODO honor user specified GEM_HOME and figure out system ruby usage
 	exec.CreateScript(ctx, &pth, newRb.GemHome)
 	exec.ExecScript(ctx)
 

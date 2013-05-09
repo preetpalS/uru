@@ -57,7 +57,7 @@ func init() {
 }
 
 // CurrentRubyInfo returns the tag for the ruby currently in use.
-func CurrentRubyInfo() (tag string, info Ruby, err error) {
+func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
 	envPath := os.Getenv(`PATH`)
 	if envPath == `` {
 		err = errors.New("Unable to read PATH environment variable")
@@ -65,9 +65,19 @@ func CurrentRubyInfo() (tag string, info Ruby, err error) {
 	}
 
 	if strings.Index(envPath, Canary) != -1 {
-		// modified PATH looks like:
+		// prepended PATH looks like where GEM_HOME element is optional:
 		//   GEM_HOME;RUBY_DIR;;;... -or- GEM_HOME:RUBY_DIR:::...
-		curRbPath := strings.Split(envPath, string(os.PathListSeparator))[1]
+		head := strings.Split(envPath, string(os.PathListSeparator))[:3]
+		var curRbPath string
+		// test if the last element of the 2-element `head` slice is a blank
+		// string which means GEM_HOME wasn't prepended to PATH
+		if head[1] == `` {
+			// scenario: RUBY_DIR;;;... -or- RUBY_DIR:::...
+			curRbPath = head[0]
+		} else {
+			// scenario: GEM_HOME;RUBY_DIR;;;... -or- GEM_HOME:RUBY_DIR:::...
+			curRbPath = head[1]
+		}
 		for _, v := range KnownRubies {
 			tstRb := []string{curRbPath, v}
 			tag, info, err = RubyInfo(strings.Join(tstRb, string(os.PathSeparator)))
@@ -77,6 +87,7 @@ func CurrentRubyInfo() (tag string, info Ruby, err error) {
 		}
 	} else {
 		tag = `system`
+		info = ctx.Rubies[tag]
 	}
 
 	return
