@@ -47,6 +47,7 @@ func rubyExec(ctx *env.Context) (err error) {
 				strings.Join(ctx.CmdArgs(), " "))
 			break
 		}
+		// XXX clears and sets but also creates unnecessary empty GEM_HOME env var
 		err = os.Setenv(`GEM_HOME`, info.GemHome)
 		if err != nil {
 			fmt.Println("Unable to run `%s %s`\n\n", ctx.Cmd(),
