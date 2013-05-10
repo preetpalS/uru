@@ -71,8 +71,10 @@ namespace :package do
         case d
         when /\A(darwin|linux)/
           puts "---> packaging #{d}"
-          system "#{S7ZIP_EXE} a -tgzip -mx9 uru-#{$1}-#{ts}-bin-x86.gz ./#{d}/*  > #{dev_null} 2>&1"
-          mv "uru-#{$1}-#{ts}-bin-x86.gz", PKG, :verbose => false
+          system "#{S7ZIP_EXE} a -ttar uru-#{$1}.tar ./#{d}/*  > #{dev_null} 2>&1"
+          system "#{S7ZIP_EXE} a -tgzip -mx9 uru-#{$1}-#{ts}-bin-x86.tar.gz uru-#{$1}.tar > #{dev_null} 2>&1"
+          mv "uru-#{$1}-#{ts}-bin-x86.tar.gz", PKG, :verbose => false
+          rm "uru-#{$1}.tar", :verbose => false
         when /\Awindows/
           puts "---> packaging #{d}"
           system "#{S7ZIP_EXE} a -t7z -mx9 uru-windows-#{ts}-bin-x86.7z ./#{d}/* > #{dev_null} 2>&1"
