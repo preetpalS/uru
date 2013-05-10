@@ -8,6 +8,8 @@ S7ZIP_EXE = 'C:/tools/7za.exe'
 
 task :default => :all
 
+VER = /AppVersion\s*=\s*\"(\d\.\d\.\d)/.match(File.read('env/ui.go')) { |m| m[1] }
+
 ARCH = ENV['GOARCH'] || '386'
 BUILD = 'build'
 PKG = File.expand_path('pkg')
@@ -71,14 +73,19 @@ namespace :package do
         case d
         when /\A(darwin|linux)/
           puts "---> packaging #{d}"
-          system "#{S7ZIP_EXE} a -ttar uru-#{$1}.tar ./#{d}/*  > #{dev_null} 2>&1"
-          system "#{S7ZIP_EXE} a -tgzip -mx9 uru-#{$1}-#{ts}-bin-x86.tar.gz uru-#{$1}.tar > #{dev_null} 2>&1"
-          mv "uru-#{$1}-#{ts}-bin-x86.tar.gz", PKG, :verbose => false
-          rm "uru-#{$1}.tar", :verbose => false
+          tar = "uru-#{VER}-#{$1}.tar"
+          archive = "uru-#{VER}-#{$1}-#{ts}-x86.tar.gz"
+
+          system "#{S7ZIP_EXE} a -ttar #{tar} ./#{d}/* > #{dev_null} 2>&1"
+          system "#{S7ZIP_EXE} a -tgzip -mx9 #{archive} #{tar} > #{dev_null} 2>&1"
+          mv archive, PKG, :verbose => false
+          rm tar, :verbose => false
         when /\Awindows/
           puts "---> packaging #{d}"
-          system "#{S7ZIP_EXE} a -t7z -mx9 uru-windows-#{ts}-bin-x86.7z ./#{d}/* > #{dev_null} 2>&1"
-          mv "uru-windows-#{ts}-bin-x86.7z", PKG, :verbose => false
+          archive = "uru-#{VER}-windows-#{ts}-x86.7z"
+
+          system "#{S7ZIP_EXE} a -t7z -mx9 #{archive} ./#{d}/* > #{dev_null} 2>&1"
+          mv archive, PKG, :verbose => false
         end
       end
     end
