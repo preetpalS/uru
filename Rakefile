@@ -8,7 +8,7 @@ S7ZIP_EXE = 'C:/tools/7za.exe'
 
 task :default => :all
 
-VER = /AppVersion\s*=\s*\"(\d\.\d\.\d)/.match(File.read('env/ui.go')) { |m| m[1] }
+VER = /AppVersion\s*=\s*\"(\d\.\d\.\d)/.match(File.read('env/ui.go')) { |m| m[1] } || 'NA'
 
 ARCH = ENV['GOARCH'] || '386'
 BUILD = 'build'
@@ -67,14 +67,22 @@ task :package => 'package:all'
 directory PKG
 namespace :package do
   task :all => ['all:shrink',PKG] do
-    ts = Time.now.strftime('%Y%m%dT%H%M')
+    ts = `git rev-list --abbrev-commit -1 HEAD`.chomp
+    cpu = case ARCH
+          when 'amd64'
+            'x64'
+          when '386'
+            'x86'
+          else
+            'NA'
+          end
     Dir.chdir BUILD do
       Dir.glob('*').each do |d|
         case d
         when /\A(darwin|linux)/
           puts "---> packaging #{d}"
           tar = "uru-#{VER}-#{$1}.tar"
-          archive = "uru-#{VER}-#{$1}-#{ts}-x86.tar.gz"
+          archive = "uru-#{VER}-#{ts}-#{$1}-#{cpu}.tar.gz"
 
           system "#{S7ZIP_EXE} a -ttar #{tar} ./#{d}/* > #{dev_null} 2>&1"
           system "#{S7ZIP_EXE} a -tgzip -mx9 #{archive} #{tar} > #{dev_null} 2>&1"
@@ -82,7 +90,7 @@ namespace :package do
           rm tar, :verbose => false
         when /\Awindows/
           puts "---> packaging #{d}"
-          archive = "uru-#{VER}-windows-#{ts}-x86.7z"
+          archive = "uru-#{VER}-#{ts}-windows-#{cpu}.7z"
 
           system "#{S7ZIP_EXE} a -t7z -mx9 #{archive} ./#{d}/* > #{dev_null} 2>&1"
           mv archive, PKG, :verbose => false
