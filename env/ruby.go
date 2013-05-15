@@ -50,7 +50,7 @@ func init() {
 
 	SysRbRegex, err = regexp.Compile(`\Asys`)
 	if err != nil {
-		panic("unable to compile ruby parsing regexp")
+		panic("unable to compile system ruby parsing regexp")
 	}
 
 	KnownRubies = []string{`ruby`, `jruby`}
@@ -65,7 +65,7 @@ func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
 	}
 
 	if strings.Index(envPath, Canary) != -1 {
-		// prepended PATH looks like where GEM_HOME element is optional:
+		// prepended PATH looks like this, where GEM_HOME element is optional:
 		//   GEM_HOME;RUBY_DIR;;;... -or- GEM_HOME:RUBY_DIR:::...
 		head := strings.Split(envPath, string(os.PathListSeparator))[:3]
 		var curRbPath string
