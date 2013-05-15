@@ -12,8 +12,8 @@ import (
 )
 
 var (
-	debug = flag.Bool(`debug`, false, "enable debug mode")
-	help  = flag.Bool(`help`, false, "this help summary")
+	debug   = flag.Bool(`debug`, false, "enable debug mode")
+	help    = flag.Bool(`help`, false, "this help summary")
 	version = flag.Bool(`version`, false, "show version info")
 
 	ctx env.Context
