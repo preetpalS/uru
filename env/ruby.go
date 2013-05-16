@@ -56,7 +56,8 @@ func init() {
 	KnownRubies = []string{`ruby`, `jruby`}
 }
 
-// CurrentRubyInfo returns the tag for the ruby currently in use.
+// CurrentRubyInfo returns the identifying tag and metadata information for the
+// ruby currently in use.
 func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
 	envPath := os.Getenv(`PATH`)
 	if envPath == `` {
@@ -93,9 +94,9 @@ func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
 	return
 }
 
-// RubyInfo returns information about a specific ruby. It accepts a string with
-// either the simple name of the ruby executable, or the absolute path the the
-// ruby executable.
+// RubyInfo returns an identifying tag and metadata information about a specific
+// ruby. It accepts a string of either the simple name of the ruby executable, or
+// the ruby executables absolute path.
 func RubyInfo(ruby string) (tag string, info Ruby, err error) {
 	rb, err := exec.LookPath(ruby)
 	if err != nil {
@@ -139,6 +140,7 @@ func MarshalRubies(ctx *Context) (err error) {
 	src := filepath.Join(ctx.Home(), `rubies.json`)
 	dst := filepath.Join(ctx.Home(), `rubies.json.bak`)
 
+	// TODO extract backup functionality to a utility function
 	_, err = os.Stat(src)
 	if os.IsNotExist(err) {
 		log.Printf("[DEBUG] %s does not exist; creating\n", src)
