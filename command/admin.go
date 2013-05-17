@@ -30,6 +30,8 @@ func Admin(ctx *env.Context) {
 		adminAdd(ctx)
 	case ctx.CmdRegex(`install`).MatchString(subCmd):
 		adminInstall(ctx)
+	case ctx.CmdRegex(`refresh`).MatchString(subCmd):
+		adminRefresh(ctx)
 	case ctx.CmdRegex(`rm`).MatchString(subCmd):
 		adminRemove(ctx)
 	default:
