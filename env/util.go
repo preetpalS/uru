@@ -17,17 +17,22 @@ import (
 func CopyFile(dst, src string) (written int64, err error) {
 	sf, err := os.Open(src)
 	if err != nil {
-		return 0, err
+		return
 	}
 	defer sf.Close()
 
 	df, err := os.Create(dst)
 	if err != nil {
-		return 0, err
+		return
 	}
 	defer df.Close()
 
-	return io.Copy(df, sf)
+	written, err = io.Copy(df, sf)
+
+	log.Printf("[DEBUG] copied file\n  src: %s\n  dst: %s\n  bytes copied: %d\n",
+		src, dst, written)
+
+	return
 }
 
 // StringSplitPath splits the PATH env var into a slice of strings.

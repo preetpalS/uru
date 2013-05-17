@@ -142,6 +142,14 @@ func MarshalRubies(ctx *Context) (err error) {
 
 	// TODO extract backup functionality to a utility function
 	_, err = os.Stat(src)
+	if err == nil {
+		log.Printf("[DEBUG] backing up JSON ruby registry\n")
+		_, e := CopyFile(dst, src)
+		if e != nil {
+			log.Println("[DEBUG] unable to backup JSON ruby registry")
+			return e
+		}
+	}
 	if os.IsNotExist(err) {
 		log.Printf("[DEBUG] %s does not exist; creating\n", src)
 		f, e := os.Create(src)
@@ -150,12 +158,6 @@ func MarshalRubies(ctx *Context) (err error) {
 			return e
 		}
 		defer f.Close()
-	} else {
-		_, e := CopyFile(dst, src)
-		if e != nil {
-			log.Println("[DEBUG] unable to backup JSON ruby registry")
-			return e
-		}
 	}
 
 	b, err := json.Marshal(ctx.Rubies)
