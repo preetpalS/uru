@@ -25,13 +25,13 @@ func adminRemove(ctx *env.Context) {
 		os.Exit(1)
 	}
 
-	tag := ctx.CmdArgs()[0]
-
-	rb, ok := ctx.Rubies[tag]
-	if !ok {
+	tag, err := env.TagLabelToTag(ctx, ctx.CmdArgs()[0])
+	if err != nil {
 		fmt.Printf("---> Skipping. Unable to find ruby registered as `%s`\n", tag)
 		return
 	}
+
+	rb := ctx.Rubies[tag]
 
 	resp, err := env.UIYesConfirm(fmt.Sprintf("\nOK to deregister `%s`?", rb.Description))
 	if err != nil {

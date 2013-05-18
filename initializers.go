@@ -64,7 +64,6 @@ func initCommandParser() {
 	ctx.SetCmdRegex(`refresh`, `\Arefresh\z`)
 	ctx.SetCmdRegex(`rm`, `\Arm|del\z`)
 	ctx.SetCmdRegex(`ruby`, `\Aruby|rb\z`)
-	ctx.SetCmdRegex(`use`, `\A\d{2}|sys`)
 	ctx.SetCmdRegex(`version`, `\Aver(?:sion)?\z`)
 }
 

@@ -4,7 +4,10 @@
 package env
 
 import (
+	"bytes"
+	"fmt"
 	"errors"
+	"hash/fnv"
 	"io"
 	"log"
 	"os"
@@ -47,6 +50,34 @@ func StringSplitPath() (path []string, err error) {
 	return
 }
 
+// NewTag generates a new tag value used to identify a specific ruby.
+func NewTag(ctx *Context, rb Ruby) (tag string, err error) {
+	hash := fnv.New32a()
+	b := bytes.NewBufferString(fmt.Sprintf("%s%s", rb.Description, rb.Home))
+
+	_, err = hash.Write(b.Bytes())
+
+	return fmt.Sprintf("%d", hash.Sum32()), err
+}
+
+// TagLabelToTag returns the tag value of the registered ruby corresponding
+// to the specified tag label string.
+func TagLabelToTag(ctx *Context, label string) (tag string, err error) {
+	for t, rbInfo := range ctx.Rubies {
+		// fuzzy match on the tag label
+		// TODO full match on ID
+		if strings.Contains(rbInfo.TagLabel, label) {
+			tag = t
+			break
+		}
+	}
+	if tag == `` {
+		return tag, errors.New(fmt.Sprintf("---> unable to find ruby matching `%s`\n", label))
+	}
+
+	return
+}
+
 // PathListForTag returns a PATH list appropriate for a given ruby tag.
 func PathListForTag(ctx *Context, tag string) (path []string, err error) {
 	// get current PATH and split it on the canary separator demarcating the
@@ -74,7 +105,7 @@ func PathListForTag(ctx *Context, tag string) (path []string, err error) {
 	newRb := ctx.Rubies[tag]
 	tail := strings.Split(tmp, string(os.PathListSeparator))
 
-	if SysRbRegex.MatchString(tag) {
+	if SysRbRegex.MatchString(newRb.TagLabel) {
 		// system ruby already on base PATH so set new PATH to base PATH
 		path = tail
 	} else {

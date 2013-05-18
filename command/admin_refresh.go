@@ -26,10 +26,10 @@ func adminRefresh(ctx *env.Context) {
 
 	freshRubies := make(env.RubyRegistry, 4)
 
-	for tag, info := range ctx.Rubies {
+	for _, info := range ctx.Rubies {
 		rb := filepath.Join(info.Home, info.Exe)
 
-		newTag, freshInfo, err := env.RubyInfo(rb)
+		newTag, freshInfo, err := env.RubyInfo(ctx, rb)
 		if err != nil {
 			fmt.Println("---> Unable to determine ruby metadata while refreshing")
 			os.Exit(1)
@@ -43,12 +43,12 @@ func adminRefresh(ctx *env.Context) {
 		}
 		// patch up freshened ruby GEM_HOME with registered system ruby GEM_HOME as
 		// `RubyInfo` only generates a default value.
-		if tag == `system` {
-			newTag = `system`
-			freshInfo.GemHome = ctx.Rubies[tag].GemHome
+		if info.TagLabel == `system` {
+			freshInfo.TagLabel = `system`
+			freshInfo.GemHome = info.GemHome
 		}
 
-		fmt.Printf("---> Refreshing %s tagged as %s\n", info.Exe, tag)
+		fmt.Printf("---> Refreshing %s tagged as %s\n", info.Exe, info.TagLabel)
 		freshRubies[newTag] = freshInfo
 	}
 

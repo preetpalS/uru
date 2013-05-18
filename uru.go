@@ -7,14 +7,12 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"os"
 
 	"bitbucket.org/jonforums/uru/command"
 )
 
 func main() {
-
 	if len(os.Args) == 1 || *help == true {
 		command.Help(&ctx)
 	}
@@ -37,14 +35,9 @@ func main() {
 		command.List(&ctx)
 	case ctx.CmdRegex(`ruby`).MatchString(cmd):
 		command.Ruby(&ctx)
-	case ctx.CmdRegex(`use`).MatchString(cmd):
-		command.Use(&ctx, ``)
 	case ctx.CmdRegex(`version`).MatchString(cmd):
 		command.Version(&ctx)
 	default:
-		fmt.Printf("[ERROR] I don't understand the `%s` command\n\n", cmd)
-		ctx.SetCmdAndArgs(``, nil)
-		command.Help(&ctx)
+		command.Use(&ctx, ``)
 	}
-
 }

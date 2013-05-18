@@ -30,6 +30,7 @@ var (
 
 type Ruby struct {
 	ID          string // ruby version including patch number
+	TagLabel    string // user friendly ruby tag value
 	Exe         string // ruby executable name
 	Home        string // full path to ruby executable directory
 	GemHome     string // full path to a ruby's gem home directory
@@ -81,13 +82,22 @@ func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
 		}
 		for _, v := range KnownRubies {
 			tstRb := []string{curRbPath, v}
-			tag, info, err = RubyInfo(strings.Join(tstRb, string(os.PathSeparator)))
+			tag, info, err = RubyInfo(ctx, strings.Join(tstRb, string(os.PathSeparator)))
 			if err == nil {
 				break
 			}
 		}
 	} else {
-		tag = `system`
+		tag, err = TagLabelToTag(ctx, `system`)
+		if err != nil {
+			if len(ctx.Rubies) > 0 {
+				// gracefully handle the scenario where a system ruby isn't included
+				// in the registered rubies and PATH is the base PATH
+				return ``, info, nil
+			} else {
+				return ``, info, errors.New("Unable to find tag for system ruby")
+			}
+		}
 		info = ctx.Rubies[tag]
 	}
 
@@ -97,7 +107,7 @@ func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
 // RubyInfo returns an identifying tag and metadata information about a specific
 // ruby. It accepts a string of either the simple name of the ruby executable, or
 // the ruby executables absolute path.
-func RubyInfo(ruby string) (tag string, info Ruby, err error) {
+func RubyInfo(ctx *Context, ruby string) (tag string, info Ruby, err error) {
 	rb, err := exec.LookPath(ruby)
 	if err != nil {
 		return
@@ -117,7 +127,13 @@ func RubyInfo(ruby string) (tag string, info Ruby, err error) {
 	if res != nil {
 		info.ID = res[2]
 		info.Exe = res[1]
-		tag = strings.Replace(info.ID, `.`, ``, -1)
+		info.TagLabel = strings.Replace(info.ID, `.`, ``, -1)
+		tag, err = NewTag(ctx, info)
+		if err != nil {
+			// TODO implement
+			panic("unable to create new tag for ruby")
+		}
+
 		usrHome := ``
 		if runtime.GOOS == `windows` {
 			usrHome = os.Getenv(`USERPROFILE`)
