@@ -60,20 +60,22 @@ func NewTag(ctx *Context, rb Ruby) (tag string, err error) {
 	return fmt.Sprintf("%d", hash.Sum32()), err
 }
 
-// TagLabelToTag returns the tag value of the registered ruby corresponding
-// to the specified tag label string.
-func TagLabelToTag(ctx *Context, label string) (tag string, err error) {
-	for t, rbInfo := range ctx.Rubies {
+// TagLabelToTag returns a map of registered ruby tags whose TagLabel's match that
+// of the specified tag label string.
+func TagLabelToTag(ctx *Context, label string) (tags map[string]Ruby, err error) {
+	tags = make(map[string]Ruby)
+
+	for t, ri := range ctx.Rubies {
 		// fuzzy match on the tag label
 		// TODO full match on ID
-		if strings.Contains(rbInfo.TagLabel, label) {
-			tag = t
-			break
+		if strings.Contains(ri.TagLabel, label) {
+			tags[t] = ri
 		}
 	}
-	if tag == `` {
-		return tag, errors.New(fmt.Sprintf("---> unable to find ruby matching `%s`\n", label))
+	if len(tags) == 0 {
+		return nil, errors.New(fmt.Sprintf("---> unable to find ruby matching `%s`\n", label))
 	}
+	log.Printf("[DEBUG] tags matching `%s`\n%v\n", label, tags)
 
 	return
 }

@@ -25,10 +25,27 @@ func adminRemove(ctx *env.Context) {
 		os.Exit(1)
 	}
 
-	tag, err := env.TagLabelToTag(ctx, ctx.CmdArgs()[0])
+	cmd := ctx.CmdArgs()[0]
+	tags, err := env.TagLabelToTag(ctx, cmd)
 	if err != nil {
-		fmt.Printf("---> Skipping. Unable to find ruby registered as `%s`\n", tag)
-		return
+		fmt.Printf("---> unable to find registered ruby matching `%s`\n", cmd)
+		os.Exit(1)
+	}
+
+	tag := ``
+	if len(tags) == 1 {
+		// XXX less convoluted way to get the key of a 1 element map?
+		for t, _ := range tags {
+			tag = t
+			break
+		}
+	} else {
+		// multiple rubies match the given tag label, ask the user for the
+		// correct one.
+		tag, err = env.SelectRubyFromList(tags, cmd, `deregister`)
+		if err != nil {
+			os.Exit(1)
+		}
 	}
 
 	rb := ctx.Rubies[tag]

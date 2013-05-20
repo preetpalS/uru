@@ -4,13 +4,14 @@
 package env
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 )
 
 const (
-	AppName    = "uru"
-	AppVersion = "0.3.0"
+	AppName    = `uru`
+	AppVersion = `0.3.0`
 )
 
 var (
@@ -35,6 +36,30 @@ func UIYesConfirm(prompt string) (resp string, err error) {
 		resp, err = "Y", nil
 	} else {
 		resp = "N"
+	}
+
+	return
+}
+
+// SelectRubyFromList presents a list of registered rubies and asks the user
+// to select one. It returns the identifying tag for the selected ruby, or an
+// error if unable to get the users selection.
+func SelectRubyFromList(tags map[string]Ruby, label, verb string) (tag string, err error) {
+	var i, choice uint8
+	choices := make(map[uint8]string)
+
+	fmt.Printf("---> these rubies match your `%s` tag:\n\n", label)
+	for t, ri := range tags {
+		i++
+		choices[i] = t
+		fmt.Printf(" [%d] %10.10s: %s\n", i, ri.TagLabel, ri.Description)
+	}
+	fmt.Printf("\nselect [1]-[%d] to %s that specific ruby (0 to exit) [0]: ", i, verb)
+	_, err = fmt.Scanln(&choice)
+	if err != nil || choice == 0 || choice > i {
+		return ``, errors.New("error: unable to get users ruby selection response")
+	} else {
+		tag = choices[choice]
 	}
 
 	return

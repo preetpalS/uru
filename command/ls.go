@@ -33,16 +33,16 @@ func List(ctx *env.Context) {
 	}
 
 	var me, desc string
-	for t, v := range ctx.Rubies {
+	for t, ri := range ctx.Rubies {
 		if t == tag {
 			me = `=>`
 		} else {
 			me = "  "
 		}
-		desc = v.Description
+		desc = ri.Description
 		if len(desc) > 65 {
 			desc = fmt.Sprintf("%.65s...", desc)
 		}
-		fmt.Printf(" %s %10.10s: %s\n", me, v.TagLabel, desc)
+		fmt.Printf(" %s %10.10s: %s\n", me, ri.TagLabel, desc)
 	}
 }

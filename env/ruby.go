@@ -88,7 +88,7 @@ func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
 			}
 		}
 	} else {
-		tag, err = TagLabelToTag(ctx, `system`)
+		tags, err := TagLabelToTag(ctx, `system`)
 		if err != nil {
 			if len(ctx.Rubies) > 0 {
 				// gracefully handle the scenario where a system ruby isn't included
@@ -96,6 +96,12 @@ func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
 				return ``, info, nil
 			} else {
 				return ``, info, errors.New("Unable to find tag for system ruby")
+			}
+		}
+		for t, ri := range tags {
+			if ri.TagLabel == `system` {
+				tag = t
+				break
 			}
 		}
 		info = ctx.Rubies[tag]

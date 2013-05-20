@@ -14,10 +14,26 @@ import (
 func Use(ctx *env.Context, msg string) {
 	cmd := ctx.Cmd()
 
-	tag, err := env.TagLabelToTag(ctx, cmd)
+	tags, err := env.TagLabelToTag(ctx, cmd)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "---> unable to find ruby matching `%s`\n", cmd)
+		fmt.Printf("---> unable to find registered ruby matching `%s`\n", cmd)
 		os.Exit(1)
+	}
+
+	tag := ``
+	if len(tags) == 1 {
+		// XXX less convoluted way to get the key of a 1 element map?
+		for t, _ := range tags {
+			tag = t
+			break
+		}
+	} else {
+		// multiple rubies match the given tag label, ask the user for the
+		// correct one.
+		tag, err = env.SelectRubyFromList(tags, cmd, `use`)
+		if err != nil {
+			os.Exit(1)
+		}
 	}
 
 	newRb := ctx.Rubies[tag]
