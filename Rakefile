@@ -8,7 +8,7 @@ S7ZIP_EXE = 'C:/tools/7za.exe'
 
 task :default => :all
 
-VER = /AppVersion\s*=\s*\"(\d\.\d\.\d)/.match(File.read('env/ui.go')) { |m| m[1] } || 'NA'
+VER = /AppVersion\s*=\s*\`(\d\.\d\.\d)/.match(File.read('env/ui.go')) { |m| m[1] } || 'NA'
 
 ARCH = ENV['GOARCH'] || '386'
 BUILD = 'build'
