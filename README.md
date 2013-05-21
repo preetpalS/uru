@@ -1,14 +1,13 @@
 # Unleash Ruby
 
-Uru is a lightweight, multi-platform command line tool that enables you to more
-easily and productively use the multiple rubies (currently MRI and JRuby) on your
-Windows, Linux, or OS X systems.
+Uru is a lightweight, multi-platform command line tool that helps you use the
+multiple rubies (currently MRI and JRuby) on your 32/64-bit Windows, Linux, or
+OS X systems.
 
 While there are a number of fantastic ruby environment managers such as [RVM][1],
 [rbenv][2], [pik][3], and [chruby][4], none are truely multi-platform, and all
-provide different levels of awesomeness. In contrast, [Uru][5] is all about
-providing a core set of minimal complexity, ruby use enhancers for Windows,
-Linux, and OS X platforms.
+provide different levels of awesomeness. In contrast, [uru][5] is a micro-kernel.
+It provides a core set of minimal complexity, cross-platform ruby use enhancers.
 
 For the most part, Ruby is a multi-platform joy to use. Wouldn't it be great if
 your ruby environment manager spoke multi-platform?
