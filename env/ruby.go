@@ -39,7 +39,7 @@ type Ruby struct {
 
 func init() {
 	var err error
-	rbRegex, err = regexp.Compile(`\A(j?ruby)\s+(\d\.\d\.\d(?:\w+)?)`)
+	rbRegex, err = regexp.Compile(`\A(j?ruby)\s+(\d\.\d\.\d)(\w+)?`)
 	if err != nil {
 		panic("unable to compile ruby parsing regexp")
 	}
@@ -131,9 +131,13 @@ func RubyInfo(ctx *Context, ruby string) (tag string, info Ruby, err error) {
 	info.Description = strings.TrimSpace(string(b))
 	res := rbRegex.FindStringSubmatch(info.Description)
 	if res != nil {
-		info.ID = res[2]
 		info.Exe = res[1]
-		info.TagLabel = strings.Replace(info.ID, `.`, ``, -1)
+		if patch := res[3]; patch == `` {
+			info.ID = res[2]
+		} else {
+			info.ID = fmt.Sprintf("%s-%s", res[2], patch)
+		}
+		info.TagLabel = strings.Replace(strings.Replace(info.ID, `.`, ``, -1), `-`, ``, -1)
 		tag, err = NewTag(ctx, info)
 		if err != nil {
 			// TODO implement
