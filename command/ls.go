@@ -57,7 +57,8 @@ func List(ctx *env.Context) {
 
 		fmt.Printf(" %s %10.10s: %s\n", me, ri.TagLabel, desc)
 		if verbose {
-			fmt.Printf("%s Home: %s\n%s GemHome: %s\n\n", indent, ri.Home, indent, ri.GemHome)
+			fmt.Printf("%s ID: %s\n%s Home: %s\n%s GemHome: %s\n\n",
+				indent, ri.ID, indent, ri.Home, indent, ri.GemHome)
 		}
 	}
 }
