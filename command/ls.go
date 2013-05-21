@@ -14,7 +14,7 @@ func init() {
 	CommandRegistry["ls"] = Command{
 		Name:    "ls",
 		Aliases: []string{"ls", "list"},
-		Usage:   "ls",
+		Usage:   "ls [--verbose]",
 		HelpMsg: "list all ruby installations",
 		Eg:      `ls`}
 }
