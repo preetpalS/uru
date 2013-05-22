@@ -40,7 +40,7 @@ func List(ctx *env.Context) {
 		os.Exit(1)
 	}
 
-	indent := fmt.Sprintf("%15.15s", ``)
+	indent := fmt.Sprintf("%17.17s", ``)
 
 	var me, desc string
 	for t, ri := range ctx.Rubies {
@@ -51,11 +51,11 @@ func List(ctx *env.Context) {
 		}
 
 		desc = ri.Description
-		if len(desc) > 65 {
-			desc = fmt.Sprintf("%.65s...", desc)
+		if len(desc) > 64 {
+			desc = fmt.Sprintf("%.64s...", desc)
 		}
 
-		fmt.Printf(" %s %10.10s: %s\n", me, ri.TagLabel, desc)
+		fmt.Printf(" %s %12.12s: %s\n", me, ri.TagLabel, desc)
 		if verbose {
 			fmt.Printf("%s ID: %s\n%s Home: %s\n%s GemHome: %s\n\n",
 				indent, ri.ID, indent, ri.Home, indent, ri.GemHome)

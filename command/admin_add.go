@@ -100,7 +100,7 @@ func adminAdd(ctx *env.Context) {
 	for t, i := range ctx.Rubies {
 		// default tag labels are the same but tag (description/home hash) is different
 		if rbInfo.TagLabel == i.TagLabel && tag != t {
-			if tagAlias != `` && len(tagAlias) <= 10 {
+			if tagAlias != `` {
 				rbInfo.TagLabel = tagAlias
 			} else {
 				fmt.Printf(`
@@ -114,7 +114,7 @@ func adminAdd(ctx *env.Context) {
 --->
 --->   %s admin add RUBY_DIR --tag TAG
 --->
----> where TAG is 10 characters or less.`, loc, env.AppName)
+---> where TAG is 12 characters or less.`, loc, env.AppName)
 				os.Exit(1)
 			}
 		}
