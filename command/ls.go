@@ -15,7 +15,7 @@ func init() {
 		Name:    "ls",
 		Aliases: []string{"ls", "list"},
 		Usage:   "ls [--verbose]",
-		HelpMsg: "list all ruby installations",
+		HelpMsg: "list all registered ruby installations",
 		Eg:      `ls`}
 }
 
