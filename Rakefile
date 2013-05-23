@@ -2,6 +2,7 @@ require 'rake/clean'
 require 'rbconfig'
 
 # --- BUILD CONFIGURATION ---
+GO_PKG_ROOT = 'bitbucket.org/jonforums/uru'
 UPX_EXE = 'C:/Apps/upx/bin/upx.exe'
 S7ZIP_EXE = 'C:/tools/7za.exe'
 # ---------------------------
@@ -61,6 +62,7 @@ namespace :build do
   end
 end
 
+
 desc 'archive all built exes'
 task :package => 'package:all'
 
@@ -97,5 +99,18 @@ namespace :package do
         end
       end
     end
+  end
+end
+
+
+desc 'test all uru packages'
+task :test => 'test:all'
+
+namespace :test do
+  task :all => ['test:env']
+
+  task :env do
+    puts "---> testing `env` package"
+    system "go test #{GO_PKG_ROOT}/env"
   end
 end
