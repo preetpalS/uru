@@ -66,9 +66,12 @@ func TagLabelToTag(ctx *Context, label string) (tags map[string]Ruby, err error)
 	tags = make(map[string]Ruby)
 
 	for t, ri := range ctx.Rubies {
-		// fuzzy match on the tag label
-		// TODO full match on ID
-		if strings.Contains(ri.TagLabel, label) {
+		switch {
+		// fuzzy match on TagLabel
+		case strings.Contains(ri.TagLabel, label):
+			tags[t] = ri
+		// full match on ID
+		case ri.ID == label:
 			tags[t] = ri
 		}
 	}
