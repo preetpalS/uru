@@ -17,7 +17,7 @@ your ruby environment manager spoke multi-platform?
 The quickest path to uru zen is to [download][download] the binary archive for
 your platform type, extract its contents to a directory already on `PATH`, and
 perform one of the following installs. To build and install uru from Go source,
-review [installation and usage][usage].
+or get more in-depth details, review the [installation and usage][usage] info.
 
 ## Windows systems
 
