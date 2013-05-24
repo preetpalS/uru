@@ -4,6 +4,7 @@
 package command
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -14,10 +15,23 @@ import (
 func Use(ctx *env.Context, msg string) {
 	cmd := ctx.Cmd()
 
-	tags, err := env.TagLabelToTag(ctx, cmd)
-	if err != nil {
-		fmt.Printf("---> unable to find registered ruby matching `%s`\n", cmd)
-		os.Exit(1)
+	// use .ruby-version file contents to select which ruby to use
+	// credit: thanks to Luis Lavena for the idea
+	var tags map[string]env.Ruby
+	var err error
+	switch cmd {
+	case `.`:
+		tags, err = useRubyVersionFile(ctx)
+		if err != nil {
+			fmt.Println("---> someday soon I'll understand the `.ruby-version` file")
+			os.Exit(1)
+		}
+	default:
+		tags, err = env.TagLabelToTag(ctx, cmd)
+		if err != nil {
+			fmt.Printf("---> unable to find registered ruby matching `%s`\n", cmd)
+			os.Exit(1)
+		}
 	}
 
 	tag := ``
@@ -60,4 +74,9 @@ func Use(ctx *env.Context, msg string) {
 	default:
 		fmt.Printf(msg)
 	}
+}
+
+// TODO implement
+func useRubyVersionFile(ctx *env.Context) (tags map[string]env.Ruby, err error) {
+	return nil, errors.New("not implemented")
 }
