@@ -4,7 +4,6 @@
 package command
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -21,9 +20,9 @@ func Use(ctx *env.Context, msg string) {
 	var err error
 	switch cmd {
 	case `.`:
-		tags, err = useRubyVersionFile(ctx)
+		tags, err = useRubyVersionFile(ctx, versionator)
 		if err != nil {
-			fmt.Println("---> someday soon I'll understand the `.ruby-version` file")
+			fmt.Println("---> unable to find or process a `.ruby-version` file")
 			os.Exit(1)
 		}
 	default:
@@ -74,9 +73,4 @@ func Use(ctx *env.Context, msg string) {
 	default:
 		fmt.Printf(msg)
 	}
-}
-
-// TODO implement
-func useRubyVersionFile(ctx *env.Context) (tags map[string]env.Ruby, err error) {
-	return nil, errors.New("not implemented")
 }
