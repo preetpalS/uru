@@ -52,7 +52,7 @@ func SelectRubyFromList(tags map[string]Ruby, label, verb string) (tag string, e
 	for t, ri := range tags {
 		i++
 		choices[i] = t
-		fmt.Printf(" [%d] %10.10s: %s\n", i, ri.TagLabel, ri.Description)
+		fmt.Printf(" [%d] %12.12s: %s\n", i, ri.TagLabel, ri.Description)
 	}
 	fmt.Printf("\nselect [1]-[%d] to %s that specific ruby (0 to exit) [0]: ", i, verb)
 	_, err = fmt.Scanln(&choice)
