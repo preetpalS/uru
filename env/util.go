@@ -71,7 +71,7 @@ func TagLabelToTag(ctx *Context, label string) (tags map[string]Ruby, err error)
 		case strings.Contains(ri.TagLabel, label):
 			tags[t] = ri
 		// full match on ID
-		case ri.ID == label:
+		case label == ri.ID:
 			tags[t] = ri
 		}
 	}

@@ -7,6 +7,7 @@ package main
 
 import (
 	"flag"
+	"log"
 	"os"
 
 	"bitbucket.org/jonforums/uru/command"
@@ -23,6 +24,7 @@ func main() {
 
 	cmd := flag.Arg(0)
 	ctx.SetCmdAndArgs(cmd, flag.Args()[1:])
+	log.Printf("[DEBUG] cmd = %s\n", cmd)
 
 	switch {
 	case ctx.CmdRegex(`admin`).MatchString(cmd):
