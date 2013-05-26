@@ -39,7 +39,7 @@ type Ruby struct {
 
 func init() {
 	var err error
-	rbRegex, err = regexp.Compile(`\A(j?ruby)\s+(\d\.\d\.\d)(\w+)?`)
+	rbRegex, err = regexp.Compile(`\A(j?ruby)\s+(\d\.\d\.\d)(\w+)?(?:.+patchlevel )?(\d{1,3})?`)
 	if err != nil {
 		panic("unable to compile ruby parsing regexp")
 	}
@@ -133,7 +133,12 @@ func RubyInfo(ctx *Context, ruby string) (tag string, info Ruby, err error) {
 	if res != nil {
 		info.Exe = res[1]
 		if patch := res[3]; patch == `` {
-			info.ID = res[2]
+			// patch up patchlevel for MRI 1.8.7's version string
+			if patch187 := res[4]; patch187 != `` {
+				info.ID = fmt.Sprintf("%s-p%s", res[2], patch187)
+			} else {
+				info.ID = res[2]
+			}
 		} else {
 			info.ID = fmt.Sprintf("%s-%s", res[2], patch)
 		}
