@@ -14,9 +14,9 @@ func init() {
 	AdminCmdRegistry["rm"] = Command{
 		Name:    "rm",
 		Aliases: []string{"rm", "del"},
-		Usage:   "rm TAG",
+		Usage:   "admin rm TAG",
 		HelpMsg: "deregister a ruby installation",
-		Eg:      `rm 193p193`}
+		Eg:      `admin rm 193p193`}
 }
 
 func adminRemove(ctx *env.Context) {

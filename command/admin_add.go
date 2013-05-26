@@ -17,9 +17,9 @@ func init() {
 	AdminCmdRegistry["add"] = Command{
 		Name:    "add",
 		Aliases: nil,
-		Usage:   "add RUBY_DIR [--tag TAG] | system",
+		Usage:   "admin add RUBY_DIR [--tag TAG] | system",
 		HelpMsg: "register an existing ruby installation",
-		Eg:      `add C:\ruby200\bin`}
+		Eg:      `admin add C:\ruby200\bin`}
 }
 
 func adminAdd(ctx *env.Context) {

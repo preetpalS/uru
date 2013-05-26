@@ -17,9 +17,9 @@ func init() {
 	AdminCmdRegistry["refresh"] = Command{
 		Name:    "refresh",
 		Aliases: nil,
-		Usage:   "refresh",
+		Usage:   "admin refresh",
 		HelpMsg: "refresh all registered rubies",
-		Eg:      `refresh`}
+		Eg:      `admin refresh`}
 }
 
 func adminRefresh(ctx *env.Context) {

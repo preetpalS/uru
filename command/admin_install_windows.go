@@ -16,9 +16,9 @@ func init() {
 	AdminCmdRegistry["install"] = Command{
 		Name:    "install",
 		Aliases: []string{"install", "in"},
-		Usage:   "install",
+		Usage:   "admin install",
 		HelpMsg: "install uru",
-		Eg:      `install`}
+		Eg:      `admin install`}
 }
 
 func adminInstall(ctx *env.Context) {
