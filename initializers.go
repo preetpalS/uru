@@ -62,6 +62,7 @@ func initCommandParser() {
 	ctx.SetCmdRegex(`install`, `\Ainstall|in\z`)
 	ctx.SetCmdRegex(`ls`, `\Als|list\z`)
 	ctx.SetCmdRegex(`refresh`, `\Arefresh\z`)
+	ctx.SetCmdRegex(`retag`, `\Aretag|tag\z`)
 	ctx.SetCmdRegex(`rm`, `\Arm|del\z`)
 	ctx.SetCmdRegex(`ruby`, `\Aruby|rb\z`)
 	ctx.SetCmdRegex(`version`, `\Aver(?:sion)?\z`)
