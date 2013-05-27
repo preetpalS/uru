@@ -44,15 +44,21 @@ func UIYesConfirm(prompt string) (resp string, err error) {
 // SelectRubyFromList presents a list of registered rubies and asks the user
 // to select one. It returns the identifying tag for the selected ruby, or an
 // error if unable to get the users selection.
-func SelectRubyFromList(tags map[string]Ruby, label, verb string) (tag string, err error) {
+func SelectRubyFromList(tags RubyMap, label, verb string) (tag string, err error) {
 	var i, choice uint8
 	choices := make(map[uint8]string)
+	indent := fmt.Sprintf("%19.19s",``)
 
 	fmt.Printf("---> these rubies match your `%s` tag:\n\n", label)
 	for t, ri := range tags {
 		i++
 		choices[i] = t
-		fmt.Printf(" [%d] %12.12s: %s\n", i, ri.TagLabel, ri.Description)
+		fmt.Printf(" [%d] %12.12s: %s\n%sHome: %s\n",
+			i,
+			ri.TagLabel,
+			ri.Description,
+			indent,
+			ri.Home)
 	}
 	fmt.Printf("\nselect [1]-[%d] to %s that specific ruby (0 to exit) [0]: ", i, verb)
 	_, err = fmt.Scanln(&choice)
