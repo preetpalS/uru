@@ -9,7 +9,14 @@ import (
 	"regexp"
 )
 
-type RubyRegistry map[string]Ruby
+const RubyRegistryVersion = `1.0.0`
+
+type RubyMap map[string]Ruby
+
+type RubyRegistry struct {
+	Version string
+	Rubies map[string]Ruby
+}
 
 type Context struct {
 	commandRegex map[string]*regexp.Regexp
@@ -17,12 +24,15 @@ type Context struct {
 	command      string
 	commandArgs  []string
 
-	Rubies RubyRegistry
+	Registry RubyRegistry
 }
 
 func (c *Context) Init() {
 	c.commandRegex = make(map[string]*regexp.Regexp)
-	c.Rubies = make(RubyRegistry, 4)
+	c.Registry = RubyRegistry{
+		Version: RubyRegistryVersion,
+		Rubies: make(RubyMap, 4),
+	}
 }
 
 func (c *Context) CmdRegex(cmd string) *regexp.Regexp {
@@ -32,17 +42,16 @@ func (c *Context) CmdRegex(cmd string) *regexp.Regexp {
 
 	return c.commandRegex[cmd]
 }
-func (c *Context) SetCmdRegex(cmd string, r string) error {
+func (c *Context) SetCmdRegex(cmd string, r string) (err error) {
 	if c.commandRegex == nil {
 		panic("Context has not been initialized")
 	}
 
-	var e error
-	c.commandRegex[cmd], e = regexp.Compile(r)
-	if e != nil {
+	c.commandRegex[cmd], err = regexp.Compile(r)
+	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: unable to compile `%s` regexp", cmd)
 	}
-	return e
+	return
 }
 
 func (c *Context) Home() string {

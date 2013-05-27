@@ -90,7 +90,7 @@ func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
 	} else {
 		tags, err := TagLabelToTag(ctx, `system`)
 		if err != nil {
-			if len(ctx.Rubies) > 0 {
+			if len(ctx.Registry.Rubies) > 0 {
 				// gracefully handle the scenario where a system ruby isn't included
 				// in the registered rubies and PATH is the base PATH
 				return ``, info, nil
@@ -104,7 +104,7 @@ func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
 				break
 			}
 		}
-		info = ctx.Rubies[tag]
+		info = ctx.Registry.Rubies[tag]
 	}
 
 	return
@@ -191,7 +191,7 @@ func MarshalRubies(ctx *Context) (err error) {
 		defer f.Close()
 	}
 
-	b, err := json.Marshal(ctx.Rubies)
+	b, err := json.Marshal(ctx.Registry)
 	if err != nil {
 		log.Println("[DEBUG] unable to marshall the ruby registry to JSON")
 		return

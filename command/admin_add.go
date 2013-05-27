@@ -97,7 +97,7 @@ func adminAdd(ctx *env.Context) {
 
 	// patch metadata if adding a ruby with the same default tag label as an
 	// existing registered ruby.
-	for t, i := range ctx.Rubies {
+	for t, i := range ctx.Registry.Rubies {
 		// default tag labels are the same but tag (description/home hash) is different
 		if rbInfo.TagLabel == i.TagLabel && tag != t {
 			if tagAlias != `` {
@@ -127,12 +127,12 @@ func adminAdd(ctx *env.Context) {
 	}
 
 	// TODO allow overwriting or force rm/add cycle?
-	if _, ok := ctx.Rubies[tag]; ok {
+	if _, ok := ctx.Registry.Rubies[tag]; ok {
 		fmt.Printf("---> Skipping. `%s` is already registered\n", rbPath)
 		return
 	}
 
-	ctx.Rubies[tag] = rbInfo
+	ctx.Registry.Rubies[tag] = rbInfo
 
 	// persist the new and existing registered rubies to the filesystem
 	err = env.MarshalRubies(ctx)

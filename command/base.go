@@ -30,7 +30,7 @@ func rubyExec(ctx *env.Context) (err error) {
 	curPath := os.Getenv(`PATH`)
 	curGemHome := os.Getenv(`GEM_HOME`)
 
-	for rb, info := range ctx.Rubies {
+	for rb, info := range ctx.Registry.Rubies {
 		fmt.Printf("%s\n\n", info.Description)
 
 		pth, err := env.PathListForTag(ctx, rb)

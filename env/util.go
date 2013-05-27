@@ -62,10 +62,10 @@ func NewTag(ctx *Context, rb Ruby) (tag string, err error) {
 
 // TagLabelToTag returns a map of registered ruby tags whose TagLabel's match that
 // of the specified tag label string.
-func TagLabelToTag(ctx *Context, label string) (tags map[string]Ruby, err error) {
-	tags = make(map[string]Ruby)
+func TagLabelToTag(ctx *Context, label string) (tags RubyMap, err error) {
+	tags = make(RubyMap, 4)
 
-	for t, ri := range ctx.Rubies {
+	for t, ri := range ctx.Registry.Rubies {
 		switch {
 		// fuzzy match on TagLabel
 		case strings.Contains(ri.TagLabel, label):
@@ -107,7 +107,7 @@ func PathListForTag(ctx *Context, tag string) (path []string, err error) {
 		tmp = paths[1]
 	}
 
-	newRb := ctx.Rubies[tag]
+	newRb := ctx.Registry.Rubies[tag]
 	tail := strings.Split(tmp, string(os.PathListSeparator))
 
 	if SysRbRegex.MatchString(newRb.TagLabel) {

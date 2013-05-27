@@ -24,9 +24,9 @@ func init() {
 
 func adminRefresh(ctx *env.Context) {
 
-	freshRubies := make(env.RubyRegistry, 4)
+	freshRubies := make(env.RubyMap, 4)
 
-	for _, info := range ctx.Rubies {
+	for _, info := range ctx.Registry.Rubies {
 		rb := filepath.Join(info.Home, info.Exe)
 
 		newTag, freshInfo, err := env.RubyInfo(ctx, rb)
@@ -53,7 +53,7 @@ func adminRefresh(ctx *env.Context) {
 	}
 
 	log.Printf("[DEBUG] === fresh ruby metadata ===\n%+v\n", freshRubies)
-	ctx.Rubies = freshRubies
+	ctx.Registry.Rubies = freshRubies
 
 	err := env.MarshalRubies(ctx)
 	if err != nil {

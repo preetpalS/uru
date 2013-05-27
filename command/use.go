@@ -16,7 +16,7 @@ func Use(ctx *env.Context, msg string) {
 
 	// use .ruby-version file contents to select which ruby to use
 	// credit: thanks to Luis Lavena for the idea
-	var tags map[string]env.Ruby
+	var tags env.RubyMap
 	var err error
 	switch cmd {
 	case `.`:
@@ -49,7 +49,7 @@ func Use(ctx *env.Context, msg string) {
 		}
 	}
 
-	newRb := ctx.Rubies[tag]
+	newRb := ctx.Registry.Rubies[tag]
 
 	newPath, err := env.PathListForTag(ctx, tag)
 	if err != nil {

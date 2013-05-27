@@ -21,7 +21,7 @@ func init() {
 
 // List all rubies registered with uru, identifying the currently active ruby
 func List(ctx *env.Context) {
-	if len(ctx.Rubies) == 0 {
+	if len(ctx.Registry.Rubies) == 0 {
 		fmt.Println("---> No rubies registered with uru")
 		return
 	}
@@ -43,7 +43,7 @@ func List(ctx *env.Context) {
 	indent := fmt.Sprintf("%17.17s", ``)
 
 	var me, desc string
-	for t, ri := range ctx.Rubies {
+	for t, ri := range ctx.Registry.Rubies {
 		if t == tag {
 			me = `=>`
 		} else {

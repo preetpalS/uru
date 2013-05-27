@@ -48,7 +48,7 @@ func adminRemove(ctx *env.Context) {
 		}
 	}
 
-	rb := ctx.Rubies[tag]
+	rb := ctx.Registry.Rubies[tag]
 
 	resp, err := env.UIYesConfirm(fmt.Sprintf("\nOK to deregister `%s`?", rb.Description))
 	if err != nil {
@@ -59,7 +59,7 @@ func adminRemove(ctx *env.Context) {
 		return
 	}
 
-	delete(ctx.Rubies, tag)
+	delete(ctx.Registry.Rubies, tag)
 
 	err = env.MarshalRubies(ctx)
 	if err != nil {

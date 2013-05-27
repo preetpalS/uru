@@ -82,10 +82,10 @@ func initRubies() {
 		panic("unable to read the JSON ruby registry")
 	}
 
-	err = json.Unmarshal(b, &ctx.Rubies)
+	err = json.Unmarshal(b, &ctx.Registry)
 	if err != nil {
 		log.Printf("[DEBUG] unable to unmarshal %s\n", rubies)
 		panic("unable to unmarshal the JSON ruby registry")
 	}
-	log.Printf("[DEBUG] === ctx.Rubies ===\n%+v", ctx.Rubies)
+	log.Printf("[DEBUG] === ctx.Registry.Rubies ===\n%+v", ctx.Registry.Rubies)
 }

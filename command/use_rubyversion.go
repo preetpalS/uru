@@ -17,9 +17,9 @@ import (
 	"bitbucket.org/jonforums/uru/env"
 )
 
-type rbVersionFunc func(ctx *env.Context, dir string) (tags map[string]env.Ruby, err error)
+type rbVersionFunc func(ctx *env.Context, dir string) (tags env.RubyMap, err error)
 
-func useRubyVersionFile(ctx *env.Context, verFunc rbVersionFunc) (tags map[string]env.Ruby, err error) {
+func useRubyVersionFile(ctx *env.Context, verFunc rbVersionFunc) (tags env.RubyMap, err error) {
 	cwd, err := os.Getwd()
 	if err != nil {
 		return nil, err
@@ -96,7 +96,7 @@ func useRubyVersionFile(ctx *env.Context, verFunc rbVersionFunc) (tags map[strin
 	return nil, errors.New("unable to find a .ruby-version file")
 }
 
-func versionator(ctx *env.Context, dir string) (tags map[string]env.Ruby, err error) {
+func versionator(ctx *env.Context, dir string) (tags env.RubyMap, err error) {
 	var path string
 	if strings.HasSuffix(dir, string(os.PathSeparator)) {
 		path = fmt.Sprintf("%s.ruby-version", dir)
