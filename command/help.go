@@ -4,6 +4,7 @@
 package command
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"os"
@@ -57,15 +58,15 @@ func commandHelp(cmd string) {
 		return
 	}
 
+	buf := bytes.NewBufferString("  Description: %s\n")
+	if command.Aliases != nil {
+		buf.WriteString(fmt.Sprintf("  Aliases: %s\n", strings.Join(command.Aliases, ", ")))
+	}
+	buf.WriteString("  Usage: %s\n  Example: %s %s\n")
+
 	fmt.Fprintf(os.Stderr,
-		`
-  Description: %s
-  Aliases: %v
-  Usage: %s
-  Example: %s %s
-`,
+		buf.String(),
 		command.HelpMsg,
-		strings.Join(command.Aliases, ", "),
 		command.Usage,
 		env.AppName, command.Eg)
 
