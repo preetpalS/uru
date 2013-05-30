@@ -48,7 +48,7 @@ func adminRefresh(ctx *env.Context) {
 			freshInfo.GemHome = info.GemHome
 		}
 
-		fmt.Printf("---> Refreshing %s tagged as %s\n", info.Exe, info.TagLabel)
+		fmt.Printf("---> refreshing %s tagged as `%s`\n", info.Exe, info.TagLabel)
 		freshRubies[newTag] = freshInfo
 	}
 
