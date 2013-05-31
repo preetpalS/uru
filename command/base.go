@@ -30,12 +30,12 @@ func rubyExec(ctx *env.Context) (err error) {
 	curPath := os.Getenv(`PATH`)
 	curGemHome := os.Getenv(`GEM_HOME`)
 
-	for rb, info := range ctx.Registry.Rubies {
+	for tag, info := range ctx.Registry.Rubies {
 		fmt.Printf("%s\n\n", info.Description)
 
-		pth, err := env.PathListForTag(ctx, rb)
+		pth, err := env.PathListForTag(ctx, tag)
 		if err != nil {
-			fmt.Println("Unable to run `%s %s`\n\n", ctx.Cmd(),
+			fmt.Printf("[ERROR] getting path list, unable to run `%s %s`\n\n", ctx.Cmd(),
 				strings.Join(ctx.CmdArgs(), " "))
 			break
 		}
@@ -43,14 +43,14 @@ func rubyExec(ctx *env.Context) (err error) {
 		// set env vars in this process so they'll be injected into the child process
 		err = os.Setenv(`PATH`, strings.Join(pth, string(os.PathListSeparator)))
 		if err != nil {
-			fmt.Println("Unable to run `%s %s`\n\n", ctx.Cmd(),
+			fmt.Printf("[ERROR] setting PATH, unable to run `%s %s`\n\n", ctx.Cmd(),
 				strings.Join(ctx.CmdArgs(), " "))
 			break
 		}
 		// XXX clears and sets but also creates unnecessary empty GEM_HOME env var
 		err = os.Setenv(`GEM_HOME`, info.GemHome)
 		if err != nil {
-			fmt.Println("Unable to run `%s %s`\n\n", ctx.Cmd(),
+			fmt.Printf("[ERROR] setting GEM_HOME, unable to run `%s %s`\n\n", ctx.Cmd(),
 				strings.Join(ctx.CmdArgs(), " "))
 			break
 		}
@@ -63,7 +63,7 @@ func rubyExec(ctx *env.Context) (err error) {
 		}
 		out, err := exec.Command(cmd, ctx.CmdArgs()...).Output()
 		if err != nil {
-			fmt.Printf("---> Unable to run `%s %s`\n\n", ctx.Cmd(),
+			fmt.Printf("---> unable to run `%s %s`\n\n", ctx.Cmd(),
 				strings.Join(ctx.CmdArgs(), " "))
 		} else {
 			fmt.Printf("%s\n", out)
