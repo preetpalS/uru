@@ -49,7 +49,7 @@ $ exec $SHELL -l
 
 # Easy to Use
 
-While a summary of uru's core commands are [available here][usage], once your
+While examples of uru's core commands are [available here][examples], once your
 installed rubies have been registered with uru, usage is similar to:
 
 ~~~ bash
@@ -98,6 +98,7 @@ hello there
 
 [download]: https://bitbucket.org/jonforums/uru/wiki/Downloads
 [usage]: https://bitbucket.org/jonforums/uru/wiki/Usage
+[examples]: https://bitbucket.org/jonforums/uru/wiki/Examples
 
 [1]: https://rvm.io/
 [2]: https://github.com/sstephenson/rbenv
