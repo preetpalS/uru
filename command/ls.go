@@ -6,9 +6,33 @@ package command
 import (
 	"fmt"
 	"os"
+	"sort"
 
 	"bitbucket.org/jonforums/uru/env"
 )
+
+type tagInfo struct {
+	Tag      string
+	TagLabel string
+}
+
+// tagInfoSorter sorts slices of tagInfo structs by implementing sort.Interface by
+// providing Len, Swap, and Less
+type tagInfoSorter struct {
+	Tags []tagInfo
+}
+
+func (s *tagInfoSorter) Len() int {
+	return len(s.Tags)
+}
+
+func (s *tagInfoSorter) Swap(i, j int) {
+	s.Tags[i], s.Tags[j] = s.Tags[j], s.Tags[i]
+}
+
+func (s *tagInfoSorter) Less(i, j int) bool {
+	return s.Tags[i].TagLabel < s.Tags[j].TagLabel
+}
 
 func init() {
 	CommandRegistry["ls"] = Command{
@@ -40,10 +64,20 @@ func List(ctx *env.Context) {
 		os.Exit(1)
 	}
 
-	indent := fmt.Sprintf("%17.17s", ``)
+	// sort tags by tag labels
+	tis := new(tagInfoSorter)
+	tis.Tags = []tagInfo{}
+	for t, ri := range ctx.Registry.Rubies {
+		tis.Tags = append(tis.Tags, tagInfo{Tag: t, TagLabel: ri.TagLabel})
+	}
+	sort.Sort(tis)
 
 	var me, desc string
-	for t, ri := range ctx.Registry.Rubies {
+	indent := fmt.Sprintf("%17.17s", ``)
+	for _, ti := range tis.Tags {
+		t := ti.Tag
+		ri := ctx.Registry.Rubies[t]
+
 		if t == tag {
 			me = `=>`
 		} else {
