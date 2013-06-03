@@ -6,33 +6,9 @@ package command
 import (
 	"fmt"
 	"os"
-	"sort"
 
 	"bitbucket.org/jonforums/uru/env"
 )
-
-type tagInfo struct {
-	Tag      string
-	TagLabel string
-}
-
-// tagInfoSorter sorts slices of tagInfo structs by implementing sort.Interface by
-// providing Len, Swap, and Less
-type tagInfoSorter struct {
-	Tags []tagInfo
-}
-
-func (s *tagInfoSorter) Len() int {
-	return len(s.Tags)
-}
-
-func (s *tagInfoSorter) Swap(i, j int) {
-	s.Tags[i], s.Tags[j] = s.Tags[j], s.Tags[i]
-}
-
-func (s *tagInfoSorter) Less(i, j int) bool {
-	return s.Tags[i].TagLabel < s.Tags[j].TagLabel
-}
 
 func init() {
 	CommandRegistry["ls"] = Command{
@@ -60,22 +36,19 @@ func List(ctx *env.Context) {
 
 	tag, _, err := env.CurrentRubyInfo(ctx)
 	if err != nil {
-		fmt.Printf("---> Unable to list rubies; try again\n")
+		fmt.Println("---> unable to list rubies; try again\n")
 		os.Exit(1)
 	}
 
-	// sort tags by tag labels
-	tis := new(tagInfoSorter)
-	tis.Tags = []tagInfo{}
-	for t, ri := range ctx.Registry.Rubies {
-		tis.Tags = append(tis.Tags, tagInfo{Tag: t, TagLabel: ri.TagLabel})
+	sortedTags, err := env.SortTagsByTagLabel(ctx)
+	if err != nil {
+		fmt.Println("---> unable to list sorted rubies; try again")
+		os.Exit(1)
 	}
-	sort.Sort(tis)
 
 	var me, desc string
 	indent := fmt.Sprintf("%17.17s", ``)
-	for _, ti := range tis.Tags {
-		t := ti.Tag
+	for _, t := range sortedTags {
 		ri := ctx.Registry.Rubies[t]
 
 		if t == tag {

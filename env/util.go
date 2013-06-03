@@ -13,8 +13,32 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"sort"
 	"strings"
 )
+
+type tagInfo struct {
+	Tag      string
+	TagLabel string
+}
+
+// tagInfoSorter sorts slices of tagInfo structs by implementing sort.Interface by
+// providing Len, Swap, and Less
+type tagInfoSorter struct {
+	Tags []tagInfo
+}
+
+func (s *tagInfoSorter) Len() int {
+	return len(s.Tags)
+}
+
+func (s *tagInfoSorter) Swap(i, j int) {
+	s.Tags[i], s.Tags[j] = s.Tags[j], s.Tags[i]
+}
+
+func (s *tagInfoSorter) Less(i, j int) bool {
+	return s.Tags[i].TagLabel < s.Tags[j].TagLabel
+}
 
 // CopyFile copies a source file to a destination file.
 func CopyFile(dst, src string) (written int64, err error) {
@@ -42,7 +66,7 @@ func CopyFile(dst, src string) (written int64, err error) {
 func StringSplitPath() (path []string, err error) {
 	rawPath := os.Getenv(`PATH`)
 	if rawPath == `` {
-		return nil, errors.New("error: unable to get PATH env var value")
+		return nil, errors.New("unable to get PATH env var value")
 	}
 
 	path = strings.Split(rawPath, string(os.PathListSeparator))
@@ -76,7 +100,7 @@ func TagLabelToTag(ctx *Context, label string) (tags RubyMap, err error) {
 		}
 	}
 	if len(tags) == 0 {
-		return nil, errors.New(fmt.Sprintf("---> unable to find ruby matching `%s`\n", label))
+		return nil, errors.New(fmt.Sprintf("unable to find ruby matching `%s`\n", label))
 	}
 	log.Printf("[DEBUG] tags matching `%s`\n%v\n", label, tags)
 
@@ -128,6 +152,29 @@ func PathListForTag(ctx *Context, tag string) (path []string, err error) {
 		path = append(head, tail...)
 	}
 	log.Printf("[DEBUG] %v\n", path)
+
+	return
+}
+
+// SortTagsByTagLabel returns a string slice of tags sorted by tag label.
+func SortTagsByTagLabel(ctx *Context) (tags []string, err error) {
+	if len(ctx.Registry.Rubies) == 0 {
+		return nil, errors.New("no sorted tags to return due to no registered rubies")
+	}
+
+	tis := new(tagInfoSorter)
+	tis.Tags = []tagInfo{}
+	for t, ri := range ctx.Registry.Rubies {
+		tis.Tags = append(tis.Tags, tagInfo{Tag: t, TagLabel: ri.TagLabel})
+	}
+	sort.Sort(tis)
+
+	for _, ti := range tis.Tags {
+		tags = append(tags, ti.Tag)
+	}
+	if len(tags) == 0 {
+		return nil, errors.New("no sorted tags to return")
+	}
 
 	return
 }
