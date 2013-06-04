@@ -61,10 +61,12 @@ func rubyExec(ctx *env.Context) (err error) {
 			// invoke correct ruby executable
 			cmd = info.Exe
 		}
-		out, err := exec.Command(cmd, ctx.CmdArgs()...).Output()
+		out, err := exec.Command(cmd, ctx.CmdArgs()...).CombinedOutput()
 		if err != nil {
 			fmt.Printf("---> unable to run `%s %s`\n\n", ctx.Cmd(),
 				strings.Join(ctx.CmdArgs(), " "))
+			fmt.Printf("--- returned error message ---\n%s\n\n", err.Error())
+			fmt.Printf("--- combined child output ---\n%s\n", out)
 		} else {
 			fmt.Printf("%s\n", out)
 		}
