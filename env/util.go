@@ -151,7 +151,7 @@ func PathListForTag(ctx *Context, tag string) (path []string, err error) {
 
 		path = append(head, tail...)
 	}
-	log.Printf("[DEBUG] %v\n", path)
+	log.Printf("[DEBUG] === path list ===\n  %v\n", path)
 
 	return
 }
