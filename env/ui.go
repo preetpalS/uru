@@ -53,7 +53,7 @@ func SelectRubyFromList(tags RubyMap, label, verb string) (tag string, err error
 	for t, ri := range tags {
 		i++
 		choices[i] = t
-		fmt.Printf(" [%d] %12.12s: %s\n%sHome: %s\n",
+		fmt.Printf(" [%d] %-12.12s: %s\n%sHome: %s\n",
 			i,
 			ri.TagLabel,
 			ri.Description,
