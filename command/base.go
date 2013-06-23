@@ -5,8 +5,11 @@ package command
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"runtime"
 	"strings"
 
 	"bitbucket.org/jonforums/uru/env"
@@ -57,11 +60,18 @@ func rubyExec(ctx *env.Context) (err error) {
 
 		// run the command in a child process and reflect the child's stdout
 		cmd := ctx.Cmd()
-		if cmd == `ruby` {
-			// invoke correct ruby executable
+		if runtime.GOOS == `windows` || cmd == `ruby` {
+			// bypass .bat wrappers when on windows; always select correct ruby exe
 			cmd = info.Exe
 		}
-		out, err := exec.Command(cmd, ctx.CmdArgs()...).CombinedOutput()
+		cmdArgs := ctx.CmdArgs()
+		if runtime.GOOS == `windows` && ctx.Cmd() == `gem` {
+			// bypass gem.bat wrapper on windows
+			cmdArgs = append([]string{filepath.Join(info.Home, `gem`)}, cmdArgs...)
+		}
+		log.Printf("[DEBUG] === exec.Command args ===\n  cmd: %s\n  cmdArgs: %v\n",
+			cmd, cmdArgs)
+		out, err := exec.Command(cmd, cmdArgs...).CombinedOutput()
 		if err != nil {
 			fmt.Printf("---> unable to run `%s %s`\n\n", ctx.Cmd(),
 				strings.Join(ctx.CmdArgs(), " "))
