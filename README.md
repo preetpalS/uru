@@ -54,46 +54,72 @@ installed rubies have been registered with uru, usage is similar to:
 
 ~~~ bash
 $ uru ls
-        173: jruby 1.7.3 (1.9.3p385) 2013-02-21 dac429b on Java HotSpot(TM) Serv...
- =>  system: ruby 2.1.0dev (2013-05-06 trunk 40593) [i686-linux]
+    174         : jruby 1.7.4 (1.9.3p392) 2013-05-16 2390d3b on Java HotSpot(TM) S...
+    200p255     : ruby 2.0.0p255 (2013-07-07 revision 41812) [i686-linux]
+ => system      : ruby 2.1.0dev (2013-07-06 trunk 41808) [i686-linux]
 
-$ uru 173
----> Now using jruby 1.7.3
+
+$ uru 174
+---> Now using jruby 1.7.4 tagged as `174`
+
 
 $ uru ls
- =>     173: jruby 1.7.3 (1.9.3p385) 2013-02-21 dac429b on Java HotSpot(TM) Serv...
-     system: ruby 2.1.0dev (2013-05-06 trunk 40593) [i686-linux]
+ => 174         : jruby 1.7.4 (1.9.3p392) 2013-05-16 2390d3b on Java HotSpot(TM) S...
+    200p255     : ruby 2.0.0p255 (2013-07-07 revision 41812) [i686-linux]
+    system      : ruby 2.1.0dev (2013-07-06 trunk 41808) [i686-linux]
+
 
 $ jruby --version
-jruby 1.7.3 (1.9.3p385) 2013-02-21 dac429b on Java HotSpot(TM) Server VM 1.7.0_21-b11 [linux-i386]
+jruby 1.7.4 (1.9.3p392) 2013-05-16 2390d3b on Java HotSpot(TM) Server VM 1.7.0_25-b15 [linux-i386]
+
 
 $ uru sys
----> Now using ruby 2.1.0dev
+---> Now using ruby 2.1.0-dev tagged as `system`
 
-$ uru ls
-        173: jruby 1.7.3 (1.9.3p385) 2013-02-21 dac429b on Java HotSpot(TM) Serv...
- =>  system: ruby 2.1.0dev (2013-05-06 trunk 40593) [i686-linux]
 
-$ ruby --version
-ruby 2.1.0dev (2013-05-06 trunk 40593) [i686-linux]
+$ uru ls --verbose
+    174         : jruby 1.7.4 (1.9.3p392) 2013-05-16 2390d3b on Java HotSpot(TM) S...
+                  ID: 1.7.4
+                  Home: /home/jon/.rubies/jruby-1.7.4/bin
+                  GemHome: /home/jon/.gem/jruby/1.7.4
+
+    200p255     : ruby 2.0.0p255 (2013-07-07 revision 41812) [i686-linux]
+                  ID: 2.0.0-p255
+                  Home: /home/jon/.rubies/ruby-2.0.0/bin
+                  GemHome: /home/jon/.gem/ruby/2.0.0
+
+ => system      : ruby 2.1.0dev (2013-07-06 trunk 41808) [i686-linux]
+                  ID: 2.1.0-dev
+                  Home: /usr/local/bin
+                  GemHome:
+
 
 $ uru gem li rake
-jruby 1.7.3 (1.9.3p385) 2013-02-21 dac429b on Java HotSpot(TM) Server VM 1.7.0_21-b11 [linux-i386]
+ruby 2.0.0p255 (2013-07-07 revision 41812) [i686-linux]
 
-rake (10.0.3)
+rake (10.1.0, 0.9.6)
 
-ruby 2.1.0dev (2013-05-06 trunk 40593) [i686-linux]
+ruby 2.1.0dev (2013-07-06 trunk 41808) [i686-linux]
 
-rake (10.0.4, 0.9.6)
+rake (10.1.0, 0.9.6)
 
-$ uru ruby hello.rb
-jruby 1.7.3 (1.9.3p385) 2013-02-21 dac429b on Java HotSpot(TM) Server VM 1.7.0_21-b11 [linux-i386]
+jruby 1.7.4 (1.9.3p392) 2013-05-16 2390d3b on Java HotSpot(TM) Server VM 1.7.0_25-b15 [linux-i386]
 
-hello there
+rake (10.1.0, 10.0.3)
 
-ruby 2.1.0dev (2013-05-06 trunk 40593) [i686-linux]
 
-hello there
+$ uru ruby -e 'name="You"; puts "Hello #{name}!"'
+ruby 2.0.0p255 (2013-07-07 revision 41812) [i686-linux]
+
+Hello You!
+
+ruby 2.1.0dev (2013-07-06 trunk 41808) [i686-linux]
+
+Hello You!
+
+jruby 1.7.4 (1.9.3p392) 2013-05-16 2390d3b on Java HotSpot(TM) Server VM 1.7.0_25-b15 [linux-i386]
+
+Hello You!
 ~~~
 
 [download]: https://bitbucket.org/jonforums/uru/wiki/Downloads
