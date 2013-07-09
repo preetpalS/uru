@@ -27,12 +27,20 @@ func adminRefresh(ctx *env.Context) {
 	freshRubies := make(env.RubyMap, 4)
 
 	for _, info := range ctx.Registry.Rubies {
+		_, err := os.Stat(info.Home)
+		if os.IsNotExist(err) {
+			fmt.Printf("---> %s tagged as `%s` does not exist; deregistering\n",
+				info.Exe, info.TagLabel)
+			continue
+		}
+
 		rb := filepath.Join(info.Home, info.Exe)
 
 		newTag, freshInfo, err := env.RubyInfo(ctx, rb)
 		if err != nil {
-			fmt.Println("---> Unable to determine ruby metadata while refreshing")
-			os.Exit(1)
+			fmt.Printf("---> unable to refresh %s tagged as `%s`; deregistering\n",
+				info.Exe, info.TagLabel)
+			continue
 		}
 
 		// XXX assume windows users always install gems into the ruby installation
