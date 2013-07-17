@@ -17,12 +17,20 @@ func init() {
 	AdminCmdRegistry["refresh"] = Command{
 		Name:    "refresh",
 		Aliases: nil,
-		Usage:   "admin refresh",
+		Usage:   "admin refresh [--retag]",
 		HelpMsg: "refresh all registered rubies",
 		Eg:      `admin refresh`}
 }
 
 func adminRefresh(ctx *env.Context) {
+
+	retag := false
+	for _, v := range ctx.CmdArgs() {
+		if v == `--retag` {
+			retag = true
+			break
+		}
+	}
 
 	freshRubies := make(env.RubyMap, 4)
 
@@ -48,6 +56,10 @@ func adminRefresh(ctx *env.Context) {
 		// the GEM_HOME env var was active at system ruby registration.
 		if runtime.GOOS == `windows` {
 			freshInfo.GemHome = ``
+		}
+		// patch up (nonexclusive) to keep existing TagLabel unless given --retag
+		if !retag {
+			freshInfo.TagLabel = info.TagLabel
 		}
 		// patch up freshened ruby GEM_HOME with registered system ruby GEM_HOME as
 		// `RubyInfo` only generates a default value.
