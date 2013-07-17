@@ -47,7 +47,7 @@ func UIYesConfirm(prompt string) (resp string, err error) {
 func SelectRubyFromList(tags RubyMap, label, verb string) (tag string, err error) {
 	var i, choice uint8
 	choices := make(map[uint8]string)
-	indent := fmt.Sprintf("%19.19s",``)
+	indent := fmt.Sprintf("%19.19s", ``)
 
 	fmt.Printf("---> these rubies match your `%s` tag:\n\n", label)
 	for t, ri := range tags {

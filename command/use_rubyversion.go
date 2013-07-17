@@ -7,10 +7,10 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"path/filepath"
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"runtime"
 	"strings"
 

@@ -5,8 +5,8 @@ package env
 
 import (
 	"bytes"
-	"fmt"
 	"errors"
+	"fmt"
 	"hash/fnv"
 	"io"
 	"log"

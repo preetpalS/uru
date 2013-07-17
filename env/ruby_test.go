@@ -9,12 +9,12 @@ import (
 
 type rubyInfo struct {
 	VersionString string
-	Exe string
-	Version string
-	PatchLevel string
+	Exe           string
+	Version       string
+	PatchLevel    string
 }
 
-var rubies = map[string]rubyInfo {
+var rubies = map[string]rubyInfo{
 	`ruby-windows-187`: rubyInfo{
 		`ruby 1.8.7 (2012-10-12 patchlevel 371) [i386-mingw32]`,
 		`ruby`,
@@ -89,7 +89,7 @@ func TestRubyRegex(t *testing.T) {
 				ri.Version,
 				matches[2])
 		}
-		if matches[3] != ri.PatchLevel && matches[4] == ``{
+		if matches[3] != ri.PatchLevel && matches[4] == `` {
 			t.Errorf("ruby regex did not match ruby patchlevel string\n  want: `%s`\n  got: `%s`",
 				ri.PatchLevel,
 				matches[3])

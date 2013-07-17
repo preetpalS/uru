@@ -11,7 +11,7 @@ func TestYesRegex(t *testing.T) {
 	if yResp.MatchString(`N`) || yResp.MatchString(`n`) {
 		t.Error("incorrectly matched a `no` type response")
 	}
-	if !( yResp.MatchString(`yes`) && yResp.MatchString(`YesPlease`) ) {
+	if !(yResp.MatchString(`yes`) && yResp.MatchString(`YesPlease`)) {
 		t.Error("did not match a `yes` type response")
 	}
 }

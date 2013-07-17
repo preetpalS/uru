@@ -15,7 +15,7 @@ type RubyMap map[string]Ruby
 
 type RubyRegistry struct {
 	Version string
-	Rubies map[string]Ruby
+	Rubies  map[string]Ruby
 }
 
 type Context struct {
@@ -31,7 +31,7 @@ func (c *Context) Init() {
 	c.commandRegex = make(map[string]*regexp.Regexp)
 	c.Registry = RubyRegistry{
 		Version: RubyRegistryVersion,
-		Rubies: make(RubyMap, 4),
+		Rubies:  make(RubyMap, 4),
 	}
 }
 
