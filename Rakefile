@@ -9,6 +9,10 @@ S7ZIP_EXE = 'C:/tools/7za.exe'
 
 task :default => :all
 
+args = ARGV.dup
+opts = {}
+opts[:shrink] = args.delete('--shrink')
+
 VER = /AppVersion\s*=\s*\`(\d{1,2}\.\d{1,2}\.\d{1,2})(\.\w+)?/.match(File.read('env/ui.go')) do |m|
   if m[2] != nil then m[1] + m[2] else m[1] end
 end || 'NA'
@@ -29,8 +33,9 @@ def dev_null
   end
 end
 
+builds = %W[build:windows_#{ARCH} build:linux_#{ARCH} build:darwin_#{ARCH}]
 desc 'build all OS/arch flavors'
-task :all => %W[build:windows_#{ARCH} build:linux_#{ARCH} build:darwin_#{ARCH}]
+task :all => builds
 
 namespace :all do
   desc 'build and shrink all exes'
@@ -69,8 +74,15 @@ desc 'archive all built exes'
 task :package => 'package:all'
 
 directory PKG
+pkg_prereqs = [PKG]
+if opts[:shrink]
+  pkg_prereqs.unshift('all:shrink')
+else
+  pkg_prereqs = builds + pkg_prereqs
+end
+
 namespace :package do
-  task :all => ['all:shrink',PKG] do
+  task :all => pkg_prereqs do
     ts = `git rev-list --abbrev-commit -1 HEAD`.chomp
     cpu = case ARCH
           when 'amd64'
