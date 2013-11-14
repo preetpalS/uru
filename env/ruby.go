@@ -39,7 +39,7 @@ type Ruby struct {
 
 func init() {
 	var err error
-	rbRegex, err = regexp.Compile(`\A(j?ruby)\s+(\d\.\d\.\d)(\w+)?(?:.+patchlevel )?(\d{1,3})?`)
+	rbRegex, err = regexp.Compile(`\A(j?ruby|rubinius)\s+(\d\.\d\.\d)(\w+)?(?:.+patchlevel )?(\d{1,3})?`)
 	if err != nil {
 		panic("unable to compile ruby parsing regexp")
 	}
@@ -54,7 +54,8 @@ func init() {
 		panic("unable to compile system ruby parsing regexp")
 	}
 
-	KnownRubies = []string{`ruby`, `jruby`}
+	// list of known ruby executables
+	KnownRubies = []string{`ruby`, `jruby`, `rbx`}
 }
 
 // CurrentRubyInfo returns the identifying tag and metadata information for the
@@ -131,7 +132,11 @@ func RubyInfo(ctx *Context, ruby string) (tag string, info Ruby, err error) {
 	info.Description = strings.TrimSpace(string(b))
 	res := rbRegex.FindStringSubmatch(info.Description)
 	if res != nil {
-		info.Exe = res[1]
+		if exe := res[1]; exe == `rubinius` {
+			info.Exe = `rbx`
+		} else {
+			info.Exe = exe
+		}
 		if patch := res[3]; patch == `` {
 			// patch up patchlevel for MRI 1.8.7's version string
 			if patch187 := res[4]; patch187 != `` {

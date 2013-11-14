@@ -63,6 +63,12 @@ var rubies = map[string]rubyInfo{
 		`1.7.4`,
 		``,
 	},
+	`rubinius-darwin-211`: rubyInfo{
+		`rubinius 2.1.1 (2.1.0 be67ed17 2013-10-18 JI) [x86_64-darwin13.0.0]`,
+		`rubinius`,
+		`2.1.1`,
+		``,
+	},
 	`ruby-linux-dev`: rubyInfo{
 		`ruby 2.1.0dev (2013-05-25 trunk 40932) [i686-linux]`,
 		`ruby`,
