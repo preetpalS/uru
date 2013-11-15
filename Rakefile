@@ -64,7 +64,7 @@ namespace :build do
       ENV['GOARCH'] = arch
       ENV['GOOS'] = os
       ENV['CGO_ENABLED'] = cgo
-      system "go build -o #{BUILD}/#{t.name.split(':')[-1]}/uru_rt#{ext}"
+      system %Q{go build -ldflags "-s" -o #{BUILD}/#{t.name.split(':')[-1]}/uru_rt#{ext}}
     end
   end
 end
