@@ -55,7 +55,7 @@ func init() {
 	}
 
 	// list of known ruby executables
-	KnownRubies = []string{`ruby`, `jruby`, `rbx`}
+	KnownRubies = []string{`rbx`, `ruby`, `jruby`}
 }
 
 // CurrentRubyInfo returns the identifying tag and metadata information for the
