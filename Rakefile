@@ -83,7 +83,6 @@ end
 
 namespace :package do
   task :all => pkg_prereqs do
-    ts = `git rev-list --abbrev-commit -1 HEAD`.chomp
     cpu = case ARCH
           when 'amd64'
             'x64'
@@ -98,7 +97,7 @@ namespace :package do
         when /\A(darwin|linux)/
           puts "---> packaging #{d}"
           tar = "uru-#{VER}-#{$1}.tar"
-          archive = "uru-#{VER}-#{ts}-#{$1}-#{cpu}.tar.gz"
+          archive = "uru-#{VER}-#{$1}-#{cpu}.tar.gz"
 
           system "#{S7ZIP_EXE} a -ttar #{tar} ./#{d}/* > #{dev_null} 2>&1"
           system "#{S7ZIP_EXE} a -tgzip -mx9 #{archive} #{tar} > #{dev_null} 2>&1"
@@ -106,7 +105,7 @@ namespace :package do
           rm tar, :verbose => false
         when /\Awindows/
           puts "---> packaging #{d}"
-          archive = "uru-#{VER}-#{ts}-windows-#{cpu}.7z"
+          archive = "uru-#{VER}-windows-#{cpu}.7z"
 
           system "#{S7ZIP_EXE} a -t7z -mx9 #{archive} ./#{d}/* > #{dev_null} 2>&1"
           mv archive, PKG, :verbose => false
