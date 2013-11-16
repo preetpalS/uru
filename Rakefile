@@ -1,18 +1,17 @@
 require 'rake/clean'
 require 'rbconfig'
 
-# --- BUILD CONFIGURATION ---
+# --- CUSTOMIZE BUILD CONFIGURATION ---
 GO_PKG_ROOT = 'bitbucket.org/jonforums/uru'
-UPX_EXE = 'C:/Apps/upx/bin/upx.exe'
 S7ZIP_EXE = 'C:/tools/7za.exe'
-# ---------------------------
+# -------------------------------------
 
 task :default => :all
 
+# command line options
 args = ARGV.dup
 opts = {}
-opts[:shrink] = args.delete('--shrink')
-opts[:devbuild] = args.delete('--dev-build')
+opts[:devbuild] = args.delete('--dev-build')  # create development build packages
 
 VER = /AppVersion\s*=\s*\`(\d{1,2}\.\d{1,2}\.\d{1,2})(\.\w+)?/.match(File.read('env/ui.go')) do |m|
   if m[2] != nil then m[1] + m[2] else m[1] end
@@ -34,27 +33,14 @@ def dev_null
   end
 end
 
+
 builds = %W[build:windows_#{ARCH} build:linux_#{ARCH} build:darwin_#{ARCH}]
 desc 'build all OS/arch flavors'
 task :all => builds
 
-namespace :all do
-  desc 'build and shrink all exes'
-  task :shrink => [:all] do
-    Dir.chdir BUILD do
-      Dir.glob('*').each do |d|
-        Dir.chdir d do
-          Dir.glob('uru*').each do |f|
-            puts "---> upx shrinking #{d} #{f}"
-            system "#{UPX_EXE} -9 #{f} > #{dev_null} 2>&1"
-          end
-        end
-      end
-    end
-  end
-end
-
 namespace :build do
+  puts "\n  *** DEVELOPMENT build mode ***\n\n" if opts[:devbuild]
+
   %W[windows:#{ARCH}:0 linux:#{ARCH}:0 darwin:#{ARCH}:0].each do |tgt|
     os, arch, cgo = tgt.split(':')
     ext = (os == 'windows' ? '.exe' : '')
@@ -75,16 +61,11 @@ desc 'archive all built exes'
 task :package => 'package:all'
 
 directory PKG
-pkg_prereqs = [PKG]
-if opts[:shrink]
-  pkg_prereqs.unshift('all:shrink')
-else
-  pkg_prereqs = builds + pkg_prereqs
-end
+pkg_prereqs = builds + [PKG]
 
 namespace :package do
   task :all => pkg_prereqs do
-    ts = `git rev-list --abbrev-commit -1 HEAD`.chomp
+    cs = `git rev-list --abbrev-commit -1 HEAD`.chomp
     cpu = case ARCH
           when 'amd64'
             'x64'
@@ -100,7 +81,7 @@ namespace :package do
           puts "---> packaging #{d}"
           tar = "uru-#{VER}-#{$1}.tar"
           archive = if opts[:devbuild]
-                      "uru-#{VER}-#{ts}-#{$1}-#{cpu}.tar.gz"
+                      "uru-#{VER}-#{cs}-#{$1}-#{cpu}.tar.gz"
                     else
                       "uru-#{VER}-#{$1}-#{cpu}.tar.gz"
                     end
@@ -112,7 +93,7 @@ namespace :package do
         when /\Awindows/
           puts "---> packaging #{d}"
           archive = if opts[:devbuild]
-                      "uru-#{VER}-#{ts}-windows-#{cpu}.7z"
+                      "uru-#{VER}-#{cs}-windows-#{cpu}.7z"
                     else
                       "uru-#{VER}-windows-#{cpu}.7z"
                     end
