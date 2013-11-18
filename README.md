@@ -1,16 +1,16 @@
 # Unleash Ruby
 
 Uru is a lightweight, multi-platform command line tool that helps you use the
-multiple rubies (currently MRI, JRuby, and Rubinius) on your 32/64-bit Windows,
-Linux, or OS X systems.
+multiple rubies (currently MRI, JRuby, and Rubinius) on your 32/64-bit Linux,
+OS X, or Windows systems.
 
 While there are a number of fantastic ruby environment managers such as [RVM][1],
 [rbenv][2], [pik][3], and [chruby][4], none are truely multi-platform, and all
 provide different levels of awesomeness. In contrast, [uru][5] is a micro-kernel.
-It provides a core set of minimal complexity, cross-platform ruby use enhancers.
+It provides a core set of minimal complexity, multi-platform ruby use enhancers.
 
-In many cases, Ruby is a multi-platform joy to use. Wouldn't it be great if
-your ruby environment manager was also multi-platform?
+In many cases, Ruby is a multi-platform joy to use. Shouldn't your ruby environment
+manager also be multi-platform?
 
 # Easy to Install
 
@@ -49,8 +49,8 @@ $ exec $SHELL -l
 
 # Easy to Use
 
-While examples of uru's core commands are [available here][examples], once your
-installed rubies have been registered with uru, usage is similar to:
+While more detailed examples of uru's core commands are [available here][examples],
+once you have registered your installed rubies with uru, usage is similar to:
 
 ~~~ bash
 $ uru ls
