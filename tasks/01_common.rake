@@ -14,6 +14,14 @@ VER = /AppVersion\s*=\s*\`(\d{1,2}\.\d{1,2}\.\d{1,2})(\.\w+)?/.match(File.read('
 end || 'NA'
 
 ARCH = ENV['GOARCH'] || '386'
+CPU = case ARCH
+      when 'amd64'
+        'x64'
+      when '386'
+        'x86'
+      else
+        'NA'
+      end
 BUILD = 'build'
 PKG = File.expand_path('pkg')
 

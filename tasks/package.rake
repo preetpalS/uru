@@ -7,14 +7,6 @@ pkg_prereqs = BUILDS + [PKG]
 namespace :package do
   task :all => pkg_prereqs do
     cs = `git rev-list --abbrev-commit -1 HEAD`.chomp
-    cpu = case ARCH
-          when 'amd64'
-            'x64'
-          when '386'
-            'x86'
-          else
-            'NA'
-          end
     Dir.chdir BUILD do
       Dir.glob('*').each do |d|
         case d
@@ -22,9 +14,9 @@ namespace :package do
           puts "---> packaging #{d}"
           tar = "uru-#{VER}-#{$1}.tar"
           archive = if URU_OPTS[:devbuild]
-                      "uru-#{VER}-#{cs}-#{$1}-#{cpu}.tar.gz"
+                      "uru-#{VER}-#{cs}-#{$1}-#{CPU}.tar.gz"
                     else
-                      "uru-#{VER}-#{$1}-#{cpu}.tar.gz"
+                      "uru-#{VER}-#{$1}-#{CPU}.tar.gz"
                     end
 
           system "#{S7ZIP_EXE} a -ttar #{tar} ./#{d}/* > #{dev_null} 2>&1"
@@ -34,9 +26,9 @@ namespace :package do
         when /\Awindows/
           puts "---> packaging #{d}"
           archive = if URU_OPTS[:devbuild]
-                      "uru-#{VER}-#{cs}-windows-#{cpu}.7z"
+                      "uru-#{VER}-#{cs}-windows-#{CPU}.7z"
                     else
-                      "uru-#{VER}-windows-#{cpu}.7z"
+                      "uru-#{VER}-windows-#{CPU}.7z"
                     end
 
           system "#{S7ZIP_EXE} a -t7z -mx9 #{archive} ./#{d}/* > #{dev_null} 2>&1"
