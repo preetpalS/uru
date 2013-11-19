@@ -3,7 +3,7 @@ require 'erb'
 if DEPLOY_MODE
   namespace :deploy do
     desc 'deploy uru binaries to sourceforge.net'
-    task :sf do
+    task :sf => ['package:all'] do
       # upload via sftp/psftp and set files as new default with Net::HTTP::Put.new
       #   http://sourceforge.net/p/forge/community-docs/Using%20the%20Release%20API/
       #   http://www.ruby-doc.org/stdlib-2.0.0/libdoc/net/http/rdoc/Net/HTTP.html
@@ -18,10 +18,9 @@ if DEPLOY_MODE
   # helpers
   module SFDeployer
 
-    # FIXME don't hardcode x86/x64 cpu specifier
-    @windows_archive = File.expand_path("pkg/uru-#{VER}-windows-x86.7z")
-    @linux_archive = File.expand_path("pkg/uru-#{VER}-linux-x86.tar.gz")
-    @darwin_archive = File.expand_path("pkg/uru-#{VER}-darwin-x86.tar.gz")
+    @windows_archive = File.expand_path("pkg/uru-#{VER}-windows-#{CPU}.7z")
+    @linux_archive = File.expand_path("pkg/uru-#{VER}-linux-#{CPU}.tar.gz")
+    @darwin_archive = File.expand_path("pkg/uru-#{VER}-darwin-#{CPU}.tar.gz")
 
     def self.sftp_batch_script
       data = {
