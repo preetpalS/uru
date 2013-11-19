@@ -1,7 +1,7 @@
 # --- CUSTOMIZE BUILD CONFIGURATION ---
 GO_PKG_ROOT = 'bitbucket.org/jonforums/uru'
 S7ZIP_EXE = 'C:/tools/7za.exe'
-SCP_EXE = 'C:/tools/pscp.exe'
+SFTP_EXE = 'C:/tools/psftp.exe'
 # -------------------------------------
 
 # load project archive deployment configuration file if present
