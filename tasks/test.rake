@@ -1,3 +1,6 @@
+# Author: Jon Maken, All Rights Reserved
+# License: 3-clause BSD
+
 desc 'test all uru packages'
 task :test => 'test:all'
 

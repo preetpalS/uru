@@ -1,3 +1,6 @@
+# Author: Jon Maken, All Rights Reserved
+# License: 3-clause BSD
+
 # The deployment task requires two non-revision controlled files in the root
 # of the project directory: deploy_config.rb and cacert.pem.
 #

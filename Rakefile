@@ -1,3 +1,6 @@
+# Author: Jon Maken, All Rights Reserved
+# License: 3-clause BSD
+
 # --- CUSTOMIZE BUILD CONFIGURATION ---
 GO_PKG_ROOT = 'bitbucket.org/jonforums/uru'
 S7ZIP_EXE = 'C:/tools/7za.exe'

@@ -1,3 +1,6 @@
+# Author: Jon Maken, All Rights Reserved
+# License: 3-clause BSD
+
 desc 'package all built exes'
 task :package => 'package:all'
 
