@@ -28,6 +28,7 @@ if DEPLOY_MODE
   namespace :deploy do
     desc 'deploy uru binaries to sourceforge.net'
     task :sf => ['package:all'] do
+      # TODO likely these two are too quick for sf.net's infrastructure; split
       SFDeployer.deploy_files
       SFDeployer.set_default_files
     end
@@ -70,7 +71,6 @@ if DEPLOY_MODE
     # TODO implement error handling
     def self.set_default_files
       # http://sourceforge.net/p/forge/community-docs/Using%20the%20Release%20API/
-      # https://blogs.oracle.com/edwingo/entry/ruby_multipart_post_put_request
       http = Net::HTTP.new('sourceforge.net', 443)
       http.use_ssl = true
       http.verify_mode = ::OpenSSL::SSL::VERIFY_PEER
@@ -89,6 +89,8 @@ if DEPLOY_MODE
         req['Accept'] = 'application/json'
         req.set_form_data 'api_key' => UruDeployConfig.sf_api_key,
                           'default' => (d.size == 1 ? d[0] : d)
+        # TODO parse JSON response for error that looks similar to
+        #        { "error": "blah blah blah" }
         res = http.request(req)
       end
     end
