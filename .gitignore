@@ -2,3 +2,4 @@ build/
 pkg/
 
 deploy_config.rb
+cacert.pem
