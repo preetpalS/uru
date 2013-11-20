@@ -1,3 +1,25 @@
+# The deployment task requires two non-revision controlled files in the root
+# of the project directory: deploy_config.rb and cacert.pem.
+#
+# a cacert.pem can be obtained from http://curl.haxx.se/docs/caextract.html
+#
+# deploy_config.rb looks similar to:
+#
+#  UruDeployConfig = OpenStruct.new(
+#    :sf_user => 'YOUR SF.NET USERNAME',
+#    :sf_private_key => '/path/to/your/private/key/registered/at/sf.net',
+#    :sf_api_key => 'YOUR SF.NET API KEY',
+#  )
+#
+#  UruDeployConfig.sftp_script_template =<<-EOF
+#  cd /home/frs/project/urubinaries/uru
+#  mkdir <%= data[:version] %>
+#  cd <%= data[:version] %>
+#  put <%= data[:windows_archive] %>
+#  put <%= data[:linux_archive] %>
+#  put <%= data[:darwin_archive] %>
+#  EOF
+
 if DEPLOY_MODE
 
   require 'erb'
