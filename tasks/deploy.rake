@@ -26,23 +26,33 @@
 if DEPLOY_MODE
 
   require 'erb'
+  require 'json'
   require 'net/https'
 
   namespace :deploy do
-    desc 'deploy uru binaries to sourceforge.net'
-    task :sf => ['package:all'] do
-      # TODO likely these two are too quick for sf.net's infrastructure; split
-      SFDeployer.deploy_files
-      SFDeployer.set_default_files
+    namespace :sf do
+      desc 'deploy uru binaries to sourceforge.net'
+      task :files => ['package:all'] do
+        SFDeployer.deploy_files
+      end
+
+      desc 'set default download files'
+      task :defaults => [
+                          "#{PKG}/uru-#{VER}-windows-#{CPU}.7z",
+                          "#{PKG}/uru-#{VER}-linux-#{CPU}.tar.gz",
+                          "#{PKG}/uru-#{VER}-darwin-#{CPU}.tar.gz"
+                        ] do
+        SFDeployer.set_default_files
+      end
     end
   end
 
 
   module SFDeployer
 
-    @windows_archive = File.expand_path("pkg/uru-#{VER}-windows-#{CPU}.7z")
-    @linux_archive = File.expand_path("pkg/uru-#{VER}-linux-#{CPU}.tar.gz")
-    @darwin_archive = File.expand_path("pkg/uru-#{VER}-darwin-#{CPU}.tar.gz")
+    @windows_archive = "#{PKG}/uru-#{VER}-windows-#{CPU}.7z"
+    @linux_archive = "#{PKG}/uru-#{VER}-linux-#{CPU}.tar.gz"
+    @darwin_archive = "#{PKG}/uru-#{VER}-darwin-#{CPU}.tar.gz"
 
     def self.sftp_batch_script
       data = {
@@ -64,7 +74,7 @@ if DEPLOY_MODE
 
       begin
         command = "#{SFTP_EXE} -i #{UruDeployConfig.sf_private_key} #{UruDeployConfig.sf_user}@frs.sourceforge.net -b #{batch_file}"
-        puts "---> deploying to urubinaries at sf.net"
+        puts "---> deploying to urubinaries at sourceforge.net"
         system "#{command} > #{dev_null} 2>&1"
       ensure
         File.unlink(batch_file)
@@ -92,9 +102,10 @@ if DEPLOY_MODE
         req['Accept'] = 'application/json'
         req.set_form_data 'api_key' => UruDeployConfig.sf_api_key,
                           'default' => (d.size == 1 ? d[0] : d)
-        # TODO parse JSON response for error that looks similar to
-        #        { "error": "blah blah blah" }
+
         res = http.request(req)
+        res_msg = JSON.load(res.body)
+        abort "---> FAILED to set download defaults for #{f}" if res_msg['error']
       end
     end
 
