@@ -1,5 +1,7 @@
 # Unleash Ruby
 
+**Current Version:** 0.6.4
+
 Uru is a lightweight, multi-platform command line tool that helps you use the
 multiple rubies (currently MRI, JRuby, and Rubinius) on your 32/64-bit Linux,
 OS X, or Windows systems.
