@@ -23,7 +23,7 @@
 #  put <%= data[:darwin_archive] %>
 #  EOF
 
-if DEPLOY_MODE
+if Module.constants.include?(:DEPLOY_MODE)
 
   require 'erb'
   require 'json'
