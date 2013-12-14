@@ -25,6 +25,9 @@ func Use(ctx *env.Context, msg string) {
 			fmt.Println("---> unable to find or process a `.ruby-version` file")
 			os.Exit(1)
 		}
+	case `nil`:
+		useNil(ctx)
+		os.Exit(0)
 	default:
 		tags, err = env.TagLabelToTag(ctx, cmd)
 		if err != nil {
