@@ -60,9 +60,8 @@ func Use(ctx *env.Context, msg string) {
 		os.Exit(1)
 	}
 
-	// create and execute the environment changing runner script
-	exec.CreateScript(ctx, &newPath, newRb.GemHome)
-	exec.ExecScript(ctx)
+	// create the environment switcher script
+	exec.CreateSwitcherScript(ctx, &newPath, newRb.GemHome)
 
 	switch msg {
 	case ``:

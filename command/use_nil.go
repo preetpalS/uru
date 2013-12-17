@@ -30,8 +30,7 @@ func useNil(ctx *env.Context) (err error) {
 	newPath := strings.Split(curPath[1], string(os.PathListSeparator))
 
 	// TODO handle pre-existing "system" GEM_HOME via URU_ORIGINAL_GEM_HOME envar
-	exec.CreateScript(ctx, &newPath, "")
-	exec.ExecScript(ctx)
+	exec.CreateSwitcherScript(ctx, &newPath, "")
 
 	return
 }
