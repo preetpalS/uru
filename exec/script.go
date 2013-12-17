@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -86,24 +85,4 @@ func CreateSwitcherScript(ctx *env.Context, path *[]string, gemHome string) (scr
 	}
 
 	return
-}
-
-// ExecScript executes the runner script based upon the type of shell that
-// called the uru runtime.
-func ExecScript(ctx *env.Context) {
-
-	runner := filepath.Join(ctx.Home(), scriptName)
-	var cmd *exec.Cmd
-	switch os.Getenv(`URU_INVOKER`) {
-	case `powershell`:
-		cmd = exec.Command("powershell", "-file", runner)
-	case `batch`:
-		cmd = exec.Command("cmd", runner)
-	case `bash`:
-		cmd = exec.Command("sh", runner)
-	default:
-		panic("uru invoked from unknown shell (check URU_INVOKER env var)")
-	}
-
-	cmd.Run()
 }
