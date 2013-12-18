@@ -36,7 +36,7 @@ func PrintCommandSummary() {
 	}
 
 	fmt.Fprintf(os.Stderr, "%6.6s   %s\n",
-		"TAG", "switch to use ruby version TAG")
+		"TAG", "switch to use ruby version TAG, '.', or 'nil'")
 }
 
 func printAdminCommandSummary() {
