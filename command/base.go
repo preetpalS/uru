@@ -43,46 +43,55 @@ func rubyExec(ctx *env.Context) (err error) {
 			break
 		}
 
-		// set env vars in this process so they'll be injected into the child process
+		// set env vars in current process to be inherited by the child process
 		err = os.Setenv(`PATH`, strings.Join(pth, string(os.PathListSeparator)))
 		if err != nil {
 			fmt.Printf("[ERROR] setting PATH, unable to run `%s %s`\n\n", ctx.Cmd(),
 				strings.Join(ctx.CmdArgs(), " "))
 			break
 		}
-		// XXX clears and sets but also creates unnecessary empty GEM_HOME env var
-		err = os.Setenv(`GEM_HOME`, info.GemHome)
-		if err != nil {
-			fmt.Printf("[ERROR] setting GEM_HOME, unable to run `%s %s`\n\n", ctx.Cmd(),
-				strings.Join(ctx.CmdArgs(), " "))
-			break
+		// on Windows, gems are installed in the ruby tree; GEM_HOME is not used
+		if runtime.GOOS != `windows` {
+			// XXX oddly, GEM_HOME must be set in current process so that users .gemrc
+			// is consulted. Setting os/exec's `Command.Env` causes users .gemrc to
+			// be ignored.
+			err = os.Setenv(`GEM_HOME`, info.GemHome)
+			if err != nil {
+				fmt.Printf("[ERROR] setting GEM_HOME, unable to run `%s %s`\n\n", ctx.Cmd(),
+					strings.Join(ctx.CmdArgs(), " "))
+				break
+			}
 		}
 
-		// run the command in a child process and reflect the child's stdout
+		// run the command in a child process and capture stdout/stderr
 		cmd := ctx.Cmd()
 		if runtime.GOOS == `windows` || cmd == `ruby` {
-			// bypass .bat wrappers when on windows; always select correct ruby exe
+			// on windows, bypass .bat wrappers; always select correct ruby exe
 			cmd = info.Exe
 		}
 		cmdArgs := ctx.CmdArgs()
 		if runtime.GOOS == `windows` && ctx.Cmd() == `gem` {
-			// bypass gem.bat wrapper on windows
+			// on windows, bypass gem.bat wrapper; always run gem via ruby exe
 			cmdArgs = append([]string{filepath.Join(info.Home, `gem`)}, cmdArgs...)
 		}
 		log.Printf("[DEBUG] === exec.Command args ===\n  cmd: %s\n  cmdArgs: %v\n",
 			cmd, cmdArgs)
-		out, err := exec.Command(cmd, cmdArgs...).CombinedOutput()
+
+		// TODO set runner.Stdin to allow interactive input to child process?
+		runner := exec.Command(cmd, cmdArgs...)
+		out, err := runner.CombinedOutput()
 		if err != nil {
 			fmt.Printf("---> unable to run `%s %s`\n\n", ctx.Cmd(),
 				strings.Join(ctx.CmdArgs(), " "))
-			fmt.Printf("--- returned error message ---\n%s\n\n", err.Error())
-			fmt.Printf("--- combined child output ---\n%s\n", out)
+
+			log.Printf("--- returned error message ---\n%s\n\n", err.Error())
+			log.Printf("--- combined child output ---\n%s\n", out)
 		} else {
 			fmt.Printf("%s\n", out)
 		}
 	}
 
-	// switch back to the original ruby
+	// revert to the original ruby
 	os.Setenv(`PATH`, curPath)
 	if curGemHome != `` {
 		os.Setenv(`GEM_HOME`, curGemHome)
