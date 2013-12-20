@@ -76,8 +76,11 @@ func rubyExec(ctx *env.Context) (err error) {
 		log.Printf("[DEBUG] === exec.Command args ===\n  cmd: %s\n  cmdArgs: %v\n",
 			cmd, cmdArgs)
 
-		// TODO set runner.Stdin to allow interactive input to child process?
 		runner := exec.Command(cmd, cmdArgs...)
+		// TODO while allowing communication with the child process, intermediate
+		// output from the child process is not currently displayed making this
+		// capability almost useless.
+		runner.Stdin = os.Stdin
 		out, err := runner.CombinedOutput()
 		if err != nil {
 			fmt.Printf("---> unable to run `%s %s`\n\n", ctx.Cmd(),
