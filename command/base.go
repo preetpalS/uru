@@ -50,8 +50,7 @@ func rubyExec(ctx *env.Context) (err error) {
 				strings.Join(ctx.CmdArgs(), " "))
 			break
 		}
-		// on Windows, gems are installed in the ruby tree; GEM_HOME is not used
-		if runtime.GOOS != `windows` {
+		if info.GemHome != `` {
 			// XXX oddly, GEM_HOME must be set in current process so that users .gemrc
 			// is consulted. Setting os/exec's `Command.Env` causes users .gemrc to
 			// be ignored.
