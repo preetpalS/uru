@@ -9,15 +9,21 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"bitbucket.org/jonforums/uru/env"
+)
+
+const (
+	SINGLE_REGISTRATION = iota
+	MULTI_REGISTRATION
 )
 
 func init() {
 	AdminCmdRegistry["add"] = Command{
 		Name:    "add",
 		Aliases: nil,
-		Usage:   "admin add RUBY_DIR [--tag TAG] | system",
+		Usage:   "admin add DIR [--tag TAG] | --recurse DIR [--dirtag] | system",
 		HelpMsg: "register an existing ruby installation",
 		Eg:      `admin add C:\ruby200\bin`}
 }
@@ -27,16 +33,15 @@ func adminAdd(ctx *env.Context) {
 	cmdArgs := ctx.CmdArgs()
 
 	if argsLen = len(cmdArgs); argsLen == 0 {
-		fmt.Println("[ERROR] must specify a ruby bindir or `system`.")
+		fmt.Println("[ERROR] must specify a ruby installation or `system`.")
 		os.Exit(1)
 	}
 
-	loc := cmdArgs[0]
-
-	tagAlias := ``
+	var tagAlias, baseDir string
+	var dirTag bool
 	for i, v := range ctx.CmdArgs() {
 		if v == `--tag` {
-			if i < argsLen {
+			if i < argsLen-1 {
 				tagAlias = cmdArgs[i+1]
 				break
 			} else {
@@ -44,13 +49,77 @@ func adminAdd(ctx *env.Context) {
 				os.Exit(1)
 			}
 		}
+		if v == `--recurse` {
+			if i < argsLen-1 {
+				baseDir = cmdArgs[i+1]
+			} else {
+				fmt.Println("[ERROR] invalid `admin add --recurse BASE_DIR` invocation.")
+				os.Exit(1)
+			}
+		}
+		if v == `--dirtag` {
+			dirTag = true
+		}
 	}
 
+	if baseDir != `` {
+		// register ruby installations in subdirs of given base dir
+		loc, err := filepath.Abs(baseDir)
+		if err != nil {
+			fmt.Println("[ERROR] unable to determine absolute ruby base dir path.")
+			os.Exit(1)
+		}
+
+		subdirs, err := filepath.Glob(filepath.Join(loc, `*`, `bin`))
+		if subdirs == nil || err != nil {
+			fmt.Println("[ERROR] unable to determine ruby base dir subdirs.")
+			os.Exit(1)
+		}
+
+	SubdirLoop:
+		for _, bindir := range subdirs {
+			for _, i := range ctx.Registry.Rubies {
+				// XXX comparison of string paths too fragile?
+				if i.Home == bindir {
+					fmt.Printf("---> Skipping. `%s` is already registered\n", bindir)
+					continue SubdirLoop
+				}
+			}
+
+			if dirTag {
+				tagAlias = strings.Trim(fmt.Sprintf("%-12.12s", filepath.Base(filepath.Dir(bindir))), ` `)
+			} else {
+				tagAlias = ``
+			}
+
+			registerRuby(ctx, bindir, tagAlias, MULTI_REGISTRATION)
+		}
+	} else {
+		// register ruby installation in given bin directory
+		loc, err := filepath.Abs(cmdArgs[0])
+		if err != nil {
+			fmt.Println("[ERROR] unable to determine absolute ruby bindir path.")
+			os.Exit(1)
+		}
+
+		for _, i := range ctx.Registry.Rubies {
+			// XXX comparison of string paths too fragile?
+			if i.Home == loc {
+				fmt.Printf("---> Skipping. `%s` is already registered\n", loc)
+				return
+			}
+		}
+
+		registerRuby(ctx, loc, tagAlias, SINGLE_REGISTRATION)
+	}
+}
+
+func registerRuby(ctx *env.Context, location string, tagAlias string, regType int) {
 	var rbPath, ext string
 	if runtime.GOOS == `windows` {
-		ext = ".exe"
+		ext = `.exe`
 	}
-	switch loc {
+	switch location {
 	case `system`:
 		var err error
 		for _, v := range env.KnownRubies {
@@ -61,17 +130,17 @@ func adminAdd(ctx *env.Context) {
 		}
 	default:
 		for _, v := range env.KnownRubies {
-			rbPath = filepath.Join(loc, fmt.Sprintf("%s%s", v, ext))
+			rbPath = filepath.Join(location, fmt.Sprintf("%s%s", v, ext))
 			_, err := os.Stat(rbPath)
 			if os.IsNotExist(err) {
-				rbPath = ""
+				rbPath = ``
 				continue
 			} else {
 				break
 			}
 		}
 		if rbPath == `` {
-			fmt.Printf("---> Unable to find a known ruby at `%s`\n", loc)
+			fmt.Printf("---> Unable to find a known ruby at `%s`\n", location)
 			return
 		}
 	}
@@ -90,20 +159,21 @@ func adminAdd(ctx *env.Context) {
 	// assume the vast majority of windows users install gems into the ruby
 	// installation; clear GEM_HOME value source to prevent persisting a
 	// GEM_HOME value for the ruby being registered.
-	// XXX potential usage bug
 	if runtime.GOOS == `windows` {
 		rbInfo.GemHome = ``
 	}
 
+	// XXX is this really needed?
 	// patch metadata if adding a ruby with the same default tag label as an
 	// existing registered ruby.
-	for t, i := range ctx.Registry.Rubies {
-		// default tag labels are the same but tag (description/home hash) is different
-		if rbInfo.TagLabel == i.TagLabel && tag != t {
-			if tagAlias != `` {
-				rbInfo.TagLabel = tagAlias
-			} else {
-				fmt.Printf(`
+	if regType == SINGLE_REGISTRATION {
+		for t, i := range ctx.Registry.Rubies {
+			// default tag labels are the same but tag (description/home hash) is different
+			if rbInfo.TagLabel == i.TagLabel && tag != t {
+				if tagAlias != `` {
+					rbInfo.TagLabel = tagAlias
+				} else {
+					fmt.Printf(`
 ---> So sorry, but I'm not able to register the following ruby
 --->
 --->   %s
@@ -112,29 +182,25 @@ func adminAdd(ctx *env.Context) {
 ---> ruby. Please re-register the ruby with a unique tag alias by
 ---> running the following command:
 --->
---->   %s admin add RUBY_DIR --tag TAG
+--->   %s admin add DIR --tag TAG
 --->
----> where TAG is 12 characters or less.`, loc, env.AppName)
-				os.Exit(1)
+---> where TAG is 12 characters or less.`, location, env.AppName)
+					os.Exit(1)
+				}
 			}
 		}
 	}
 
 	// patch metadata if adding a system ruby
-	if loc == `system` {
+	if location == `system` {
 		rbInfo.TagLabel = `system`
 		rbInfo.GemHome = os.Getenv(`GEM_HOME`) // user configured value or empty
-	}
-
-	// TODO allow overwriting or force rm/add cycle?
-	if _, ok := ctx.Registry.Rubies[tag]; ok {
-		fmt.Printf("---> Skipping. `%s` is already registered\n", rbPath)
-		return
 	}
 
 	ctx.Registry.Rubies[tag] = rbInfo
 
 	// persist the new and existing registered rubies to the filesystem
+	// XXX marshall for each --recurse invocation?
 	err = env.MarshalRubies(ctx)
 	if err != nil {
 		fmt.Printf("---> Failed to register `%s`, try again\n", rbPath)
