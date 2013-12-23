@@ -96,17 +96,20 @@ func adminAdd(ctx *env.Context) {
 		}
 	} else {
 		// register ruby installation in given bin directory
-		loc, err := filepath.Abs(cmdArgs[0])
-		if err != nil {
-			fmt.Println("[ERROR] unable to determine absolute ruby bindir path.")
-			os.Exit(1)
-		}
+		var loc = cmdArgs[0]
+		if loc != `system` {
+			loc, err := filepath.Abs(loc)
+			if err != nil {
+				fmt.Println("[ERROR] unable to determine absolute ruby bindir path.")
+				os.Exit(1)
+			}
 
-		for _, i := range ctx.Registry.Rubies {
-			// XXX comparison of string paths too fragile?
-			if i.Home == loc {
-				fmt.Printf("---> Skipping. `%s` is already registered\n", loc)
-				return
+			for _, i := range ctx.Registry.Rubies {
+				// XXX comparison of string paths too fragile?
+				if i.Home == loc {
+					fmt.Printf("---> Skipping. `%s` is already registered\n", loc)
+					return
+				}
 			}
 		}
 
