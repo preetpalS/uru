@@ -11,7 +11,7 @@ import (
 
 const (
 	AppName    = `uru`
-	AppVersion = `0.7.1.gamma`
+	AppVersion = `0.7.1`
 )
 
 var (
