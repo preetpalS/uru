@@ -15,7 +15,7 @@ type RubyMap map[string]Ruby
 
 type RubyRegistry struct {
 	Version string
-	Rubies  map[string]Ruby
+	Rubies  RubyMap
 }
 
 type Context struct {
