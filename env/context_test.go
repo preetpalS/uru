@@ -1,0 +1,117 @@
+// Author: Jon Maken, All Rights Reserved
+// License: 3-clause BSD
+
+package env
+
+import (
+	"reflect"
+	"regexp"
+	"testing"
+)
+
+func TestContextInit(t *testing.T) {
+	var ctx Context
+	var reg = RubyRegistry{RubyRegistryVersion, RubyMap{}}
+	ctx.Init()
+
+	if ctx.commandRegex == nil {
+		t.Error("Context's `commandRegex` member not initialized")
+	}
+
+	rv := ctx.Registry
+	if !reflect.DeepEqual(rv, reg) {
+		t.Errorf("Context's `Registry` member not initialized correctly\n  want: `%v`\n  got: `%v`",
+			reg,
+			rv)
+	}
+}
+
+func TestContextCmdRegex(t *testing.T) {
+	var ctx Context
+	var r *regexp.Regexp
+	ctx.Init()
+
+	ctx.SetCmdRegex(`version`, `\Aver(?:sion)?\z`)
+	r = ctx.commandRegex[`version`]
+	rv := ctx.CmdRegex(`version`)
+	if rv != r {
+		t.Errorf("Contex.CmdRegex() not returning correct value\n  want: `%v`\n  got: `%v`",
+			r,
+			rv)
+	}
+}
+
+func TestContextHome(t *testing.T) {
+	var ctx Context
+	ctx.Init()
+
+	if ctx.Home() != `` {
+		t.Error("Context's `home` member not initialized to an empty string")
+	}
+
+	val := `test_home`
+	ctx.SetHome(val)
+	rv := ctx.Home()
+	if rv != val {
+		t.Errorf("Context.Home() not returning correct value\n  want: `%s`\n  got: `%s`",
+			val,
+			rv)
+	}
+}
+
+func TestContextCmd(t *testing.T) {
+	var ctx Context
+	ctx.Init()
+
+	if ctx.Cmd() != `` {
+		t.Error("Context's `command` member not initialized to an empty string")
+	}
+
+	val := `test_command`
+	ctx.SetCmd(val)
+	rv := ctx.Cmd()
+	if rv != val {
+		t.Errorf("Context.Cmd() not returning correct value\n  want: `%s`\n  got: `%s`",
+			val,
+			rv)
+	}
+}
+
+func TestContextCmdArgs(t *testing.T) {
+	var ctx Context
+	ctx.Init()
+
+	if ctx.CmdArgs() != nil {
+		t.Error("Context's `commandArgs` member not initialized to a nil string slice")
+	}
+
+	val := []string{`arg1`, `arg2`, `arg3`, `arg4`}
+	ctx.SetCmdArgs(val)
+	rv := ctx.CmdArgs()
+	if !reflect.DeepEqual(rv, val) {
+		t.Errorf("Context.CmdArgs() not returning correct value\n  want: `%v`\n  got: `%v`",
+			val,
+			rv)
+	}
+}
+
+func TestContextSetCmdAndArgs(t *testing.T) {
+	var ctx Context
+	ctx.Init()
+
+	cmdVal := `test_combined_command`
+	cmdArgsVal := []string{`combined_arg1`, `combined_arg2`, `combined_arg3`}
+	ctx.SetCmdAndArgs(cmdVal, cmdArgsVal)
+	rv := ctx.Cmd()
+	if rv != cmdVal {
+		t.Errorf("Context.Cmd() not returning correct value\n  want: `%s`\n  got: `%v`",
+			cmdVal,
+			rv)
+	}
+	rv2 := ctx.CmdArgs()
+	if !reflect.DeepEqual(rv2, cmdArgsVal) {
+		t.Errorf("Context.CmdArgs() not returning correct value\n  want: `%v`\n  got: `%v`",
+			cmdArgsVal,
+			rv2)
+	}
+}
