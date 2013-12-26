@@ -7,18 +7,41 @@ package main
 
 import (
 	"flag"
+	"io/ioutil"
 	"log"
 	"os"
 
 	"bitbucket.org/jonforums/uru/command"
+	"bitbucket.org/jonforums/uru/env"
 )
+
+var (
+	debug   = flag.Bool(`debug`, false, "enable debug mode")
+	help    = flag.Bool(`help`, false, "this help summary")
+	version = flag.Bool(`version`, false, "show version info")
+
+	ctx = env.NewContext()
+)
+
+func init() {
+	flag.Parse()
+
+	if !*debug {
+		log.SetOutput(ioutil.Discard)
+	}
+	log.Printf("[DEBUG] initializing uru v%s\n", env.AppVersion)
+
+	initHome()
+	initCommandParser()
+	initRubies()
+}
 
 func main() {
 	if len(os.Args) == 1 || *help == true {
-		command.Help(&ctx)
+		command.Help(ctx)
 	}
 	if *version == true {
-		command.Version(&ctx)
+		command.Version(ctx)
 		os.Exit(0)
 	}
 
@@ -26,20 +49,21 @@ func main() {
 	ctx.SetCmdAndArgs(cmd, flag.Args()[1:])
 	log.Printf("[DEBUG] cmd = %s\n", cmd)
 
+	// builtin command router
 	switch {
 	case ctx.CmdRegex(`admin`).MatchString(cmd):
-		command.Admin(&ctx)
+		command.Admin(ctx)
 	case ctx.CmdRegex(`gem`).MatchString(cmd):
-		command.Gem(&ctx)
+		command.Gem(ctx)
 	case ctx.CmdRegex(`help`).MatchString(cmd):
-		command.Help(&ctx)
+		command.Help(ctx)
 	case ctx.CmdRegex(`ls`).MatchString(cmd):
-		command.List(&ctx)
+		command.List(ctx)
 	case ctx.CmdRegex(`ruby`).MatchString(cmd):
-		command.Ruby(&ctx)
+		command.Ruby(ctx)
 	case ctx.CmdRegex(`version`).MatchString(cmd):
-		command.Version(&ctx)
+		command.Version(ctx)
 	default:
-		command.Use(&ctx, ``)
+		command.Use(ctx, ``)
 	}
 }

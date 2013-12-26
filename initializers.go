@@ -48,11 +48,6 @@ func initHome() {
 	filepath.Walk(ctx.Home(), walk)
 }
 
-// Make uru's Context ready for general use.
-func initContext() {
-	ctx.Init()
-}
-
 // Initialize uru's CLI parser.
 func initCommandParser() {
 	ctx.SetCmdRegex(`admin`, `\Aadmin\z`)
