@@ -27,14 +27,6 @@ type Context struct {
 	Registry RubyRegistry
 }
 
-func (c *Context) Init() {
-	c.commandRegex = make(map[string]*regexp.Regexp)
-	c.Registry = RubyRegistry{
-		Version: RubyRegistryVersion,
-		Rubies:  make(RubyMap, 4),
-	}
-}
-
 func (c *Context) CmdRegex(cmd string) *regexp.Regexp {
 	if c.commandRegex == nil {
 		panic("Context has not been initialized")
@@ -78,4 +70,14 @@ func (c *Context) SetCmdArgs(args []string) {
 func (c *Context) SetCmdAndArgs(cmd string, args []string) {
 	c.command = cmd
 	c.commandArgs = args
+}
+
+func NewContext() *Context {
+	return &Context{
+		commandRegex: make(map[string]*regexp.Regexp),
+		Registry:  RubyRegistry{
+			Version: RubyRegistryVersion,
+			Rubies:  make(RubyMap, 4),
+		},
+	}
 }

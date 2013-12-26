@@ -10,9 +10,8 @@ import (
 )
 
 func TestContextInit(t *testing.T) {
-	var ctx Context
+	var ctx = NewContext()
 	var reg = RubyRegistry{RubyRegistryVersion, RubyMap{}}
-	ctx.Init()
 
 	if ctx.commandRegex == nil {
 		t.Error("Context's `commandRegex` member not initialized")
@@ -27,9 +26,8 @@ func TestContextInit(t *testing.T) {
 }
 
 func TestContextCmdRegex(t *testing.T) {
-	var ctx Context
+	var ctx = NewContext()
 	var r *regexp.Regexp
-	ctx.Init()
 
 	ctx.SetCmdRegex(`version`, `\Aver(?:sion)?\z`)
 	r = ctx.commandRegex[`version`]
@@ -42,8 +40,7 @@ func TestContextCmdRegex(t *testing.T) {
 }
 
 func TestContextHome(t *testing.T) {
-	var ctx Context
-	ctx.Init()
+	var ctx = NewContext()
 
 	if ctx.Home() != `` {
 		t.Error("Context's `home` member not initialized to an empty string")
@@ -60,8 +57,7 @@ func TestContextHome(t *testing.T) {
 }
 
 func TestContextCmd(t *testing.T) {
-	var ctx Context
-	ctx.Init()
+	var ctx = NewContext()
 
 	if ctx.Cmd() != `` {
 		t.Error("Context's `command` member not initialized to an empty string")
@@ -78,8 +74,7 @@ func TestContextCmd(t *testing.T) {
 }
 
 func TestContextCmdArgs(t *testing.T) {
-	var ctx Context
-	ctx.Init()
+	var ctx = NewContext()
 
 	if ctx.CmdArgs() != nil {
 		t.Error("Context's `commandArgs` member not initialized to a nil string slice")
@@ -96,8 +91,7 @@ func TestContextCmdArgs(t *testing.T) {
 }
 
 func TestContextSetCmdAndArgs(t *testing.T) {
-	var ctx Context
-	ctx.Init()
+	var ctx = NewContext()
 
 	cmdVal := `test_combined_command`
 	cmdArgsVal := []string{`combined_arg1`, `combined_arg2`, `combined_arg3`}
