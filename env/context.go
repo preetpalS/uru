@@ -75,7 +75,7 @@ func (c *Context) SetCmdAndArgs(cmd string, args []string) {
 func NewContext() *Context {
 	return &Context{
 		commandRegex: make(map[string]*regexp.Regexp),
-		Registry:  RubyRegistry{
+		Registry: RubyRegistry{
 			Version: RubyRegistryVersion,
 			Rubies:  make(RubyMap, 4),
 		},
