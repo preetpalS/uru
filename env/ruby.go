@@ -19,10 +19,8 @@ import (
 )
 
 var (
-	rbRegex, rbVerRegex *regexp.Regexp
-	KnownRubies         []string
-
-	SysRbRegex *regexp.Regexp
+	rbRegex, rbVerRegex, rbMajMinRegex, SysRbRegex *regexp.Regexp
+	KnownRubies                                    []string
 
 	Canary = fmt.Sprintf("%s%s%s", string(os.PathListSeparator),
 		string(os.PathListSeparator), string(os.PathListSeparator))
@@ -47,6 +45,11 @@ func init() {
 	rbVerRegex, err = regexp.Compile(`\A(\d\.\d\.\d)`)
 	if err != nil {
 		panic("unable to compile ruby version parsing regexp")
+	}
+
+	rbMajMinRegex, err = regexp.Compile(`\A(\d\.\d)`)
+	if err != nil {
+		panic("unable to compile ruby major/minor version parsing regexp")
 	}
 
 	SysRbRegex, err = regexp.Compile(`\Asys`)
@@ -153,15 +156,7 @@ func RubyInfo(ctx *Context, ruby string) (tag string, info Ruby, err error) {
 			// TODO implement
 			panic("unable to create new tag for ruby")
 		}
-
-		usrHome := ``
-		if runtime.GOOS == `windows` {
-			usrHome = os.Getenv(`USERPROFILE`)
-		} else {
-			usrHome = os.Getenv(`HOME`)
-		}
-		info.GemHome = filepath.Join(usrHome, `.gem`, info.Exe,
-			rbVerRegex.FindStringSubmatch(info.ID)[0])
+		info.GemHome = gemHome(info)
 	} else {
 		err = errors.New("unable to parse ruby name and version info")
 		return
@@ -219,4 +214,21 @@ func MarshalRubies(ctx *Context) (err error) {
 
 	os.Remove(dst)
 	return
+}
+
+func gemHome(rb Ruby) string {
+	usrHome := ``
+	if runtime.GOOS == `windows` {
+		usrHome = os.Getenv(`USERPROFILE`)
+	} else {
+		usrHome = os.Getenv(`HOME`)
+	}
+
+	rbLibVersion := rbVerRegex.FindStringSubmatch(rb.ID)[0]
+	switch {
+	case rbLibVersion >= `2.1.0`:
+		rbLibVersion = fmt.Sprintf("%s.0", rbMajMinRegex.FindStringSubmatch(rbLibVersion)[0])
+	}
+
+	return filepath.Join(usrHome, `.gem`, rb.Exe, rbLibVersion)
 }

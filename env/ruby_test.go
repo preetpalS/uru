@@ -4,6 +4,7 @@
 package env
 
 import (
+	"path/filepath"
 	"testing"
 )
 
@@ -107,4 +108,25 @@ func TestRubyRegex(t *testing.T) {
 		}
 	}
 
+}
+
+func TestGemHome(t *testing.T) {
+	rubies := []Ruby{
+		{ID: `1.9.3-p471`, Exe: `ruby`},
+		{ID: `2.0.0-p376`, Exe: `ruby`},
+		{ID: `2.1.0-p0`, Exe: `ruby`},
+		{ID: `2.1.1-p7`, Exe: `ruby`},
+		{ID: `2.2.5-p34`, Exe: `ruby`},
+	}
+	rvs := []string{`1.9.3`, `2.0.0`, `2.1.0`, `2.1.0`, `2.2.0`}
+
+	for i, rb := range rubies {
+		rv := filepath.Base(gemHome(rb))
+		val := rvs[i]
+		if rv != val {
+			t.Errorf("gemHome() not returning correct version value\n  want: `%v`\n  got: `%v`",
+				val,
+				rv)
+		}
+	}
 }
