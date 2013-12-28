@@ -26,6 +26,20 @@ var (
 		string(os.PathListSeparator), string(os.PathListSeparator))
 )
 
+type MarshalFunc func(ctx *Context) error
+
+type RubyMarshaller struct {
+	marshaller MarshalFunc
+}
+
+func NewRubyMarshaller(m MarshalFunc) *RubyMarshaller {
+	return &RubyMarshaller{marshaller: m}
+}
+
+func (m *RubyMarshaller) MarshalRubyRegistry(ctx *Context) (err error) {
+	return m.marshaller(ctx)
+}
+
 type Ruby struct {
 	ID          string // ruby version including patch number
 	TagLabel    string // user friendly ruby tag value
@@ -166,8 +180,8 @@ func RubyInfo(ctx *Context, ruby string) (tag string, info Ruby, err error) {
 	return
 }
 
-// MarshallRubies persists the registered rubies to a JSON formatted file.
-func MarshalRubies(ctx *Context) (err error) {
+// marshalRubies persists the registered rubies to a JSON formatted file.
+func marshalRubies(ctx *Context) (err error) {
 	src := filepath.Join(ctx.Home(), `rubies.json`)
 	dst := filepath.Join(ctx.Home(), `rubies.json.bak`)
 
@@ -216,6 +230,8 @@ func MarshalRubies(ctx *Context) (err error) {
 	return
 }
 
+// gemHome returns a string containing the filesystem location of a particular
+// Ruby's gem home and is used to the the Ruby's GEM_HOME envar.
 func gemHome(rb Ruby) string {
 	usrHome := ``
 	if runtime.GOOS == `windows` {

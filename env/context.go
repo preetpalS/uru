@@ -24,6 +24,8 @@ type Context struct {
 	command      string
 	commandArgs  []string
 
+	marshaller   *RubyMarshaller
+
 	Registry RubyRegistry
 }
 
@@ -72,9 +74,18 @@ func (c *Context) SetCmdAndArgs(cmd string, args []string) {
 	c.commandArgs = args
 }
 
+func (c *Context) Marshaller() *RubyMarshaller {
+	return c.marshaller
+}
+
+func (c *Context) SetMarshaller(m *RubyMarshaller) {
+	c.marshaller = m
+}
+
 func NewContext() *Context {
 	return &Context{
 		commandRegex: make(map[string]*regexp.Regexp),
+		marshaller: NewRubyMarshaller(marshalRubies),
 		Registry: RubyRegistry{
 			Version: RubyRegistryVersion,
 			Rubies:  make(RubyMap, 4),

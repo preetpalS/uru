@@ -204,7 +204,7 @@ func registerRuby(ctx *env.Context, location string, tagAlias string, regType in
 
 	// persist the new and existing registered rubies to the filesystem
 	// XXX marshall for each --recurse invocation?
-	err = env.MarshalRubies(ctx)
+	err = ctx.Marshaller().MarshalRubyRegistry(ctx)
 	if err != nil {
 		fmt.Printf("---> Failed to register `%s`, try again\n", rbPath)
 	} else {

@@ -83,7 +83,7 @@ func adminRemove(ctx *env.Context) {
 		delete(ctx.Registry.Rubies, tag)
 	}
 
-	err := env.MarshalRubies(ctx)
+	err := ctx.Marshaller().MarshalRubyRegistry(ctx)
 	if err != nil {
 		fmt.Printf("---> Failed to remove `%s`. Try again", tagLabel)
 	}
