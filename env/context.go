@@ -9,15 +9,6 @@ import (
 	"regexp"
 )
 
-const RubyRegistryVersion = `1.0.0`
-
-type RubyMap map[string]Ruby
-
-type RubyRegistry struct {
-	Version string
-	Rubies  RubyMap
-}
-
 type Context struct {
 	commandRegex map[string]*regexp.Regexp
 	home         string

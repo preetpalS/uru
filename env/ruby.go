@@ -18,6 +18,8 @@ import (
 	"strings"
 )
 
+const RubyRegistryVersion = `1.0.0`
+
 var (
 	rbRegex, rbVerRegex, rbMajMinRegex, SysRbRegex *regexp.Regexp
 	KnownRubies                                    []string
@@ -25,6 +27,13 @@ var (
 	Canary = fmt.Sprintf("%s%s%s", string(os.PathListSeparator),
 		string(os.PathListSeparator), string(os.PathListSeparator))
 )
+
+type RubyMap map[string]Ruby
+
+type RubyRegistry struct {
+	Version string
+	Rubies  RubyMap
+}
 
 type MarshalFunc func(ctx *Context) error
 
