@@ -18,7 +18,7 @@ var (
 			Exe:         `ruby`,
 			Home:        `/home/fake/.rubies/ruby-2.1.0/bin`,
 			GemHome:     `/home/fake/.gem/ruby/2.1.0`,
-			Description: `ruby 2.1.1p1 (2013-12-27 revision 44443) [i386-mingw32]`,
+			Description: `ruby 2.1.1p1 (2013-12-27 revision 44443) [x86_64-linux]`,
 		},
 		{
 			ID:          `1.7.9`,
@@ -30,7 +30,7 @@ var (
 		},
 	}
 	testLabels = []string{`211`, `179`}
-	testTags   = []string{`2292638747`, `444332046`}
+	testTags   = []string{`3577244517`, `444332046`}
 )
 
 func TestStringSplitPath(t *testing.T) {
