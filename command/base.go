@@ -34,7 +34,7 @@ func rubyExec(ctx *env.Context) (err error) {
 	curGemHome := os.Getenv(`GEM_HOME`)
 
 	for tag, info := range ctx.Registry.Rubies {
-		fmt.Printf("%s\n\n", info.Description)
+		fmt.Printf("\n%s\n\n", info.Description)
 
 		pth, err := env.PathListForTag(ctx, tag)
 		if err != nil {
@@ -77,19 +77,14 @@ func rubyExec(ctx *env.Context) (err error) {
 			cmd, cmdArgs)
 
 		runner := exec.Command(cmd, cmdArgs...)
-		// TODO while allowing communication with the child process, intermediate
-		// output from the child process is not currently displayed making this
-		// capability almost useless.
 		runner.Stdin = os.Stdin
-		out, err := runner.CombinedOutput()
+		runner.Stdout = os.Stdout
+
+		err = runner.Run()
 		if err != nil {
 			fmt.Printf("---> unable to run `%s %s`\n\n", ctx.Cmd(),
 				strings.Join(ctx.CmdArgs(), " "))
-
-			log.Printf("--- returned error message ---\n%s\n\n", err.Error())
-			log.Printf("--- combined child output ---\n%s\n", out)
-		} else {
-			fmt.Printf("%s\n", out)
+			log.Printf("[DEBUG] === returned error message ===\n%s\n\n", err.Error())
 		}
 	}
 
