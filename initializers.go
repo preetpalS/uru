@@ -53,6 +53,7 @@ func initCommandParser() {
 	ctx.SetCmdRegex(`admin`, `\Aadmin\z`)
 	ctx.SetCmdRegex(`add`, `\Aadd\z`)
 	ctx.SetCmdRegex(`gem`, `\Agem\z`)
+	ctx.SetCmdRegex(`gemset`, `\Agemset|gs\z`)
 	ctx.SetCmdRegex(`help`, `\Ahelp\z`)
 	ctx.SetCmdRegex(`install`, `\Ainstall|in\z`)
 	ctx.SetCmdRegex(`ls`, `\Als|list\z`)

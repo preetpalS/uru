@@ -28,6 +28,8 @@ func Admin(ctx *env.Context) {
 	switch subCmd := cmdArgs[0]; {
 	case ctx.CmdRegex(`add`).MatchString(subCmd):
 		adminAdd(ctx)
+	case ctx.CmdRegex(`gemset`).MatchString(subCmd):
+		adminGemset(ctx)
 	case ctx.CmdRegex(`install`).MatchString(subCmd):
 		adminInstall(ctx)
 	case ctx.CmdRegex(`refresh`).MatchString(subCmd):
