@@ -28,6 +28,20 @@ type Command struct {
 	Eg      string
 }
 
+func parseGemsetName(rawName string) (ruby, gemset string, err error) {
+	names := strings.Split(rawName, `@`)
+	switch len(names) {
+	case 1:
+		ruby = names[0]
+		gemset = ``
+	case 2:
+		ruby = names[0]
+		gemset = names[1]
+	}
+
+	return
+}
+
 func rubyExec(ctx *env.Context) (err error) {
 	// TODO error check for empty PATH string
 	curPath := os.Getenv(`PATH`)
