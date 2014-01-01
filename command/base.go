@@ -30,7 +30,22 @@ type Command struct {
 
 func parseGemsetName(rawName string) (ruby, gemset string, err error) {
 	names := strings.Split(rawName, `@`)
-	switch len(names) {
+	namesLen := len(names)
+
+	// patch for `name@` bogus user input
+	if namesLen == 2 && names[1] == `` {
+		names = names[:1]
+		namesLen = len(names)
+	}
+	// patch for `name@gemset@malicious@...` bogus user input
+	if namesLen > 2 {
+		names = names[:2]
+		namesLen = len(names)
+	}
+
+	log.Printf("[DEBUG] === gemset names array ===\n  names: %v\n  namesLen: %d", names, namesLen)
+
+	switch namesLen {
 	case 1:
 		ruby = names[0]
 		gemset = ``
