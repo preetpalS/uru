@@ -5,18 +5,34 @@ package command
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"bitbucket.org/jonforums/uru/env"
 )
 
+// Implements the functionality for the incredibly dangerous user command
+//
+//    uru admin gemset rm
+//
+// which deletes the entire `.gem` directory tree in the current directory. As
+// such, the user visible command should be run from the root directory of a
+// project containing a gemset.
 func gemsetRemove(ctx *env.Context) (err error) {
-	rv, err := env.UIYesConfirm(`Delete all gems for all rubies of the gemset?`)
+	var rv, rootDir string
+	rv, err = env.UIYesConfirm("\nDelete the current project's entire gemset?")
 	if err != nil {
-		// TODO implement
+		return
 	}
 
 	if rv == `Y` {
-		fmt.Println("---> removing all gemset gems")
+		fmt.Println("---> removing the current project's gemset")
+
+		rootDir, err = os.Getwd()
+		if err != nil {
+			return
+		}
+		err = os.RemoveAll(filepath.Join(rootDir, `.gem`))
 	}
 
 	return

@@ -100,7 +100,7 @@ func TagLabelToTag(ctx *Context, label string) (tags RubyMap, err error) {
 		}
 	}
 	if len(tags) == 0 {
-		return nil, errors.New(fmt.Sprintf("unable to find ruby matching `%s`\n", label))
+		return nil, errors.New(fmt.Sprintf("---> unable to find ruby matching `%s`\n", label))
 	}
 	log.Printf("[DEBUG] tags matching `%s`\n%v\n", label, tags)
 

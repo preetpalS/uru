@@ -43,7 +43,7 @@ func parseGemsetName(rawName string) (ruby, gemset string, err error) {
 		namesLen = len(names)
 	}
 
-	log.Printf("[DEBUG] === gemset names array ===\n  names: %v\n  namesLen: %d", names, namesLen)
+	log.Printf("[DEBUG] === gemset names array ===\n  names: %v\n  namesLen: %d\n", names, namesLen)
 
 	switch namesLen {
 	case 1:

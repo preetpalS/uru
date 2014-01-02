@@ -21,7 +21,7 @@ import (
 const RubyRegistryVersion = `1.0.0`
 
 var (
-	rbRegex, rbVerRegex, rbMajMinRegex, SysRbRegex *regexp.Regexp
+	rbRegex, rbVerRegex, RbMajMinRegex, SysRbRegex *regexp.Regexp
 	KnownRubies                                    []string
 
 	Canary = fmt.Sprintf("%s%s%s", string(os.PathListSeparator),
@@ -70,7 +70,7 @@ func init() {
 		panic("unable to compile ruby version parsing regexp")
 	}
 
-	rbMajMinRegex, err = regexp.Compile(`\A(\d\.\d)`)
+	RbMajMinRegex, err = regexp.Compile(`\A(\d\.\d)`)
 	if err != nil {
 		panic("unable to compile ruby major/minor version parsing regexp")
 	}
@@ -252,7 +252,7 @@ func gemHome(rb Ruby) string {
 	rbLibVersion := rbVerRegex.FindStringSubmatch(rb.ID)[0]
 	switch {
 	case rbLibVersion >= `2.1.0`:
-		rbLibVersion = fmt.Sprintf("%s.0", rbMajMinRegex.FindStringSubmatch(rbLibVersion)[0])
+		rbLibVersion = fmt.Sprintf("%s.0", RbMajMinRegex.FindStringSubmatch(rbLibVersion)[0])
 	}
 
 	return filepath.Join(usrHome, `.gem`, rb.Exe, rbLibVersion)
