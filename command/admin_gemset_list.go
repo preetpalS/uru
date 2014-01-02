@@ -13,7 +13,7 @@ import (
 // list gems for all gemset members or just the gems relevant to the given
 // `ruby@gemset` name
 func gemsetList(ctx *env.Context, ruby, gemset string) (err error) {
-	if gemset != `gemset` && gemset != `` {
+	if gemset != `gemset` {
 		return errors.New("[ERROR] unable to list gemset gems. Only project gemsets supported.")
 	}
 
