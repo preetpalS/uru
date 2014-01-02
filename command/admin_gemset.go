@@ -18,7 +18,7 @@ func init() {
 	AdminCmdRegistry["gemset"] = Command{
 		Name:    "gemset",
 		Aliases: []string{"gemset", "gs"},
-		Usage:   "admin gemset init NAME... | ls [NAME] | rm",
+		Usage:   "admin gemset init NAME... | rm",
 		HelpMsg: "administer gemset installations",
 		Eg:      `admin gemset init 211@gemset`}
 }
@@ -50,25 +50,6 @@ func adminGemset(ctx *env.Context) {
 				fmt.Println(err)
 				continue
 			}
-		}
-	case `ls`:
-		if !(argsLen == 1 || argsLen == 2) {
-			fmt.Println("[ERROR] invalid `admin gemset ls [NAME]` invocation.")
-			os.Exit(1)
-		}
-
-		switch argsLen {
-		case 1:
-			rubyName = ``
-		default:
-			if rubyName, gemsetName, err = parseGemsetName(cmdArgs[1]); err != nil {
-				fmt.Println("[ERROR] invalid `admin gemset ls [NAME]` invocation.")
-				os.Exit(1)
-			}
-		}
-		if err = gemsetList(ctx, rubyName, gemsetName); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
 		}
 	case `rm`:
 		if err := gemsetRemove(ctx); err != nil {
