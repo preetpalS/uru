@@ -58,6 +58,12 @@ var rubies = map[string]rubyInfo{
 		`1.7.4`,
 		``,
 	},
+	`jruby-windows-1710`: rubyInfo{
+		`jruby 1.7.10 (1.9.3p392) 2014-01-09 c4ecd6b on Java HotSpot(TM) 64-Bit Server VM 1.7.0_45-b18 [Windows 8-amd64]`,
+		`jruby`,
+		`1.7.10`,
+		``,
+	},
 	`jruby-linux-174`: rubyInfo{
 		`jruby 1.7.4 (1.9.3p392) 2013-05-16 2390d3b on Java HotSpot(TM) Server VM 1.7.0_21-b11 [linux-i386]`,
 		`jruby`,

@@ -60,17 +60,17 @@ type Ruby struct {
 
 func init() {
 	var err error
-	rbRegex, err = regexp.Compile(`\A(j?ruby|rubinius)\s+(\d\.\d\.\d)(\w+)?(?:.+patchlevel )?(\d{1,3})?`)
+	rbRegex, err = regexp.Compile(`\A(j?ruby|rubinius)\s+(\d\.\d{1,2}\.\d{1,2})(\w+)?(?:.+patchlevel )?(\d{1,3})?`)
 	if err != nil {
 		panic("unable to compile ruby parsing regexp")
 	}
 
-	rbVerRegex, err = regexp.Compile(`\A(\d\.\d\.\d)`)
+	rbVerRegex, err = regexp.Compile(`\A(\d\.\d{1,2}\.\d{1,2})`)
 	if err != nil {
 		panic("unable to compile ruby version parsing regexp")
 	}
 
-	RbMajMinRegex, err = regexp.Compile(`\A(\d\.\d)`)
+	RbMajMinRegex, err = regexp.Compile(`\A(\d\.\d{1,2})`)
 	if err != nil {
 		panic("unable to compile ruby major/minor version parsing regexp")
 	}
