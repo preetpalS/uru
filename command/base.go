@@ -108,6 +108,7 @@ func rubyExec(ctx *env.Context) (err error) {
 		runner := exec.Command(cmd, cmdArgs...)
 		runner.Stdin = os.Stdin
 		runner.Stdout = os.Stdout
+		runner.Stderr = os.Stderr
 
 		err = runner.Run()
 		if err != nil {
