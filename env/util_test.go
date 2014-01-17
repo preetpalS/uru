@@ -62,9 +62,9 @@ func TestNewTag(t *testing.T) {
 	for i, rb := range testRubies {
 		rv, _ := NewTag(ctx, rb)
 		if rv != testTags[i] {
-		t.Errorf("NewTag not returning correct value\n  want: `%v`\n  got: `%v`",
-			testTags[i],
-			rv)
+			t.Errorf("NewTag not returning correct value\n  want: `%v`\n  got: `%v`",
+				testTags[i],
+				rv)
 		}
 	}
 }
