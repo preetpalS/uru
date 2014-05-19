@@ -10,23 +10,31 @@ import (
 )
 
 func TestContextInit(t *testing.T) {
-	var ctx = NewContext()
-	var reg = RubyRegistry{RubyRegistryVersion, RubyMap{}}
+	ctx := NewContext()
+	reg := RubyRegistry{
+		Version:    RubyRegistryVersion,
+		Rubies:     RubyMap{},
+	}
 
 	if ctx.commandRegex == nil {
 		t.Error("Context's `commandRegex` member not initialized")
 	}
 
 	rv := ctx.Registry
-	if !reflect.DeepEqual(rv, reg) {
-		t.Errorf("Context's `Registry` member not initialized correctly\n  want: `%v`\n  got: `%v`",
-			reg,
-			rv)
+	if rv.Version != reg.Version {
+		t.Errorf("Context's `Registry.Version` member not initialized correctly\n  want: `%v`\n  got: `%v`",
+			reg.Version,
+			rv.Version)
+	}
+	if !reflect.DeepEqual(rv.Rubies, reg.Rubies) {
+		t.Errorf("Context's `Registry.Rubies` member not initialized correctly\n  want: `%v`\n  got: `%v`",
+			reg.Rubies,
+			rv.Rubies)
 	}
 }
 
 func TestContextCmdRegex(t *testing.T) {
-	var ctx = NewContext()
+	ctx := NewContext()
 	var r *regexp.Regexp
 
 	ctx.SetCmdRegex(`version`, `\Aver(?:sion)?\z`)
@@ -40,7 +48,7 @@ func TestContextCmdRegex(t *testing.T) {
 }
 
 func TestContextHome(t *testing.T) {
-	var ctx = NewContext()
+	ctx := NewContext()
 
 	if ctx.Home() != `` {
 		t.Error("Context's `home` member not initialized to an empty string")
@@ -57,7 +65,7 @@ func TestContextHome(t *testing.T) {
 }
 
 func TestContextCmd(t *testing.T) {
-	var ctx = NewContext()
+	ctx := NewContext()
 
 	if ctx.Cmd() != `` {
 		t.Error("Context's `command` member not initialized to an empty string")
@@ -74,7 +82,7 @@ func TestContextCmd(t *testing.T) {
 }
 
 func TestContextCmdArgs(t *testing.T) {
-	var ctx = NewContext()
+	ctx := NewContext()
 
 	if ctx.CmdArgs() != nil {
 		t.Error("Context's `commandArgs` member not initialized to a nil string slice")
@@ -91,7 +99,7 @@ func TestContextCmdArgs(t *testing.T) {
 }
 
 func TestContextSetCmdAndArgs(t *testing.T) {
-	var ctx = NewContext()
+	ctx := NewContext()
 
 	cmdVal := `test_combined_command`
 	cmdArgsVal := []string{`combined_arg1`, `combined_arg2`, `combined_arg3`}
