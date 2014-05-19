@@ -4,7 +4,6 @@
 package env
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -214,20 +213,13 @@ func marshalRubies(ctx *Context) (err error) {
 		defer f.Close()
 	}
 
-	b, err := json.Marshal(ctx.Registry)
+	b, err := json.MarshalIndent(ctx.Registry, ``, `  `)
 	if err != nil {
 		log.Println("[DEBUG] unable to marshall the ruby registry to JSON")
 		return
 	}
 
-	buf := new(bytes.Buffer)
-	err = json.Indent(buf, b, ``, `  `)
-	if err != nil {
-		log.Println("[DEBUG] unable to format the JSON marshalled ruby registry")
-		return
-	}
-
-	err = ioutil.WriteFile(src, buf.Bytes(), 0)
+	err = ioutil.WriteFile(src, b, 0)
 	if err != nil {
 		os.Remove(src)
 		os.Rename(dst, src)
