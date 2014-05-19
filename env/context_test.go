@@ -12,8 +12,8 @@ import (
 func TestContextInit(t *testing.T) {
 	ctx := NewContext()
 	reg := RubyRegistry{
-		Version:    RubyRegistryVersion,
-		Rubies:     RubyMap{},
+		Version: RubyRegistryVersion,
+		Rubies:  RubyMap{},
 	}
 
 	if ctx.commandRegex == nil {
