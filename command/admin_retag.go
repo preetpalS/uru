@@ -63,7 +63,7 @@ func adminRetag(ctx *env.Context) {
 	rb.TagLabel = newLabel
 	ctx.Registry.Rubies[tag] = rb
 
-	err = ctx.Marshaller().MarshalRubyRegistry(ctx)
+	err = ctx.Registry.Marshal(ctx)
 	if err != nil {
 		fmt.Printf("---> Failed to retag `%s` to `%s`. Try again", origLabel, newLabel)
 	}

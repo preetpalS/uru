@@ -75,7 +75,7 @@ func adminRefresh(ctx *env.Context) {
 	log.Printf("[DEBUG] === fresh ruby metadata ===\n%+v\n", freshRubies)
 	ctx.Registry.Rubies = freshRubies
 
-	err := ctx.Marshaller().MarshalRubyRegistry(ctx)
+	err := ctx.Registry.Marshal(ctx)
 	if err != nil {
 		fmt.Println("---> unable to persist refreshed ruby metadata")
 		os.Exit(1)

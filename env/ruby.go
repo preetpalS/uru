@@ -29,23 +29,16 @@ var (
 
 type RubyMap map[string]Ruby
 
-type RubyRegistry struct {
-	Version string
-	Rubies  RubyMap
-}
-
 type MarshalFunc func(ctx *Context) error
 
-type RubyMarshaller struct {
+type RubyRegistry struct {
+	Version    string
+	Rubies     RubyMap
 	marshaller MarshalFunc
 }
 
-func NewRubyMarshaller(m MarshalFunc) *RubyMarshaller {
-	return &RubyMarshaller{marshaller: m}
-}
-
-func (m *RubyMarshaller) MarshalRubyRegistry(ctx *Context) (err error) {
-	return m.marshaller(ctx)
+func (rr *RubyRegistry) Marshal(ctx *Context) (err error) {
+	return rr.marshaller(ctx)
 }
 
 type Ruby struct {
