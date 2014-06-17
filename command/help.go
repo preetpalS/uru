@@ -20,7 +20,7 @@ func Help(ctx *env.Context) {
 		fmt.Fprintln(os.Stderr, "\nwhere [options] are:")
 		flag.PrintDefaults()
 		fmt.Fprintln(os.Stderr, "\nwhere CMD is one of:")
-		PrintCommandSummary()
+		printCommandSummary()
 		fmt.Fprintf(os.Stderr, "\nfor help on a particular command, type `%s help CMD`\n",
 			env.AppName)
 	} else {
@@ -30,7 +30,7 @@ func Help(ctx *env.Context) {
 	os.Exit(0)
 }
 
-func PrintCommandSummary() {
+func printCommandSummary() {
 	for k, v := range CommandRegistry {
 		fmt.Fprintf(os.Stderr, "%6.6s   %s\n", k, v.HelpMsg)
 	}
