@@ -20,7 +20,7 @@ var testGemsetNames = []struct {
 var testTagLabels = []struct {
 	TagLabel string
 	Reserved bool
-	Token string
+	Token    string
 }{
 	{`212p17`, false, ``},
 	{`auto`, true, `auto`},
