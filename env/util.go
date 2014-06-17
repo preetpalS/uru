@@ -18,8 +18,8 @@ import (
 )
 
 type tagInfo struct {
-	Tag      string
-	TagLabel string
+	Tag      string // unique internal identifier for a particular ruby
+	TagLabel string // modifiable, user friendly name for a particular ruby
 }
 
 // tagInfoSorter sorts slices of tagInfo structs by implementing sort.Interface by
