@@ -37,8 +37,8 @@ var (
 			Description: `jruby 1.7.10 (1.9.3p392) 2014-01-09 c4ecd6b on Java HotSpot(TM) 64-Bit Server VM 1.7.0_45-b18 [Windows 8-amd64]`,
 		},
 	}
-	testLabels = []string{`211`, `179`, `1710`}
-	testTags   = []string{`3577244517`, `444332046`, `3091568265`}
+	testTagLabels = []string{`211`, `179`, `1710`}
+	testTags      = []string{`3577244517`, `444332046`, `3091568265`}
 )
 
 func TestStringSplitPath(t *testing.T) {
@@ -88,7 +88,7 @@ func TestTagLabelToTag(t *testing.T) {
 
 	// valid tag label tests
 	for i, rb := range testRubies {
-		tags, err = TagLabelToTag(ctx, testLabels[i])
+		tags, err = TagLabelToTag(ctx, testTagLabels[i])
 		if err != nil {
 			t.Error("TagLabelToTag() should not return error for valid tag label")
 		}
