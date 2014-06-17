@@ -14,12 +14,11 @@ import (
 func Use(ctx *env.Context, msg string) {
 	cmd := ctx.Cmd()
 
-	// use .ruby-version file contents to select which ruby to use
-	// credit: thanks to Luis Lavena for the idea
+	// use .ruby-version file contents to select which ruby to activate
 	var tags env.RubyMap
 	var err error
 	switch cmd {
-	case `.`:
+	case `auto`:
 		tags, err = useRubyVersionFile(ctx, versionator)
 		if err != nil {
 			fmt.Println("---> unable to find or process a `.ruby-version` file")
