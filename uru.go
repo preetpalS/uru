@@ -15,15 +15,11 @@ import (
 	"bitbucket.org/jonforums/uru/env"
 )
 
-var (
-	debug   = flag.Bool(`debug`, false, "enable debug mode")
-	help    = flag.Bool(`help`, false, "this help summary")
-	version = flag.Bool(`version`, false, "show version info")
-
-	ctx = env.NewContext()
-)
-
-func init() {
+func main() {
+	// initialization
+	debug := flag.Bool(`debug`, false, "enable debug mode")
+	help := flag.Bool(`help`, false, "this help summary")
+	version := flag.Bool(`version`, false, "show version info")
 	flag.Parse()
 
 	if !*debug {
@@ -31,12 +27,11 @@ func init() {
 	}
 	log.Printf("[DEBUG] initializing uru v%s\n", env.AppVersion)
 
-	initHome()
-	initCommandParser()
-	initRubies()
-}
+	ctx := env.NewContext()
+	initHome(ctx)
+	initCommandParser(ctx)
+	initRubies(ctx)
 
-func main() {
 	if len(os.Args) == 1 || *help == true {
 		command.Help(ctx)
 	}
@@ -46,6 +41,7 @@ func main() {
 	}
 
 	cmd := flag.Arg(0)
+	// FIXME out of slice bounds panic when only `uru -debug` is given
 	ctx.SetCmdAndArgs(cmd, flag.Args()[1:])
 	log.Printf("[DEBUG] cmd = %s\n", cmd)
 

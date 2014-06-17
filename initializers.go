@@ -11,10 +11,12 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"bitbucket.org/jonforums/uru/env"
 )
 
 // Initialize uru's home directory, creating if necessary.
-func initHome() {
+func initHome(ctx *env.Context) {
 	uruHome := os.Getenv(`URU_HOME`)
 	if uruHome == `` {
 		if runtime.GOOS == `windows` {
@@ -45,7 +47,7 @@ func initHome() {
 }
 
 // Initialize uru's CLI parser.
-func initCommandParser() {
+func initCommandParser(ctx *env.Context) {
 	ctx.SetCmdRegex(`admin`, `\Aadmin\z`)
 	ctx.SetCmdRegex(`add`, `\Aadd\z`)
 	ctx.SetCmdRegex(`gem`, `\Agem\z`)
@@ -61,7 +63,7 @@ func initCommandParser() {
 }
 
 // Import all installed rubies that have been registered with uru.
-func initRubies() {
+func initRubies(ctx *env.Context) {
 	rubies := filepath.Join(ctx.Home(), `rubies.json`)
 	_, err := os.Stat(rubies)
 	if os.IsNotExist(err) {
