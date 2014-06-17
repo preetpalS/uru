@@ -28,6 +28,18 @@ type Command struct {
 	Eg      string
 }
 
+func isTagLabelReserved(tagLabel string) (bool, string) {
+	resTagLabels := []string{`auto`, `nil`}
+
+	for _, label := range resTagLabels {
+		if tagLabel == label {
+			return true, label
+		}
+	}
+
+	return false, ``
+}
+
 func parseGemsetName(rawName string) (ruby, gemset string, err error) {
 	names := strings.Split(rawName, `@`)
 	namesLen := len(names)

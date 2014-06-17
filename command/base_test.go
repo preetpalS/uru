@@ -17,6 +17,17 @@ var testGemsetNames = []struct {
 	{RawName: `211@fake-gemset`, Ruby: `211`, Gemset: `fake-gemset`},
 }
 
+var testTagLabels = []struct {
+	TagLabel string
+	Reserved bool
+	Token string
+}{
+	{`212p17`, false, ``},
+	{`auto`, true, `auto`},
+	{`debug`, false, ``},
+	{`nil`, true, `nil`},
+}
+
 func TestParseGemsetName(t *testing.T) {
 	for _, v := range testGemsetNames {
 		ruby, gemset, err := parseGemsetName(v.RawName)
@@ -32,6 +43,24 @@ func TestParseGemsetName(t *testing.T) {
 			t.Errorf("parseGemsetName() returning incorrect gemset value\n  want: `%v`\n  got: `%v`",
 				v.Gemset,
 				gemset)
+		}
+	}
+}
+
+func TestIsTagLabelReserved(t *testing.T) {
+	for _, v := range testTagLabels {
+		rvBool, rvToken := isTagLabelReserved(v.TagLabel)
+		if rvBool != v.Reserved {
+			t.Errorf("isTagLabelReserved() incorrect return check value for `%v`\n  want: `%v`\n  got: `%v`\n",
+				v.TagLabel,
+				v.Reserved,
+				rvBool)
+		}
+		if rvToken != v.Token {
+			t.Errorf("isTagLabelReserved() incorrect return token value for `%v`\n  want: `%v`\n  got: `%v`\n",
+				v.TagLabel,
+				v.Token,
+				rvToken)
 		}
 	}
 }

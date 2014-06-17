@@ -154,9 +154,14 @@ func registerRuby(ctx *env.Context, location string, tagAlias string, regType in
 		return
 	}
 
-	// set tag alias if given
+	// set the tag alias if given and it does not conflict with a uru reserved label
 	if tagAlias != `` {
-		rbInfo.TagLabel = tagAlias
+		if rsvd, word := isTagLabelReserved(tagAlias); rsvd == true {
+			fmt.Printf("---> Tag label `%s` conflicts with reserved `%s`. Try again\n", tagAlias, word)
+			os.Exit(1)
+		} else {
+			rbInfo.TagLabel = tagAlias
+		}
 	}
 
 	// assume the vast majority of windows users install gems into the ruby
