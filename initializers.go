@@ -16,18 +16,14 @@ import (
 // Initialize uru's home directory, creating if necessary.
 func initHome() {
 	uruHome := os.Getenv(`URU_HOME`)
-	if runtime.GOOS == `windows` {
-		if uruHome == `` {
+	if uruHome == `` {
+		if runtime.GOOS == `windows` {
 			ctx.SetHome(filepath.Join(os.Getenv(`USERPROFILE`), `.uru`))
 		} else {
-			ctx.SetHome(uruHome)
+			ctx.SetHome(filepath.Join(os.Getenv(`HOME`), `.uru`))
 		}
 	} else {
-		if uruHome == `` {
-			ctx.SetHome(filepath.Join(os.Getenv(`HOME`), `.uru`))
-		} else {
-			ctx.SetHome(uruHome)
-		}
+		ctx.SetHome(uruHome)
 	}
 	log.Printf("[DEBUG] uru HOME is %s\n", ctx.Home())
 
