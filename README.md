@@ -1,6 +1,7 @@
 # Unleash Ruby
 
-**Current Version:** 0.7.4
+**Current Version:** 0.7.4  
+**[News][news]**
 
 Uru is a lightweight, multi-platform command line tool that helps you use the
 multiple rubies (currently MRI, JRuby, and Rubinius) on your 32/64-bit Linux,
@@ -124,6 +125,7 @@ jruby 1.7.4 (1.9.3p392) 2013-05-16 2390d3b on Java HotSpot(TM) Server VM 1.7.0_2
 Hello You!
 ~~~
 
+[news]: https://bitbucket.org/jonforums/uru/wiki/News
 [download]: https://bitbucket.org/jonforums/uru/wiki/Downloads
 [usage]: https://bitbucket.org/jonforums/uru/wiki/Usage
 [examples]: https://bitbucket.org/jonforums/uru/wiki/Examples
