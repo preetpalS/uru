@@ -60,7 +60,7 @@ func adminRetag(ctx *env.Context) {
 	rb := ctx.Registry.Rubies[tag]
 	origLabel := rb.TagLabel
 
-	if res, word := isTagLabelReserved(newLabel); res == true {
+	if rsvd, word := isTagLabelReserved(newLabel); rsvd == true {
 		fmt.Printf("---> Tag label `%s` conflicts with reserved `%s`. Try again\n", newLabel, word)
 		os.Exit(1)
 	}
