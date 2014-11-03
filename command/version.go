@@ -13,5 +13,6 @@ import (
 // generate no help information as it adds no value and clutters the CLI
 
 func Version(ctx *env.Context) {
-	fmt.Printf("%s v%s on %s\n", env.AppName, env.AppVersion, runtime.Version())
+	fmt.Printf("%s v%s [%s/%s %s]\n", env.AppName, env.AppVersion,
+		runtime.GOOS, runtime.GOARCH, runtime.Version())
 }
