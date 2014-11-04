@@ -5,7 +5,12 @@ desc 'test all uru packages'
 task :test => 'test:all'
 
 namespace :test do
-  task :all => ['test:env','test:command']
+  task :all => ['test:main','test:env','test:command']
+
+  task :main do
+    puts "\n---> testing `main` package"
+    system "go test #{GO_PKG_ROOT}"
+  end
 
   task :env do
     puts "\n---> testing `env` package"
