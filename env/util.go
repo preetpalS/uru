@@ -18,26 +18,26 @@ import (
 )
 
 type tagInfo struct {
-	Tag      string // unique internal identifier for a particular ruby
-	TagLabel string // modifiable, user friendly name for a particular ruby
+	tag      string // unique internal identifier for a particular ruby
+	tagLabel string // modifiable, user friendly name for a particular ruby
 }
 
 // tagInfoSorter sorts slices of tagInfo structs by implementing sort.Interface by
 // providing Len, Swap, and Less
 type tagInfoSorter struct {
-	Tags []tagInfo
+	tags []tagInfo
 }
 
 func (s *tagInfoSorter) Len() int {
-	return len(s.Tags)
+	return len(s.tags)
 }
 
 func (s *tagInfoSorter) Swap(i, j int) {
-	s.Tags[i], s.Tags[j] = s.Tags[j], s.Tags[i]
+	s.tags[i], s.tags[j] = s.tags[j], s.tags[i]
 }
 
 func (s *tagInfoSorter) Less(i, j int) bool {
-	return s.Tags[i].TagLabel < s.Tags[j].TagLabel
+	return s.tags[i].tagLabel < s.tags[j].tagLabel
 }
 
 // CopyFile copies a source file to a destination file.
@@ -163,14 +163,14 @@ func SortTagsByTagLabel(ctx *Context) (tags []string, err error) {
 	}
 
 	tis := new(tagInfoSorter)
-	tis.Tags = []tagInfo{}
+	tis.tags = []tagInfo{}
 	for t, ri := range ctx.Registry.Rubies {
-		tis.Tags = append(tis.Tags, tagInfo{Tag: t, TagLabel: ri.TagLabel})
+		tis.tags = append(tis.tags, tagInfo{tag: t, tagLabel: ri.TagLabel})
 	}
 	sort.Sort(tis)
 
-	for _, ti := range tis.Tags {
-		tags = append(tags, ti.Tag)
+	for _, ti := range tis.tags {
+		tags = append(tags, ti.tag)
 	}
 	if len(tags) == 0 {
 		return nil, errors.New("no sorted tags to return")
