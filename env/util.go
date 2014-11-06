@@ -157,14 +157,14 @@ func PathListForTag(ctx *Context, tag string) (path []string, err error) {
 }
 
 // SortTagsByTagLabel returns a string slice of tags sorted by tag label.
-func SortTagsByTagLabel(ctx *Context) (tags []string, err error) {
-	if len(ctx.Registry.Rubies) == 0 {
-		return nil, errors.New("no sorted tags to return due to no registered rubies")
+func SortTagsByTagLabel(rubyMap *RubyMap) (tags []string, err error) {
+	if len(*rubyMap) == 0 {
+		return nil, errors.New("nothing in input RubyMap; no sorted tags to return")
 	}
 
 	tis := new(tagInfoSorter)
 	tis.tags = []tagInfo{}
-	for t, ri := range ctx.Registry.Rubies {
+	for t, ri := range *rubyMap {
 		tis.tags = append(tis.tags, tagInfo{tag: t, tagLabel: ri.TagLabel})
 	}
 	sort.Sort(tis)

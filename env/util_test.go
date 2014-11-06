@@ -6,6 +6,7 @@ package env
 import (
 	"os"
 	"reflect"
+	"sort"
 	"strings"
 	"testing"
 )
@@ -97,5 +98,44 @@ func TestTagLabelToTag(t *testing.T) {
 				rb.ID,
 				tags[testTags[i]].ID)
 		}
+	}
+}
+
+func TestTagInfoSorter(t *testing.T) {
+	ti := []tagInfo{
+		{testTags[0], testTagLabels[0]},
+		{testTags[1], testTagLabels[1]},
+		{testTags[2], testTagLabels[2]},
+	}
+	tis := &tagInfoSorter{ti}
+
+	sort.Sort(tis)
+	if !sort.IsSorted(tis) {
+		t.Error("Unable to sort tagInfoSorter")
+	}
+
+	expected := []string{`3091568265`, `444332046`, `3577244517`}
+	actual := []string{ti[0].tag, ti[1].tag, ti[2].tag}
+	if !reflect.DeepEqual(actual, expected) {
+		t.Errorf("tagInfoSorter incorrectly sorted\n  want: `%v`\n  got: `%v`",
+			expected, actual)
+	}
+}
+
+func TestSortTagsByTagLabel(t *testing.T) {
+	rubyMap := &RubyMap{
+		testTags[0]: testRubies[0],
+		testTags[1]: testRubies[1],
+		testTags[2]: testRubies[2],
+	}
+
+	expected := []string{`3091568265`, `444332046`, `3577244517`}
+	actual, err := SortTagsByTagLabel(rubyMap)
+	if err != nil {
+		t.Error("SortTagsByTagLabel() should not return error for valid RubyMap")
+	}
+	if !reflect.DeepEqual(actual, expected) {
+		t.Errorf("SortTagsByTagLabel() not returning correct value\n  want: `%v`\n  got: `%v`",
+			expected, actual)
 	}
 }

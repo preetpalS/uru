@@ -40,7 +40,7 @@ func List(ctx *env.Context) {
 		os.Exit(1)
 	}
 
-	sortedTags, err := env.SortTagsByTagLabel(ctx)
+	sortedTags, err := env.SortTagsByTagLabel(&ctx.Registry.Rubies)
 	if err != nil {
 		fmt.Println("---> unable to list sorted rubies; try again")
 		os.Exit(1)

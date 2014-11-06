@@ -49,16 +49,24 @@ func SelectRubyFromList(tags RubyMap, label, verb string) (tag string, err error
 	choices := make(map[uint8]string)
 	indent := fmt.Sprintf("%19.19s", ``)
 
+	// sort the tags by user provided TagLabel to enable stable iteration
+	// display of matching rubies
+	sortedTags, err := SortTagsByTagLabel(&tags)
+	if err != nil {
+		return ``, errors.New("error: unable to sort matching rubies")
+	}
+
+	// ask user to select from matching rubies
 	fmt.Printf("---> these rubies match your `%s` tag:\n\n", label)
-	for t, ri := range tags {
+	for _, k := range sortedTags {
 		i++
-		choices[i] = t
+		choices[i] = k
 		fmt.Printf(" [%d] %-12.12s: %s\n%sHome: %s\n",
 			i,
-			ri.TagLabel,
-			ri.Description,
+			tags[k].TagLabel,
+			tags[k].Description,
 			indent,
-			ri.Home)
+			tags[k].Home)
 	}
 	fmt.Printf("\nselect [1]-[%d] to %s that specific ruby (0 to exit) [0]: ", i, verb)
 	_, err = fmt.Scanln(&choice)
