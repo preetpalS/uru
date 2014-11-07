@@ -97,8 +97,9 @@ func adminAdd(ctx *env.Context) {
 	} else {
 		// register ruby installation in given bin directory
 		var loc = cmdArgs[0]
+		var err error
 		if loc != `system` {
-			loc, err := filepath.Abs(loc)
+			loc, err = filepath.Abs(loc)
 			if err != nil {
 				fmt.Println("[ERROR] unable to determine absolute ruby bindir path.")
 				os.Exit(1)
