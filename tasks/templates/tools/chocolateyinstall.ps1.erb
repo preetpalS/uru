@@ -1,0 +1,49 @@
+
+try {
+  $binRoot = "$env:systemdrive\"
+  ### Using an environment variable to to define the bin root until we implement YAML configuration ###
+  if($env:chocolatey_bin_root -ne $null){$binRoot = join-path $env:systemdrive $env:chocolatey_bin_root}
+  $<%= data[:name] %>InstallDir = join-path $binRoot '<%= data[:name].capitalize %>'
+
+  write-host "Chocolatey is installing <%= data[:name] %>-<%= data[:ver] %> to $<%= data[:name] %>InstallDir"
+  write-host "Please wait..."
+  Start-sleep 3
+
+  if (![System.IO.Directory]::Exists($<%= data[:name] %>InstallDir)) {[System.IO.Directory]::CreateDirectory($<%= data[:name] %>InstallDir)}
+  $tempDir = "$env:TEMP\chocolatey\<%= data[:name] %>"
+  if (![System.IO.Directory]::Exists($tempDir)) {[System.IO.Directory]::CreateDirectory($tempDir)}
+  $file =  join-path $tempDir ( "\<%= data[:name] %>-<%= data[:ver] %>-windows-x86.7z")
+  $url = "<%= data[:prg_url] %><%= data[:name] %>/downloads/<%= data[:name] %>-<%= data[:ver] %>-<%= data[:platform][:x86] %>"
+  $checksum = '<%= data[:chksm] %>'
+  $url64 = "<%= data[:prg_url] %><%= data[:name] %>/downloads/<%= data[:name] %>-<%= data[:ver] %>-<%= data[:platform][:x64] %>"
+  $checksum64 = '<%= data[:chksm64] %>'
+  $checksumType = '<%= data[:chksm_typ] %>'
+  Get-ChocolateyWebFile '<%= data[:name] %>' "$file" -url "$url" -url64bit "$url64" -checksum "$checksum" -checksum64 "$checksum64" -checksumType "$checksumType"
+
+  if ($($env:Path).ToLower().Contains("<%= data[:name] %>") -eq $false) {
+    $env:Path = [Environment]::GetEnvironmentVariable('Path',[System.EnvironmentVariableTarget]::Machine);
+  }
+
+
+  write-host "Cleaning out the contents of $<%= data[:name] %>InstallDir"
+  Remove-Item "$($<%= data[:name] %>InstallDir)\*" -recurse -force
+
+  # 3. Extract the new SFX DevKit into the same <DEVKIT_INSTALL_DIR> that you just cleaned up.
+  write-host "Extracting the contents of $file to $<%= data[:name] %>InstallDir"
+  #& 7za x -o"$<%= data[:name] %>InstallDir" -y "$file"
+  Start-Process "7za" -ArgumentList "x -o`"$<%= data[:name] %>InstallDir`" -y `"$file`"" -Wait
+
+  # 4. Review your config.yml file to ensure it contains the root directories of all the installed Rubies you want enhanced to use the DevKit.
+  Write-Host "You may want to configure your config.yml after this installation and rerun 'cinst ruby.devkit' if the defaults do not meet your needs"
+  Start-Sleep 1
+  # 5. From a Command Prompt, cd into the <DEVKIT_INSTALL_DIR> directory and run <%= data[:name] %>_rt admin install to install uru and <%= data[:name] %>_rt admin add system to add any system ruby into <%= data[:name] %>
+  Write-Host "Initializing and installing DevKit into Ruby."
+  cd $<%= data[:name] %>InstallDir
+  & <%= data[:name] %>_rt admin install
+  & <%= data[:name] %>_rt admin add system
+
+  Write-ChocolateySuccess '<%= data[:name].capitalize %>'
+} catch {
+  Write-ChocolateyFailure '<%= data[:name].capitalize %>' "$($_.Exception.Message)"
+  throw
+}
