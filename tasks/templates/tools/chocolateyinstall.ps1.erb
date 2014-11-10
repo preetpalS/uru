@@ -28,15 +28,13 @@ try {
   write-host "Cleaning out the contents of $<%= data[:name] %>InstallDir"
   Remove-Item "$($<%= data[:name] %>InstallDir)\*" -recurse -force
 
-  # 3. Extract the new SFX DevKit into the same <DEVKIT_INSTALL_DIR> that you just cleaned up.
+  # 3. Extract URU into the same $<%= data[:name] %>InstallDir that you just cleaned up.
   write-host "Extracting the contents of $file to $<%= data[:name] %>InstallDir"
   #& 7za x -o"$<%= data[:name] %>InstallDir" -y "$file"
   Start-Process "7za" -ArgumentList "x -o`"$<%= data[:name] %>InstallDir`" -y `"$file`"" -Wait
 
-  # 4. Review your config.yml file to ensure it contains the root directories of all the installed Rubies you want enhanced to use the DevKit.
-  Write-Host "You may want to configure your config.yml after this installation and rerun 'cinst ruby.devkit' if the defaults do not meet your needs"
-  Start-Sleep 1
-  # 5. From a Command Prompt, cd into the <DEVKIT_INSTALL_DIR> directory and run <%= data[:name] %>_rt admin install to install uru and <%= data[:name] %>_rt admin add system to add any system ruby into <%= data[:name] %>
+ 
+  # 4. From a Command Prompt, cd into the $<%= data[:name] %>InstallDir directory and run <%= data[:name] %>_rt admin install to install uru and <%= data[:name] %>_rt admin add system to add any system ruby into <%= data[:name] %>
   Write-Host "Initializing and installing DevKit into Ruby."
   cd $<%= data[:name] %>InstallDir
   & <%= data[:name] %>_rt admin install
