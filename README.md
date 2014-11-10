@@ -28,8 +28,8 @@ or get more in-depth details, review the [installation and usage][usage] info.
 :: assuming C:\tools is on PATH and uru_rt.exe was extracted to C:\tools
 C:\tools>uru_rt admin install
 
-:: [optional] if you have a pre-existing ruby already on PATH from cmd.exe
-:: initialization, you can register it as the "system" ruby
+:: [optional & not recommended] if you have a pre-existing ruby already on PATH
+:: from cmd.exe initialization, you can register it as the "system" ruby
 C:\tools>uru_rt admin add system
 ~~~
 
@@ -42,8 +42,9 @@ $ cd ~/bin && chmod +x uru_rt
 # append to ~/.profile on Ubuntu, or to ~/.zshrc on Zsh
 $ echo 'eval "$(uru_rt admin install)"' >> ~/.bash_profile
 
-# [optional] if you have a pre-existing ruby already on PATH from bash/Zsh
-# startup configuration files, you can register it as the "system" ruby
+# [optional & not recommended] if you have a pre-existing ruby already on
+# PATH from bash/Zsh startup configuration files, you can register it as
+# the "system" ruby
 $ uru_rt admin add system
 
 # restart shell
