@@ -42,6 +42,9 @@ namespace :choco do
         f.write(ERB.new(File.read(File.join(template_root, t)), nil, '<>').result(binding))
       end
     end
+
+    # prevent chocolately from creating a shim redirect executable to uru_rt.exe on install
+    FileUtils.touch("#{choco_root}/tools/uru_rt.exe.ignore")
   end
 
   # needs to be run with admin privs
