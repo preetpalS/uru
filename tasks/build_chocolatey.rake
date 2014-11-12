@@ -37,7 +37,7 @@ namespace :choco do
       dependencies: {}
     }
 
-    %w[uru.nuspec.erb tools/chocolateyinstall.ps1.erb].each do |t|
+    %w[uru.nuspec.erb tools/chocolateyinstall.ps1.erb tools/chocolateyuninstall.ps1.erb].each do |t|
       File.open(File.join(choco_root, t.gsub('.erb','')) ,'w+') do |f|
         f.write(ERB.new(File.read(File.join(template_root, t)), nil, '<>').result(binding))
       end
