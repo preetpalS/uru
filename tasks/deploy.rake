@@ -31,12 +31,12 @@ if Module.constants.include?(:DEPLOY_MODE) && DEPLOY_MODE
 
   namespace :deploy do
     namespace :sf do
-      desc 'deploy uru binaries to sourceforge.net'
+      desc 'deploy all OS/arch uru packages to sourceforge.net'
       task :files => ['package:all'] do
         SFDeployer.deploy_files
       end
 
-      desc 'set default download files'
+      desc 'set default sourceforge.net download files'
       task :defaults => [
                           "#{PKG}/uru-#{VER}-windows-#{CPU}.7z",
                           "#{PKG}/uru-#{VER}-linux-#{CPU}.tar.gz",

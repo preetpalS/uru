@@ -48,7 +48,7 @@ namespace :choco do
   end
 
   # needs to be run with admin privs
-  desc 'build uru chocolatey package'
+  desc 'build uru *.nupkg chocolatey package'
   task :package => [:prep, :templates] do
     Dir.chdir(choco_root) do
       if system "cpack > #{dev_null}"

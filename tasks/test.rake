@@ -1,7 +1,7 @@
 # Author: Jon Maken, All Rights Reserved
 # License: 3-clause BSD
 
-desc 'test all uru packages'
+desc 'test uru source files'
 task :test => 'test:all'
 
 namespace :test do

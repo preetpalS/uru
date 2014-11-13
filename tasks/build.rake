@@ -1,7 +1,7 @@
 # Author: Jon Maken, All Rights Reserved
 # License: 3-clause BSD
 
-desc 'build all OS/arch flavors'
+desc 'build uru for all OS/arch flavors'
 task :all => BUILDS
 
 namespace :build do
@@ -11,7 +11,7 @@ namespace :build do
     os, arch, cgo = tgt.split(':')
     ext = (os == 'windows' ? '.exe' : '')
 
-    desc "build #{os}/#{arch}"
+    desc "build #{os}/#{arch} uru flavor"
     task :"#{os}_#{arch}" do |t|
       puts "---> building uru #{os}_#{arch} flavor"
       ENV['GOARCH'] = arch

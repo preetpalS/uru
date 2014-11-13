@@ -1,7 +1,7 @@
 # Author: Jon Maken, All Rights Reserved
 # License: 3-clause BSD
 
-desc 'package all built exes'
+desc 'package all OS/arch built exes'
 task :package => 'package:all'
 
 directory PKG
