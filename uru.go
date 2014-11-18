@@ -60,6 +60,6 @@ func main() {
 	case ctx.CmdRegex(`version`).MatchString(cmd):
 		command.Version(ctx)
 	default:
-		command.Use(ctx, ``)
+		command.Use(ctx)
 	}
 }

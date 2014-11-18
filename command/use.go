@@ -11,7 +11,7 @@ import (
 	"bitbucket.org/jonforums/uru/exec"
 )
 
-func Use(ctx *env.Context, msg string) {
+func Use(ctx *env.Context) {
 	cmd := ctx.Cmd()
 
 	// use .ruby-version file contents to select which ruby to activate
@@ -62,16 +62,9 @@ func Use(ctx *env.Context, msg string) {
 	// create the environment switcher script
 	exec.CreateSwitcherScript(ctx, &newPath, newRb.GemHome)
 
-	switch msg {
-	case ``:
-		tagAlias := ``
-		if newRb.TagLabel != `` {
-			tagAlias = fmt.Sprintf("tagged as `%s`", newRb.TagLabel)
-		}
-		fmt.Printf("---> Now using %s %s %s\n", newRb.Exe, newRb.ID, tagAlias)
-	case ` `:
-		break
-	default:
-		fmt.Printf(msg)
+	tagAlias := ``
+	if newRb.TagLabel != `` {
+		tagAlias = fmt.Sprintf("tagged as `%s`", newRb.TagLabel)
 	}
+	fmt.Printf("---> Now using %s %s %s\n", newRb.Exe, newRb.ID, tagAlias)
 }
