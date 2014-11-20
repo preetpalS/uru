@@ -28,8 +28,10 @@ func main() {
 	log.Printf("[DEBUG] initializing uru v%s\n", env.AppVersion)
 
 	ctx := env.NewContext()
+	cmdRouter := command.NewRouter(command.Use)
+
 	initHome(ctx)
-	initCommandParser(ctx)
+	initCommandRouter(cmdRouter)
 	initRubies(ctx)
 
 	if len(os.Args) == 1 || *help == true {
@@ -45,21 +47,6 @@ func main() {
 	ctx.SetCmdAndArgs(cmd, flag.Args()[1:])
 	log.Printf("[DEBUG] cmd = %s\n", cmd)
 
-	// builtin command router
-	switch {
-	case ctx.CmdRegex(`admin`).MatchString(cmd):
-		command.Admin(ctx)
-	case ctx.CmdRegex(`gem`).MatchString(cmd):
-		command.Gem(ctx)
-	case ctx.CmdRegex(`help`).MatchString(cmd):
-		command.Help(ctx)
-	case ctx.CmdRegex(`ls`).MatchString(cmd):
-		command.List(ctx)
-	case ctx.CmdRegex(`ruby`).MatchString(cmd):
-		command.Ruby(ctx)
-	case ctx.CmdRegex(`version`).MatchString(cmd):
-		command.Version(ctx)
-	default:
-		command.Use(ctx)
-	}
+	// dispatch command to registered handler
+	cmdRouter.Dispatch(ctx, cmd)
 }

@@ -12,6 +12,7 @@ import (
 	"runtime"
 	"strings"
 
+	"bitbucket.org/jonforums/uru/command"
 	"bitbucket.org/jonforums/uru/env"
 )
 
@@ -46,20 +47,14 @@ func initHome(ctx *env.Context) {
 	filepath.Walk(ctx.Home(), walk)
 }
 
-// Initialize uru's CLI parser.
-func initCommandParser(ctx *env.Context) {
-	ctx.SetCmdRegex(`admin`, `\Aadmin\z`)
-	ctx.SetCmdRegex(`add`, `\Aadd\z`)
-	ctx.SetCmdRegex(`gem`, `\Agem\z`)
-	ctx.SetCmdRegex(`gemset`, `\A(?:gemset|gs)\z`)
-	ctx.SetCmdRegex(`help`, `\Ahelp\z`)
-	ctx.SetCmdRegex(`install`, `\A(?:install|in)\z`)
-	ctx.SetCmdRegex(`ls`, `\A(?:ls|list)\z`)
-	ctx.SetCmdRegex(`refresh`, `\Arefresh\z`)
-	ctx.SetCmdRegex(`retag`, `\A(?:retag|tag)\z`)
-	ctx.SetCmdRegex(`rm`, `\A(?:rm|del)\z`)
-	ctx.SetCmdRegex(`ruby`, `\A(?:ruby|rb)\z`)
-	ctx.SetCmdRegex(`version`, `\Aver(?:sion)?\z`)
+// Initialize uru's main command router
+func initCommandRouter(r *command.CommandRouter) {
+	r.Handle([]string{`admin`}, command.Admin)
+	r.Handle([]string{`gem`}, command.Gem)
+	r.Handle([]string{`help`}, command.Help)
+	r.Handle([]string{`ls`, `list`}, command.List)
+	r.Handle([]string{`ruby`, `rb`}, command.Ruby)
+	r.Handle([]string{`ver`, `version`}, command.Version)
 }
 
 // Import all installed rubies that have been registered with uru.
