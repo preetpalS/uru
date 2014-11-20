@@ -20,10 +20,10 @@ func TestRouterConfig(t *testing.T) {
 	if r.defHandler == nil {
 		t.Error("CommandRouter default handler is nil")
 	}
-	if l := len(r.handlers); l != count {
+	if num := len(r.handlers); num != count {
 		t.Errorf("Incorrect CommandRouter handler count\n  want: `%v`\n  got: `%v`\n",
 			count,
-			len(r.handlers))
+			num)
 	}
 }
 
