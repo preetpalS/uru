@@ -9,7 +9,6 @@ import (
 	"flag"
 	"io/ioutil"
 	"log"
-	"os"
 
 	"bitbucket.org/jonforums/uru/command"
 	"bitbucket.org/jonforums/uru/env"
@@ -18,8 +17,6 @@ import (
 func main() {
 	// initialization
 	debug := flag.Bool(`debug`, false, "enable debug mode")
-	help := flag.Bool(`help`, false, "this help summary")
-	version := flag.Bool(`version`, false, "show version info")
 	flag.Parse()
 
 	if !*debug {
@@ -34,16 +31,11 @@ func main() {
 	initCommandRouter(cmdRouter)
 	initRubies(ctx)
 
-	if len(os.Args) == 1 || *help == true {
+	if len(flag.Args()) == 0 {
 		command.Help(ctx)
-	}
-	if *version == true {
-		command.Version(ctx)
-		os.Exit(0)
 	}
 
 	cmd := flag.Arg(0)
-	// FIXME out of slice bounds panic when only `uru -debug` is given
 	ctx.SetCmdAndArgs(cmd, flag.Args()[1:])
 	log.Printf("[DEBUG] cmd = %s\n", cmd)
 
