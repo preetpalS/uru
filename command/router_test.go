@@ -61,7 +61,7 @@ func BenchmarkCommandRouter(b *testing.B) {
 	ctx := env.NewContext()
 	cmds := []string{"admin", "gem", "help", "ls", "ruby", "version", "215"}
 
-	r := NewRouter(func (*env.Context) {})
+	r := NewRouter(func(*env.Context) {})
 	r.Handle([]string{`admin`}, func(ctx *env.Context) {})
 	r.Handle([]string{`gem`}, func(ctx *env.Context) {})
 	r.Handle([]string{`help`}, func(ctx *env.Context) {})

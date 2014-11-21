@@ -27,7 +27,7 @@ func Admin(ctx *env.Context) {
 	ctx.SetCmdArgs(cmdArgs[1:])
 
 	// initialize the admin subcommand router
-	adminRouter := NewRouter(func (ctx *env.Context) {
+	adminRouter := NewRouter(func(ctx *env.Context) {
 		fmt.Printf("[ERROR] I don't understand the `%s` admin sub-command\n\n", subCmd)
 		ctx.SetCmdAndArgs(``, nil)
 		Help(ctx)
