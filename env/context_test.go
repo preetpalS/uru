@@ -5,7 +5,6 @@ package env
 
 import (
 	"reflect"
-	"regexp"
 	"testing"
 )
 
@@ -14,10 +13,6 @@ func TestContextInit(t *testing.T) {
 	reg := RubyRegistry{
 		Version: RubyRegistryVersion,
 		Rubies:  RubyMap{},
-	}
-
-	if ctx.commandRegex == nil {
-		t.Error("Context's `commandRegex` member not initialized")
 	}
 
 	rv := ctx.Registry
@@ -30,20 +25,6 @@ func TestContextInit(t *testing.T) {
 		t.Errorf("Context's `Registry.Rubies` member not initialized correctly\n  want: `%v`\n  got: `%v`",
 			reg.Rubies,
 			rv.Rubies)
-	}
-}
-
-func TestContextCmdRegex(t *testing.T) {
-	ctx := NewContext()
-	var r *regexp.Regexp
-
-	ctx.SetCmdRegex(`version`, `\Aver(?:sion)?\z`)
-	r = ctx.commandRegex[`version`]
-	rv := ctx.CmdRegex(`version`)
-	if rv != r {
-		t.Errorf("Contex.CmdRegex() not returning correct value\n  want: `%v`\n  got: `%v`",
-			r,
-			rv)
 	}
 }
 

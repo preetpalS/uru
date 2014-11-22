@@ -3,38 +3,12 @@
 
 package env
 
-import (
-	"fmt"
-	"os"
-	"regexp"
-)
-
 type Context struct {
-	commandRegex map[string]*regexp.Regexp
 	home         string
 	command      string
 	commandArgs  []string
 
 	Registry RubyRegistry
-}
-
-func (c *Context) CmdRegex(cmd string) *regexp.Regexp {
-	if c.commandRegex == nil {
-		panic("Context has not been initialized")
-	}
-
-	return c.commandRegex[cmd]
-}
-func (c *Context) SetCmdRegex(cmd string, r string) (err error) {
-	if c.commandRegex == nil {
-		panic("Context has not been initialized")
-	}
-
-	c.commandRegex[cmd], err = regexp.Compile(r)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: unable to compile `%s` regexp", cmd)
-	}
-	return
 }
 
 func (c *Context) Home() string {
@@ -65,7 +39,6 @@ func (c *Context) SetCmdAndArgs(cmd string, args []string) {
 
 func NewContext() *Context {
 	return &Context{
-		commandRegex: make(map[string]*regexp.Regexp),
 		Registry: RubyRegistry{
 			Version:    RubyRegistryVersion,
 			Rubies:     make(RubyMap, 4),
