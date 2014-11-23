@@ -1,8 +1,10 @@
 try {
-  $uruWrapperBat = Join-Path $nugetExePath "<%= data[:name] %>.bat"
-  $uruWrapperPs1 = Join-Path $nugetExePath "<%= data[:name] %>.ps1"
+  $chocoBinDir = Join-Path $env:ChocolateyInstall 'bin'
 
-  Write-Host "---> Deleting .bat and .ps1 uru wrapper scripts in $nugetExePath"
+  $uruWrapperBat = Join-Path $chocoBinDir "<%= data[:name] %>.bat"
+  $uruWrapperPs1 = Join-Path $chocoBinDir "<%= data[:name] %>.ps1"
+
+  Write-Host "---> Deleting .bat and .ps1 uru wrapper scripts from $chocoBinDir"
   if (Test-Path ($uruWrapperBat)) { Remove-Item $uruWrapperBat -force }
   if (Test-Path ($uruWrapperPs1)) { Remove-Item $uruWrapperPs1 -force }
 
