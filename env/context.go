@@ -4,9 +4,9 @@
 package env
 
 type Context struct {
-	home         string
-	command      string
-	commandArgs  []string
+	home        string
+	command     string
+	commandArgs []string
 
 	Registry RubyRegistry
 }
