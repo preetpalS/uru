@@ -43,17 +43,11 @@ func (r *CommandRouter) Handle(cmds []string, handler HandlerFunc) {
 // has been created with a non-nil default handler, the default handler will
 // be invoked with a context as the only arg.
 func (r *CommandRouter) Dispatch(ctx *env.Context, cmd string) {
-	dispatched := false
-
-	for c, f := range r.handlers {
-		if c == cmd {
-			f(ctx)
-			dispatched = true
-			break
+	if f, ok := r.handlers[cmd]; ok {
+		f(ctx)
+	} else {
+		if r.defHandler != nil {
+			r.defHandler(ctx)
 		}
-	}
-
-	if !dispatched && r.defHandler != nil {
-		r.defHandler(ctx)
 	}
 }
