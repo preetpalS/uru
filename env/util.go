@@ -62,18 +62,6 @@ func CopyFile(dst, src string) (written int64, err error) {
 	return
 }
 
-// StringSplitPath splits the PATH env var into a slice of strings.
-func StringSplitPath() (path []string, err error) {
-	rawPath := os.Getenv(`PATH`)
-	if rawPath == `` {
-		return nil, errors.New("unable to get PATH env var value")
-	}
-
-	path = strings.Split(rawPath, string(os.PathListSeparator))
-
-	return
-}
-
 // NewTag generates a new tag value used to identify a specific ruby.
 func NewTag(ctx *Context, rb Ruby) (tag string, err error) {
 	hash := fnv.New32a()

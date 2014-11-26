@@ -4,10 +4,8 @@
 package env
 
 import (
-	"os"
 	"reflect"
 	"sort"
-	"strings"
 	"testing"
 )
 
@@ -41,21 +39,6 @@ var (
 	testTagLabels = []string{`211`, `179`, `1710`}
 	testTags      = []string{`3577244517`, `444332046`, `3091568265`}
 )
-
-func TestStringSplitPath(t *testing.T) {
-	prevPath := os.Getenv(`PATH`)
-	newPath := []string{`A`, `B`, `C`, `D`}
-
-	os.Setenv(`PATH`, strings.Join(newPath, string(os.PathListSeparator)))
-	rv, _ := StringSplitPath()
-	if !reflect.DeepEqual(rv, newPath) {
-		t.Errorf("StringSplitPath not returning correct value\n  want: `%v`\n  got: `%v`",
-			newPath,
-			rv)
-	}
-
-	os.Setenv(`PATH`, prevPath)
-}
 
 func TestNewTag(t *testing.T) {
 	ctx := NewContext()
