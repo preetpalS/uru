@@ -7,12 +7,16 @@ task :all => BUILDS
 namespace :build do
   puts "\n  *** DEVELOPMENT build mode ***\n\n" if URU_OPTS[:devbuild]
 
+  task :prep do
+    abort '---> FAILED to find `go` on PATH needed to build/test' unless system "go version > #{dev_null} 2>&1"
+  end
+
   %W[windows:#{ARCH}:0 linux:#{ARCH}:0 darwin:#{ARCH}:0].each do |tgt|
     os, arch, cgo = tgt.split(':')
     ext = (os == 'windows' ? '.exe' : '')
 
     desc "build #{os}/#{arch} uru flavor"
-    task :"#{os}_#{arch}" do |t|
+    task :"#{os}_#{arch}" => [:prep] do |t|
       puts "---> building uru #{os}_#{arch} flavor"
       ENV['GOARCH'] = arch
       ENV['GOOS'] = os
