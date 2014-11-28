@@ -15,7 +15,6 @@ import (
 )
 
 func main() {
-	// initialization
 	debug := flag.Bool(`debug`, false, "enable debug mode")
 	flag.Parse()
 
@@ -25,20 +24,18 @@ func main() {
 	log.Printf("[DEBUG] initializing uru v%s\n", env.AppVersion)
 
 	ctx := env.NewContext()
-	cmdRouter := command.NewRouter(command.Use)
-
-	initHome(ctx)
-	initCommandRouter(cmdRouter)
-	initRubies(ctx)
-
 	if len(flag.Args()) == 0 {
 		command.Help(ctx)
 	}
+	initHome(ctx)
+	initRubies(ctx)
+
+	cmdRouter := command.NewRouter(command.Use)
+	initCommandRouter(cmdRouter)
 
 	cmd := flag.Arg(0)
 	ctx.SetCmdAndArgs(cmd, flag.Args()[1:])
 	log.Printf("[DEBUG] cmd = %s\n", cmd)
 
-	// dispatch command to registered handler
 	cmdRouter.Dispatch(ctx, cmd)
 }
