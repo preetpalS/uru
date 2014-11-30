@@ -100,14 +100,13 @@ func PathListForTag(ctx *Context, tag string) (path []string, err error) {
 	// get current PATH and split it on the canary separator demarcating the
 	// head (current ruby path) and tail (base path):
 	//
-	//   C:\ruby\bin;;;C:\other;D:\more -or- /.rubies/193/bin:::/other:/more
-	//              ^^^                                      ^^^
+	//   C:\ruby\bin;{{Canary}};C:\other;D:\more -or- /.rubies/193/bin:{{Canary}}:/other:/more
 	envPath := os.Getenv(`PATH`)
 	if envPath == `` {
 		return nil, errors.New("unable to get PATH env var value")
 	}
 
-	paths := strings.Split(envPath, Canary)
+	paths := strings.Split(envPath, CanaryToken)
 
 	// create the new PATH list by prepending the new ruby PATH and a canary
 	// separator to the base PATH unless the new ruby is the system ruby
@@ -127,14 +126,14 @@ func PathListForTag(ctx *Context, tag string) (path []string, err error) {
 		path = tail
 	} else {
 		// prepend base PATH with computed GEM_HOME/bin, new ruby PATH,
-		// and a canary initiator
+		// and a Canary
 		gemBinDir := filepath.Join(newRb.GemHome, `bin`)
-		head := []string{gemBinDir, newRb.Home, string(os.PathListSeparator)}
+		head := []string{gemBinDir, newRb.Home, Canary}
 
 		if runtime.GOOS == `windows` {
 			// assume windows users always install gems to ruby installation
 			// so do not prepend a generated GEM_HOME bindir to PATH
-			head = []string{newRb.Home, string(os.PathListSeparator)}
+			head = []string{newRb.Home, Canary}
 		}
 
 		path = append(head, tail...)

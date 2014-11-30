@@ -17,14 +17,17 @@ import (
 	"strings"
 )
 
-const RubyRegistryVersion = `1.0.0`
+const (
+	Canary              = `_U_`
+	RubyRegistryVersion = `1.0.0`
+)
 
 var (
 	rbRegex, rbVerRegex, RbMajMinRegex, SysRbRegex *regexp.Regexp
 	KnownRubies                                    []string
 
-	Canary = fmt.Sprintf("%s%s%s", string(os.PathListSeparator),
-		string(os.PathListSeparator), string(os.PathListSeparator))
+	CanaryToken = fmt.Sprintf("%s%s%s", string(os.PathListSeparator),
+		Canary, string(os.PathListSeparator))
 )
 
 type RubyMap map[string]Ruby
@@ -86,17 +89,17 @@ func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
 	}
 
 	if strings.Index(envPath, Canary) != -1 {
-		// prepended PATH looks like this, where GEM_HOME element is optional:
-		//   GEM_HOME;RUBY_DIR;;;... -or- GEM_HOME:RUBY_DIR:::...
+		// prepended PATH looks like this, where the GEM_HOME element is optional:
+		//   GEM_HOME;RUBY_DIR;{{Canary}};... -or- GEM_HOME:RUBY_DIR:{{Canary}}:...
 		head := strings.Split(envPath, string(os.PathListSeparator))[:3]
 		var curRbPath string
-		// test if the last element of the 2-element `head` slice is a blank
-		// string which means GEM_HOME wasn't prepended to PATH
-		if head[1] == `` {
-			// scenario: RUBY_DIR;;;... -or- RUBY_DIR:::...
+		// if the last element of the 2-element `head` slice is the Canary, then
+		// GEM_HOME wasn't prepended to PATH
+		if head[1] == Canary {
+			// scenario: RUBY_DIR;{{Canary}};... -or- RUBY_DIR:{{Canary}}:...
 			curRbPath = head[0]
 		} else {
-			// scenario: GEM_HOME;RUBY_DIR;;;... -or- GEM_HOME:RUBY_DIR:::...
+			// scenario: GEM_HOME;RUBY_DIR;{{Canary}};... -or- GEM_HOME:RUBY_DIR:{{Canary}}:...
 			curRbPath = head[1]
 		}
 		for _, v := range KnownRubies {
