@@ -4,6 +4,8 @@
 package command
 
 import (
+	"log"
+	"io/ioutil"
 	"testing"
 )
 
@@ -26,6 +28,11 @@ var testTagLabels = []struct {
 	{`auto`, true, `auto`},
 	{`debug`, false, ``},
 	{`nil`, true, `nil`},
+}
+
+func init() {
+	// silence any logging done in the package files
+	log.SetOutput(ioutil.Discard)
 }
 
 func TestParseGemsetName(t *testing.T) {

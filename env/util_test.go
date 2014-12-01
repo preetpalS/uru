@@ -4,6 +4,8 @@
 package env
 
 import (
+	"log"
+	"io/ioutil"
 	"reflect"
 	"sort"
 	"testing"
@@ -39,6 +41,11 @@ var (
 	testTagLabels = []string{`211`, `179`, `1710`}
 	testTags      = []string{`3577244517`, `444332046`, `3091568265`}
 )
+
+func init() {
+	// silence any logging done in the package files
+	log.SetOutput(ioutil.Discard)
+}
 
 func TestNewTag(t *testing.T) {
 	ctx := NewContext()
