@@ -36,13 +36,13 @@ func List(ctx *env.Context) {
 
 	tag, _, err := env.CurrentRubyInfo(ctx)
 	if err != nil {
-		fmt.Println("---> unable to list rubies; try again")
+		fmt.Printf("---> unable to list rubies; try again (%s)\n", err)
 		os.Exit(1)
 	}
 
 	sortedTags, err := env.SortTagsByTagLabel(&ctx.Registry.Rubies)
 	if err != nil {
-		fmt.Println("---> unable to list sorted rubies; try again")
+		fmt.Printf("---> unable to list sorted rubies; try again (%s)\n", err)
 		os.Exit(1)
 	}
 
