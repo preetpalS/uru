@@ -34,6 +34,8 @@ C:\tools>uru_rt admin install
 C:\tools>uru_rt admin add system
 ~~~
 
+Uru can also be installed on Windows using the [Chocolatey][chocolatey] package manager.
+
 ## Linux and OS X systems
 
 ~~~ console
@@ -131,6 +133,7 @@ Hello You!
 [download]: https://bitbucket.org/jonforums/uru/wiki/Downloads
 [usage]: https://bitbucket.org/jonforums/uru/wiki/Usage
 [examples]: https://bitbucket.org/jonforums/uru/wiki/Examples
+[chocolatey]: https://bitbucket.org/jonforums/uru/wiki/Chocolatey
 
 [1]: https://rvm.io/
 [2]: https://github.com/sstephenson/rbenv
