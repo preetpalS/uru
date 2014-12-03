@@ -88,6 +88,7 @@ func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
 		return
 	}
 
+	log.Printf("[DEBUG] CurrentRubyInfo's envPath: %q\n", envPath)
 	if strings.Index(envPath, Canary) != -1 {
 		// prepended PATH looks like this, where the GEM_HOME element is optional:
 		//   GEM_HOME;RUBY_DIR;{{Canary}};... -or- GEM_HOME:RUBY_DIR:{{Canary}}:...
