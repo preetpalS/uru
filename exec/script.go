@@ -73,7 +73,14 @@ func CreateSwitcherScript(ctx *env.Context, path *[]string, gemHome string) (scr
 			content = fmt.Sprintf(script, strings.Join(*path, string(os.PathListSeparator)), gemHome)
 		} else {
 			script = strings.Join([]string{script, "unset GEM_HOME\n"}, ``)
-			content = fmt.Sprintf(script, strings.Join(*path, string(os.PathListSeparator)))
+
+			// morph PATH on bash-on-windows environments to *nix style
+			sep := string(os.PathListSeparator)
+			if runtime.GOOS == `windows` {
+				sep = `:`
+				*path = winPathToNix(path)
+			}
+			content = fmt.Sprintf(script, strings.Join(*path, sep))
 		}
 	} else {
 		content = fmt.Sprintf(script, strings.Join(*path, string(os.PathListSeparator)), gemHome)
@@ -82,6 +89,50 @@ func CreateSwitcherScript(ctx *env.Context, path *[]string, gemHome string) (scr
 	_, err = f.WriteString(content)
 	if err != nil {
 		panic(fmt.Sprintf("failed to write `%s` switcher script", switcher))
+	}
+
+	return
+}
+
+// winPathToNix converts a slice of Windows formatted absolute file system
+// path strings to a slice of *nix style path strings usable by cygwin
+// based shells such as msysgit and msys2 bash on Windows systems.
+//
+// Windows 8.3 aliases, aka files with `~` in components of the name too long to
+// comply legacy DOS 8.3 rules, are not supported. All modern Windows systems
+// should be able to correctly handle long file names without the need to interface
+// with `GetLongPathNameW` from kernel32.dll. Ensure your PATH contains only long
+// path names, not legacy DOS 8.3 short path names.
+//
+// As the generated paths are not created with a /cygdrive prefix, you may
+// need to change cygwin PATH behavior by modifying your cygwin environment's
+// /etc/fstab similar to:
+//
+//     none / cygdrive binary,posix=0,noacl,user 0 0
+//
+// Example conversion: C:\some\arbitrary\path -> /C/some/arbitrary/path
+func winPathToNix(path *[]string) (nix []string) {
+	replacements := []string{"\\", "/", "(", "\\(", ")", "\\)", " ", "\\ "}
+
+	for _, p := range *path {
+		// pass the Canary on through untouched
+		if p == env.Canary {
+			nix = append(nix, env.Canary)
+			continue
+		}
+
+		// morph and escape problematic chars for bash
+		r := strings.NewReplacer(replacements...)
+
+		// morph the Windows volume designator to the format cygwin understands
+		parts := strings.Split(r.Replace(p), ":")
+		if len(parts) == 1 {
+			nix = append(nix, parts[0])
+			continue
+		}
+		parts[0] = fmt.Sprintf("/%s", parts[0])
+
+		nix = append(nix, strings.Join(parts, ``))
 	}
 
 	return

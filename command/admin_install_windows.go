@@ -27,6 +27,14 @@ func adminInstall(ctx *env.Context) {
 		fmt.Printf("[ERROR] uru_rt.exe must be present in a directory on PATH\n")
 		os.Exit(1)
 	}
+
+	// generate uru wrapper shell function on stdout for bash-on-Windows environments
+	// such as cygwin, msysgit, and msys2 bash
+	if shlvl := os.Getenv("SHLVL"); shlvl != `` {
+		fmt.Printf(env.WinBashWrapper)
+		return
+	}
+
 	_, err = os.Stat("uru_rt.exe")
 	if os.IsNotExist(err) {
 		fmt.Printf("[ERROR] must install from same directory as uru_rt.exe\n")

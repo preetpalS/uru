@@ -29,3 +29,22 @@ if ($env:URU_HOME) {
   if(Test-Path "$env:USERPROFILE\.uru\uru_lackee.ps1"){ & $env:USERPROFILE\.uru\uru_lackee.ps1 }
 }
 `
+
+var WinBashWrapper = `uru()
+{
+  export URU_INVOKER='bash'
+
+  # uru_rt must already be on PATH
+  uru_rt "$@"
+
+  if [[ -d "$URU_HOME" ]]; then
+    if [[ -f "$URU_HOME/uru_lackee" ]]; then
+      . "$URU_HOME/uru_lackee"
+    fi
+  else
+    if [[ -f "$USERPROFILE/.uru/uru_lackee" ]]; then
+      . "$USERPROFILE/.uru/uru_lackee"
+    fi
+  fi
+}
+`
