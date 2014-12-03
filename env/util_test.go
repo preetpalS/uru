@@ -4,8 +4,8 @@
 package env
 
 import (
-	"log"
 	"io/ioutil"
+	"log"
 	"reflect"
 	"sort"
 	"testing"

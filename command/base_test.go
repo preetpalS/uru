@@ -4,8 +4,8 @@
 package command
 
 import (
-	"log"
 	"io/ioutil"
+	"log"
 	"testing"
 )
 

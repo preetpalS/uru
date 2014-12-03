@@ -4,8 +4,8 @@
 package exec
 
 import (
-	"log"
 	"io/ioutil"
+	"log"
 	"strings"
 	"testing"
 
