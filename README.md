@@ -25,33 +25,40 @@ or get more in-depth details, review the [installation and usage][usage] info.
 ## Windows systems
 
 ~~~ console
-:: assuming C:\tools is on PATH and uru_rt.exe was extracted to C:\tools
+:: Extract uru_rt.exe to a dir already on PATH and install. For example, assuming
+:: uru_rt.exe was extracted to C:\tools already on your PATH, install uru like
 C:\tools>uru_rt admin install
 
-:: [optional] if you have a pre-existing ruby already on PATH from cmd.exe
-:: initialization, you can register it as the "system" ruby. A "system"
-:: ruby is almost always a bad idea.
+:: [OPTIONAL] If you have a pre-existing ruby already on PATH from cmd.exe
+:: initialization, you can register it as the "system" ruby. A "system" ruby is
+:: almost always a bad idea.
 C:\tools>uru_rt admin add system
 ~~~
 
-Uru can also be installed on Windows using the [Chocolatey][chocolatey] package manager.
+Windows users may also install uru
+
+* Using the [Chocolatey][chocolatey] package manager
+* In Cygwin or MSYS2 [bash-like environments][bashonwindows] while remaining
+  compatible with `cmd.exe` and `powershell` usage
+
 
 ## Linux and OS X systems
 
 ~~~ console
-# assuming ~/bin is on PATH and uru_rt was extracted to ~/bin
+# Extract uru_rt to a dir already on PATH and install. For example, assuming
+# uru_rt was extracted to ~/bin already on your PATH, install uru like
 $ cd ~/bin && chmod +x uru_rt
 
-# append to ~/.profile on Ubuntu, or to ~/.zshrc on Zsh
+# Append to ~/.profile on Ubuntu, or to ~/.zshrc on Zsh
 $ echo 'eval "$(uru_rt admin install)"' >> ~/.bash_profile
 
-# [optional] if you have a pre-existing ruby already on PATH from bash/Zsh
+# [OPTIONAL] If you have a pre-existing ruby already on PATH from bash/Zsh
 # startup configuration files, you can register it as the "system" ruby.
 # A "system" ruby is almost always a bad idea.
 $ uru_rt admin add system
 
-# restart shell
-$ exec $SHELL -l
+# Restart the shell
+$ exec $SHELL --login
 ~~~
 
 # Easy to Use
@@ -134,6 +141,7 @@ Hello You!
 [usage]: https://bitbucket.org/jonforums/uru/wiki/Usage
 [examples]: https://bitbucket.org/jonforums/uru/wiki/Examples
 [chocolatey]: https://bitbucket.org/jonforums/uru/wiki/Chocolatey
+[bashonwindows]: https://bitbucket.org/jonforums/uru/wiki/BashOnWindows
 
 [1]: https://rvm.io/
 [2]: https://github.com/sstephenson/rbenv
