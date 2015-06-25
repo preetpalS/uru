@@ -1,6 +1,6 @@
 # Unleash Ruby
 
-**Current Version:** 0.7.7  
+**Current Version:** 0.7.8  
 **News:** [latest][news]
 
 Uru is a lightweight, multi-platform command line tool that helps you use the
