@@ -5,7 +5,6 @@ package command
 
 import (
 	"bytes"
-	"flag"
 	"fmt"
 	"os"
 	"strings"
@@ -17,8 +16,6 @@ func Help(ctx *env.Context) {
 	cmdArgs := ctx.CmdArgs()
 	if len(cmdArgs) == 0 {
 		fmt.Fprintf(os.Stderr, "Usage: %s [options] CMD ARG ...\n", env.AppName)
-		fmt.Fprintln(os.Stderr, "\nwhere [options] are:")
-		flag.PrintDefaults()
 		fmt.Fprintln(os.Stderr, "\nwhere CMD is one of:")
 		printCommandSummary()
 		fmt.Fprintf(os.Stderr, "\nfor help on a particular command, type `%s help CMD`\n",
