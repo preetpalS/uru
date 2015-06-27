@@ -49,6 +49,9 @@ if Module.constants.include?(:DEPLOY_MODE) && DEPLOY_MODE
 
 
   module SFDeployer
+    # http://sourceforge.net/p/forge/documentation/SSH/
+    # http://sourceforge.net/p/forge/documentation/SSH%20Key%20Fingerprints/
+    # http://sourceforge.net/p/forge/documentation/SSH%20Keys/
 
     @windows_archive = "#{PKG}/uru-#{VER}-windows-#{CPU}.7z"
     @linux_archive = "#{PKG}/uru-#{VER}-linux-#{CPU}.tar.gz"
@@ -73,7 +76,7 @@ if Module.constants.include?(:DEPLOY_MODE) && DEPLOY_MODE
       end
 
       begin
-        command = "#{SFTP_EXE} -i #{UruDeployConfig.sf_private_key} #{UruDeployConfig.sf_user}@frs.sourceforge.net -b #{batch_file}"
+        command = "#{SFTP_EXE} -i #{UruDeployConfig.sf_private_key} -b #{batch_file} #{UruDeployConfig.sf_user}@frs.sourceforge.net"
         puts "---> deploying to urubinaries at sourceforge.net"
         system "#{command} > #{dev_null} 2>&1"
       ensure
@@ -97,7 +100,7 @@ if Module.constants.include?(:DEPLOY_MODE) && DEPLOY_MODE
         File.basename(@linux_archive) => %w[linux bsd solaris others],
         File.basename(@darwin_archive) => %w[mac]
       }.each do |f, d|
-        puts "---> setting #{f} as default for #{d.join(', ')}"
+        printf "---> setting #{f} as default for #{d.join(', ')}"
         req = Net::HTTP::Put.new("/projects/urubinaries/files/uru/#{VER}/#{f}")
         req['Accept'] = 'application/json'
         req.set_form_data 'api_key' => UruDeployConfig.sf_api_key,
@@ -105,6 +108,7 @@ if Module.constants.include?(:DEPLOY_MODE) && DEPLOY_MODE
 
         res = http.request(req)
         res_msg = JSON.load(res.body)
+        puts '...OK' if res_msg['result']
         abort "---> FAILED to set download defaults for #{f}" if res_msg['error']
       end
     end
