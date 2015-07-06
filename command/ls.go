@@ -10,17 +10,21 @@ import (
 	"bitbucket.org/jonforums/uru/env"
 )
 
+var listCmd *Command = &Command{
+	Name:    "ls",
+	Aliases: []string{"ls", "list"},
+	Usage:   "ls [--verbose]",
+	Eg:      "ls",
+	Short:   "list all registered ruby installations",
+	Run:     list,
+}
+
 func init() {
-	CommandRegistry["ls"] = Command{
-		Name:    "ls",
-		Aliases: []string{"ls", "list"},
-		Usage:   "ls [--verbose]",
-		HelpMsg: "list all registered ruby installations",
-		Eg:      `ls`}
+	CmdRouter.Handle(listCmd.Aliases, listCmd)
 }
 
 // List all rubies registered with uru, identifying the currently active ruby
-func List(ctx *env.Context) {
+func list(ctx *env.Context) {
 	if len(ctx.Registry.Rubies) == 0 {
 		fmt.Println("---> No rubies registered with uru")
 		return

@@ -11,7 +11,18 @@ import (
 	"bitbucket.org/jonforums/uru/exec"
 )
 
-func Use(ctx *env.Context) {
+var useCmd *Command = &Command{
+	Name:  "TAG",
+	Usage: "TAG",
+	Eg:    "223p146",
+	Short: "use ruby identified by TAG, 'auto', or 'nil'",
+}
+
+func init() {
+	CmdRouter.Handle(useCmd.Aliases, useCmd)
+}
+
+func use(ctx *env.Context) {
 	cmd := ctx.Cmd()
 
 	// use .ruby-version file contents to select which ruby to activate

@@ -10,9 +10,20 @@ import (
 	"bitbucket.org/jonforums/uru/env"
 )
 
-// generate no help information as it adds no value and clutters the CLI
+var versionCmd *Command = &Command{
+	Name:    "version",
+	Aliases: []string{"ver", "version"},
+	Usage:   "version",
+	Eg:      "version",
+	Short:   "display uru version",
+	Run:     version,
+}
 
-func Version(ctx *env.Context) {
+func init() {
+	CmdRouter.Handle(versionCmd.Aliases, versionCmd)
+}
+
+func version(ctx *env.Context) {
 	fmt.Printf("%s v%s [%s/%s %s]\n", env.AppName, env.AppVersion,
 		runtime.GOOS, runtime.GOARCH, runtime.Version())
 }

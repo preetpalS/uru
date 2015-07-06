@@ -12,7 +12,6 @@ import (
 	"runtime"
 	"strings"
 
-	"bitbucket.org/jonforums/uru/command"
 	"bitbucket.org/jonforums/uru/env"
 )
 
@@ -45,16 +44,6 @@ func initHome(ctx *env.Context) {
 		return nil
 	}
 	filepath.Walk(ctx.Home(), walk)
-}
-
-// Initialize uru's main command router
-func initCommandRouter(r *command.CommandRouter) {
-	r.Handle([]string{`admin`}, command.Admin)
-	r.Handle([]string{`gem`}, command.Gem)
-	r.Handle([]string{`help`}, command.Help)
-	r.Handle([]string{`ls`, `list`}, command.List)
-	r.Handle([]string{`ruby`, `rb`}, command.Ruby)
-	r.Handle([]string{`ver`, `version`}, command.Version)
 }
 
 // Import all installed rubies that have been registered with uru.

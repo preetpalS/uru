@@ -10,13 +10,17 @@ import (
 	"bitbucket.org/jonforums/uru/env"
 )
 
+var adminRemoveCmd *Command = &Command{
+	Name:    "rm",
+	Aliases: []string{"rm", "del"},
+	Usage:   "admin rm TAG | --all",
+	Eg:      "admin rm 193p193",
+	Short:   "deregister a ruby installation from uru",
+	Run:     adminRemove,
+}
+
 func init() {
-	AdminCmdRegistry["rm"] = Command{
-		Name:    "rm",
-		Aliases: []string{"rm", "del"},
-		Usage:   "admin rm TAG | --all",
-		HelpMsg: "deregister a ruby installation",
-		Eg:      `admin rm 193p193`}
+	adminRouter.Handle(adminRemoveCmd.Aliases, adminRemoveCmd)
 }
 
 func adminRemove(ctx *env.Context) {

@@ -10,13 +10,17 @@ import (
 	"bitbucket.org/jonforums/uru/env"
 )
 
+var adminRetagCmd *Command = &Command{
+	Name:    "retag",
+	Aliases: []string{"retag", "tag"},
+	Usage:   "admin retag CURRENT NEW",
+	Eg:      "admin retag 217p376 217p376-x64",
+	Short:   "retag CURRENT tag value to NEW",
+	Run:     adminRetag,
+}
+
 func init() {
-	AdminCmdRegistry["retag"] = Command{
-		Name:    "retag",
-		Aliases: []string{"retag", "tag"},
-		Usage:   "admin retag CURRENT NEW",
-		HelpMsg: "retag CURRENT tag value to NEW",
-		Eg:      `admin retag 200p197 200p197-x64`}
+	adminRouter.Handle(adminRetagCmd.Aliases, adminRetagCmd)
 }
 
 func adminRetag(ctx *env.Context) {

@@ -12,7 +12,20 @@ import (
 	"bitbucket.org/jonforums/uru/env"
 )
 
-func Help(ctx *env.Context) {
+var helpCmd *Command = &Command{
+	Name:    "help",
+	Aliases: []string{"help"},
+	Usage:   "help",
+	Eg:      "help",
+	Short:   "help",
+	Run:     help,
+}
+
+func init() {
+	CmdRouter.Handle(helpCmd.Aliases, helpCmd)
+}
+
+func help(ctx *env.Context) {
 	cmdArgs := ctx.CmdArgs()
 	if len(cmdArgs) == 0 {
 		fmt.Fprintf(os.Stderr, "Usage: %s [options] CMD ARG ...\n", env.AppName)
@@ -28,18 +41,15 @@ func Help(ctx *env.Context) {
 }
 
 func printCommandSummary() {
-	for k, v := range CommandRegistry {
-		fmt.Fprintf(os.Stderr, "%6.6s   %s\n", k, v.HelpMsg)
+	for k, v := range *CmdRouter.Commands() {
+		fmt.Fprintf(os.Stderr, "%6.6s   %s\n", k, v.Short)
 	}
-
-	fmt.Fprintf(os.Stderr, "%6.6s   %s\n",
-		"TAG", "switch to use ruby version TAG, 'auto', or 'nil'")
 }
 
 func printAdminCommandSummary() {
 	fmt.Fprintln(os.Stderr, "\nwhere SUBCMD is one of:")
-	for k, v := range AdminCmdRegistry {
-		fmt.Fprintf(os.Stderr, "%8.8s   %s\n", k, v.HelpMsg)
+	for k, v := range *adminRouter.Commands() {
+		fmt.Fprintf(os.Stderr, "%8.8s   %s\n", k, v.Short)
 		if v.Aliases != nil {
 			fmt.Fprintf(os.Stderr, "%8.8s   aliases: %s\n", "", strings.Join(v.Aliases, ", "))
 		}
@@ -49,8 +59,8 @@ func printAdminCommandSummary() {
 }
 
 func commandHelp(cmd string) {
-	command, ok := CommandRegistry[cmd]
-	if !ok {
+	command, err := CmdRouter.Handler(cmd)
+	if err != nil {
 		fmt.Fprintf(os.Stderr, "---> No help available on `%s`\n", cmd)
 		return
 	}
@@ -63,8 +73,8 @@ func commandHelp(cmd string) {
 
 	fmt.Fprintf(os.Stderr,
 		buf.String(),
-		command.HelpMsg,
-		command.Usage,
+		command.Short,
+		env.AppName, command.Usage,
 		env.AppName, command.Eg)
 
 	if cmd == `admin` {

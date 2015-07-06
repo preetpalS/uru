@@ -15,11 +15,7 @@ import (
 	"bitbucket.org/jonforums/uru/env"
 )
 
-var (
-	CommandRegistry  = make(map[string]Command)
-	AdminCmdRegistry = make(map[string]Command)
-)
-
+var CmdRouter *Router = NewRouter(use)
 
 func isTagLabelReserved(tagLabel string) (bool, string) {
 	resTagLabels := []string{`auto`, `nil`}

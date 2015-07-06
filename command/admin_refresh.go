@@ -13,13 +13,17 @@ import (
 	"bitbucket.org/jonforums/uru/env"
 )
 
+var adminRefreshCmd *Command = &Command{
+	Name:    "refresh",
+	Aliases: []string{"refresh"},
+	Usage:   "admin refresh [--retag]",
+	Eg:      "admin refresh",
+	Short:   "refresh all registered rubies",
+	Run:     adminRefresh,
+}
+
 func init() {
-	AdminCmdRegistry["refresh"] = Command{
-		Name:    "refresh",
-		Aliases: nil,
-		Usage:   "admin refresh [--retag]",
-		HelpMsg: "refresh all registered rubies",
-		Eg:      `admin refresh`}
+	adminRouter.Handle(adminRefreshCmd.Aliases, adminRefreshCmd)
 }
 
 func adminRefresh(ctx *env.Context) {

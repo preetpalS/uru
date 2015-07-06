@@ -19,13 +19,17 @@ const (
 	MULTI_REGISTRATION
 )
 
+var adminAddCmd *Command = &Command{
+	Name:    "add",
+	Aliases: []string{"add"},
+	Usage:   "admin add DIR [--tag TAG] | --recurse DIR [--dirtag] | system",
+	Eg:      `admin add C:\Apps\rubies\ruby-2.1\bin`,
+	Short:   "register an existing ruby installation",
+	Run:     adminAdd,
+}
+
 func init() {
-	AdminCmdRegistry["add"] = Command{
-		Name:    "add",
-		Aliases: nil,
-		Usage:   "admin add DIR [--tag TAG] | --recurse DIR [--dirtag] | system",
-		HelpMsg: "register an existing ruby installation",
-		Eg:      `admin add C:\ruby200\bin`}
+	adminRouter.Handle(adminAddCmd.Aliases, adminAddCmd)
 }
 
 func adminAdd(ctx *env.Context) {

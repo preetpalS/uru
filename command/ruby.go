@@ -7,16 +7,20 @@ import (
 	"bitbucket.org/jonforums/uru/env"
 )
 
-func init() {
-	CommandRegistry["ruby"] = Command{
-		Name:    "ruby",
-		Aliases: []string{"ruby", "rb"},
-		Usage:   "ruby ARGS ...",
-		HelpMsg: "run a ruby command with all registered rubies",
-		Eg:      `ruby -e "puts RUBY_VERSION"`}
+var rubyCmd *Command = &Command{
+	Name:    "ruby",
+	Aliases: []string{"ruby", "rb"},
+	Usage:   "ruby ARGS...",
+	Eg:      `ruby -e "puts RUBY_VERSION"`,
+	Short:   "run a ruby command with all registered rubies",
+	Run:     ruby,
 }
 
-func Ruby(ctx *env.Context) {
+func init() {
+	CmdRouter.Handle(rubyCmd.Aliases, rubyCmd)
+}
+
+func ruby(ctx *env.Context) {
 	ctx.SetCmd(`ruby`)
 	err := rubyExec(ctx)
 	if err != nil {

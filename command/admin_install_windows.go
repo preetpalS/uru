@@ -12,13 +12,17 @@ import (
 	"bitbucket.org/jonforums/uru/env"
 )
 
+var adminInstallCmd *Command = &Command{
+	Name:    "install",
+	Aliases: []string{"install", "in"},
+	Usage:   "admin install",
+	Eg:      "admin install",
+	Short:   "install uru",
+	Run:     adminInstall,
+}
+
 func init() {
-	AdminCmdRegistry["install"] = Command{
-		Name:    "install",
-		Aliases: []string{"install", "in"},
-		Usage:   "admin install",
-		HelpMsg: "install uru",
-		Eg:      `admin install`}
+	adminRouter.Handle(adminInstallCmd.Aliases, adminInstallCmd)
 }
 
 func adminInstall(ctx *env.Context) {

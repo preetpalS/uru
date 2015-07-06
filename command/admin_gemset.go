@@ -14,13 +14,17 @@ import (
 	"bitbucket.org/jonforums/uru/env"
 )
 
+var adminGemsetCmd *Command = &Command{
+	Name:    "gemset",
+	Aliases: []string{"gemset", "gs"},
+	Usage:   "admin gemset init NAME... | rm",
+	Eg:      "admin gemset init 211@gemset",
+	Short:   "administer gemset installations",
+	Run:     adminGemset,
+}
+
 func init() {
-	AdminCmdRegistry["gemset"] = Command{
-		Name:    "gemset",
-		Aliases: []string{"gemset", "gs"},
-		Usage:   "admin gemset init NAME... | rm",
-		HelpMsg: "administer gemset installations",
-		Eg:      `admin gemset init 211@gemset`}
+	adminRouter.Handle(adminGemsetCmd.Aliases, adminGemsetCmd)
 }
 
 func adminGemset(ctx *env.Context) {
@@ -59,8 +63,6 @@ func adminGemset(ctx *env.Context) {
 		}
 	default:
 		fmt.Printf("[ERROR] I don't understand the `%s` gemset sub-command\n\n", subCmd)
-		ctx.SetCmdAndArgs(``, nil)
-		Help(ctx)
 	}
 }
 

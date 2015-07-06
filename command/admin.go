@@ -5,20 +5,27 @@ package command
 
 import (
 	"fmt"
+	"os"
 
 	"bitbucket.org/jonforums/uru/env"
 )
 
-func init() {
-	CommandRegistry["admin"] = Command{
-		Name:    "admin",
-		Aliases: nil,
-		Usage:   "admin SUBCMD ARGS",
-		HelpMsg: "administer uru installation",
-		Eg:      `admin add C:\ruby200\bin`}
+var adminRouter *Router = NewRouter(defAdminHandler)
+
+var adminCmd *Command = &Command{
+	Name:    "admin",
+	Aliases: []string{"admin"},
+	Usage:   "admin SUBCMD ARGS",
+	Eg:      `admin add C:\Apps\rubies\ruby-2.1\bin`,
+	Short:   "administer uru installation",
+	Run:     admin,
 }
 
-func Admin(ctx *env.Context) {
+func init() {
+	CmdRouter.Handle(adminCmd.Aliases, adminCmd)
+}
+
+func admin(ctx *env.Context) {
 	cmdArgs := ctx.CmdArgs()
 	if len(cmdArgs) == 0 {
 		return
@@ -26,19 +33,10 @@ func Admin(ctx *env.Context) {
 	subCmd := cmdArgs[0]
 	ctx.SetCmdArgs(cmdArgs[1:])
 
-	// initialize the admin subcommand router
-	adminRouter := NewRouter(func(ctx *env.Context) {
-		fmt.Printf("[ERROR] I don't understand the `%s` admin sub-command\n\n", subCmd)
-		ctx.SetCmdAndArgs(``, nil)
-		Help(ctx)
-	})
-	adminRouter.Handle([]string{`add`}, adminAdd)
-	adminRouter.Handle([]string{`gemset`, `gs`}, adminGemset)
-	adminRouter.Handle([]string{`install`, `in`}, adminInstall)
-	adminRouter.Handle([]string{`refresh`}, adminRefresh)
-	adminRouter.Handle([]string{`retag`, `tag`}, adminRetag)
-	adminRouter.Handle([]string{`del`, `rm`}, adminRemove)
-
-	// dispatch subcommands to registered handlers
 	adminRouter.Dispatch(ctx, subCmd)
+}
+
+func defAdminHandler(ctx *env.Context) {
+	fmt.Printf("[ERROR] I don't understand the `%s` admin sub-command\n\n", ctx.CmdArgs()[0])
+	os.Exit(1)
 }

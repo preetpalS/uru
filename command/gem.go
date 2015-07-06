@@ -7,16 +7,20 @@ import (
 	"bitbucket.org/jonforums/uru/env"
 )
 
-func init() {
-	CommandRegistry["gem"] = Command{
-		Name:    "gem",
-		Aliases: nil,
-		Usage:   "gem ARGS ...",
-		HelpMsg: "run a gem command with all registered rubies",
-		Eg:      `gem install narray`}
+var gemCmd *Command = &Command{
+	Name:    "gem",
+	Aliases: []string{"gem"},
+	Usage:   "gem ARGS...",
+	Eg:      "gem install narray",
+	Short:   "run a gem command with all registered rubies",
+	Run:     gem,
 }
 
-func Gem(ctx *env.Context) {
+func init() {
+	CmdRouter.Handle(gemCmd.Aliases, gemCmd)
+}
+
+func gem(ctx *env.Context) {
 	err := rubyExec(ctx)
 	if err != nil {
 		// TODO implement me
