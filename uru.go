@@ -6,36 +6,49 @@
 package main
 
 import (
-	"flag"
 	"io/ioutil"
 	"log"
+	"os"
 
 	"bitbucket.org/jonforums/uru/command"
 	"bitbucket.org/jonforums/uru/env"
 )
 
 func main() {
-	debug := flag.Bool(`debug`, false, "enable debug mode")
-	flag.Parse()
+	var debug, needHelp bool
+	var cmd string
 
-	if !*debug {
+	if len(os.Args) == 1 {
+		needHelp = true
+	}
+	for _, a := range os.Args {
+		switch a {
+		case "-h", "--help":
+			needHelp = true
+		case "--debug":
+			debug = true
+		}
+	}
+
+	if !debug {
 		log.SetOutput(ioutil.Discard)
 	}
 	log.Printf("[DEBUG] initializing uru v%s\n", env.AppVersion)
 
 	ctx := env.NewContext()
-	if len(flag.Args()) == 0 {
-		command.Help(ctx)
-	}
 	initHome(ctx)
 	initRubies(ctx)
 
-	cmdRouter := command.NewRouter(command.Use)
-	initCommandRouter(cmdRouter)
-
-	cmd := flag.Arg(0)
-	ctx.SetCmdAndArgs(cmd, flag.Args()[1:])
+	if needHelp {
+		cmd = "help"
+	} else {
+		cmd = os.Args[1]
+		if len(os.Args) > 2 {
+			ctx.SetCmdArgs(os.Args[2:])
+		}
+	}
+	ctx.SetCmd(cmd)
 	log.Printf("[DEBUG] cmd = %s\n", cmd)
 
-	cmdRouter.Dispatch(ctx, cmd)
+	command.CmdRouter.Dispatch(ctx, cmd)
 }
