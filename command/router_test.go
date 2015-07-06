@@ -14,8 +14,8 @@ import (
 
 func TestRouterConfig(t *testing.T) {
 	r := NewRouter(func(ctx *env.Context) {})
-	r.Handle([]string{`gem`}, func(ctx *env.Context) {})
-	r.Handle([]string{`ls`, `list`}, func(ctx *env.Context) {})
+	r.Handle([]string{`gem`}, &Command{})
+	r.Handle([]string{`ls`, `list`}, &Command{})
 
 	count := 3
 
@@ -36,8 +36,8 @@ func TestRouterDispatch(t *testing.T) {
 
 	defExpected := "default_test"
 	r := NewRouter(func(*env.Context) { fmt.Fprintf(out, "%s", defExpected) })
-	r.Handle([]string{`admin`}, func(*env.Context) { fmt.Fprintf(out, "%s", "admin_test") })
-	r.Handle([]string{`gem`}, func(*env.Context) { fmt.Fprintf(out, "%s", "gem_test") })
+	r.Handle([]string{`admin`}, &Command{Run: func(*env.Context) { fmt.Fprintf(out, "%s", "admin_test") }})
+	r.Handle([]string{`gem`}, &Command{Run: func(*env.Context) { fmt.Fprintf(out, "%s", "gem_test") }})
 
 	// test registered command routing
 	for _, c := range []string{`admin`, `gem`} {
@@ -97,12 +97,12 @@ func BenchmarkCommandRouter(b *testing.B) {
 	cmds := []string{"admin", "gem", "help", "ls", "ruby", "version", "215"}
 
 	r := NewRouter(func(*env.Context) {})
-	r.Handle([]string{`admin`}, func(ctx *env.Context) {})
-	r.Handle([]string{`gem`}, func(ctx *env.Context) {})
-	r.Handle([]string{`help`}, func(ctx *env.Context) {})
-	r.Handle([]string{`ls`, `list`}, func(ctx *env.Context) {})
-	r.Handle([]string{`ruby`, `rb`}, func(ctx *env.Context) {})
-	r.Handle([]string{`ver`, `version`}, func(ctx *env.Context) {})
+	r.Handle([]string{`admin`}, &Command{Run: func(ctx *env.Context) {}})
+	r.Handle([]string{`gem`}, &Command{Run: func(ctx *env.Context) {}})
+	r.Handle([]string{`help`}, &Command{Run: func(ctx *env.Context) {}})
+	r.Handle([]string{`ls`, `list`}, &Command{Run: func(ctx *env.Context) {}})
+	r.Handle([]string{`ruby`, `rb`}, &Command{Run: func(ctx *env.Context) {}})
+	r.Handle([]string{`ver`, `version`}, &Command{Run: func(ctx *env.Context) {}})
 
 	for i := 0; i < b.N; i++ {
 		for _, c := range cmds {
