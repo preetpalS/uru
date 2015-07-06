@@ -28,7 +28,8 @@ func init() {
 func help(ctx *env.Context) {
 	cmdArgs := ctx.CmdArgs()
 	if len(cmdArgs) == 0 {
-		fmt.Fprintf(os.Stderr, "Usage: %s [options] CMD ARG ...\n", env.AppName)
+		fmt.Fprintf(os.Stderr, "%s v%s\n", env.AppName, env.AppVersion)
+		fmt.Fprintf(os.Stderr, "Usage: %s [options] CMD ARG...\n", env.AppName)
 		fmt.Fprintln(os.Stderr, "\nwhere CMD is one of:")
 		printCommandSummary()
 		fmt.Fprintf(os.Stderr, "\nfor help on a particular command, type `%s help CMD`\n",
@@ -53,7 +54,7 @@ func printAdminCommandSummary() {
 		if v.Aliases != nil {
 			fmt.Fprintf(os.Stderr, "%8.8s   aliases: %s\n", "", strings.Join(v.Aliases, ", "))
 		}
-		fmt.Fprintf(os.Stderr, "%8.8s   usage: %s\n", "", v.Usage)
+		fmt.Fprintf(os.Stderr, "%8.8s   usage: %s %s\n", "", env.AppName, v.Usage)
 		fmt.Fprintf(os.Stderr, "%8.8s   eg: %s %s\n\n", "", env.AppName, v.Eg)
 	}
 }
@@ -69,7 +70,7 @@ func commandHelp(cmd string) {
 	if command.Aliases != nil {
 		buf.WriteString(fmt.Sprintf("  Aliases: %s\n", strings.Join(command.Aliases, ", ")))
 	}
-	buf.WriteString("  Usage: %s\n  Example: %s %s\n")
+	buf.WriteString("  Usage: %s %s\n  Example: %s %s\n")
 
 	fmt.Fprintf(os.Stderr,
 		buf.String(),
