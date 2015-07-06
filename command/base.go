@@ -20,13 +20,6 @@ var (
 	AdminCmdRegistry = make(map[string]Command)
 )
 
-type Command struct {
-	Name    string
-	Aliases []string
-	Usage   string
-	HelpMsg string
-	Eg      string
-}
 
 func isTagLabelReserved(tagLabel string) (bool, string) {
 	resTagLabels := []string{`auto`, `nil`}
