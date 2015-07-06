@@ -8,8 +8,8 @@ namespace :test do
   task :all => ['build:prep','test:main','test:env','test:exec','test:command']
 
   task :main do
-    puts "\n---> testing `main` package"
-    system "go test #{GO_PKG_ROOT}"
+    puts "\n---> testing `uru` command"
+    system "go test #{GO_PKG_ROOT}/cmd/uru"
   end
 
   task :env do

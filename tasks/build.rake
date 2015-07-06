@@ -5,6 +5,9 @@ desc 'build uru for all OS/arch flavors'
 task :all => BUILDS
 
 namespace :build do
+  # Enable dev builds similar to:
+  #   rake all -- --dev-build
+  #   rake package -- --dev-build
   puts "\n  *** DEVELOPMENT build mode ***\n\n" if URU_OPTS[:devbuild]
 
   task :prep do
@@ -21,7 +24,7 @@ namespace :build do
       ENV['GOARCH'] = arch
       ENV['GOOS'] = os
       ENV['CGO_ENABLED'] = cgo
-      system %Q{go build -ldflags "-s" -o #{BUILD}/#{t.name.split(':')[-1]}/uru_rt#{ext}}
+      system %Q{go build -ldflags "-s" -o #{BUILD}/#{t.name.split(':')[-1]}/uru_rt#{ext} #{GO_PKG_ROOT}/cmd/uru}
     end
   end
 end
