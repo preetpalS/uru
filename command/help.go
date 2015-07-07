@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 
 	"bitbucket.org/jonforums/uru/env"
@@ -42,20 +43,34 @@ func help(ctx *env.Context) {
 }
 
 func printCommandSummary() {
-	for k, v := range *CmdRouter.Commands() {
-		fmt.Fprintf(os.Stderr, "%6.6s   %s\n", k, v.Short)
+	keys, cmds := []string{}, *CmdRouter.Commands()
+
+	for k, _ := range cmds {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, v := range keys {
+		fmt.Fprintf(os.Stderr, "%6.6s   %s\n", v, cmds[v].Short)
 	}
 }
 
 func printAdminCommandSummary() {
+	keys, cmds := []string{}, *adminRouter.Commands()
+
+	for k, _ := range cmds {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
 	fmt.Fprintln(os.Stderr, "\nwhere SUBCMD is one of:")
-	for k, v := range *adminRouter.Commands() {
-		fmt.Fprintf(os.Stderr, "%8.8s   %s\n", k, v.Short)
-		if v.Aliases != nil {
-			fmt.Fprintf(os.Stderr, "%8.8s   aliases: %s\n", "", strings.Join(v.Aliases, ", "))
+	for _, v := range keys {
+		fmt.Fprintf(os.Stderr, "%8.8s   %s\n", v, cmds[v].Short)
+		if cmds[v].Aliases != nil {
+			fmt.Fprintf(os.Stderr, "%8.8s   aliases: %s\n", "", strings.Join(cmds[v].Aliases, ", "))
 		}
-		fmt.Fprintf(os.Stderr, "%8.8s   usage: %s %s\n", "", env.AppName, v.Usage)
-		fmt.Fprintf(os.Stderr, "%8.8s   eg: %s %s\n\n", "", env.AppName, v.Eg)
+		fmt.Fprintf(os.Stderr, "%8.8s   usage: %s %s\n", "", env.AppName, cmds[v].Usage)
+		fmt.Fprintf(os.Stderr, "%8.8s   eg: %s %s\n\n", "", env.AppName, cmds[v].Eg)
 	}
 }
 
