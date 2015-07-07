@@ -5,9 +5,9 @@ desc 'test uru source files'
 task :test => 'test:all'
 
 namespace :test do
-  task :all => ['build:prep','test:main','test:env','test:exec','test:command']
+  task :all => ['build:prep','test:uru','test:env','test:exec','test:command']
 
-  task :main do
+  task :uru do
     puts "\n---> testing `uru` command"
     system "go test #{GO_PKG_ROOT}/cmd/uru"
   end
