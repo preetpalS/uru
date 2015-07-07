@@ -3,3 +3,4 @@ pkg/
 
 deploy_config.rb
 cacert.pem
+dev_notes.txt
