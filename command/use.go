@@ -8,7 +8,6 @@ import (
 	"os"
 
 	"bitbucket.org/jonforums/uru/env"
-	"bitbucket.org/jonforums/uru/exec"
 )
 
 var useCmd *Command = &Command{
@@ -71,7 +70,7 @@ func use(ctx *env.Context) {
 	}
 
 	// create the environment switcher script
-	exec.CreateSwitcherScript(ctx, &newPath, newRb.GemHome)
+	env.CreateSwitcherScript(ctx, &newPath, newRb.GemHome)
 
 	tagAlias := ``
 	if newRb.TagLabel != `` {

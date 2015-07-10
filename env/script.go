@@ -1,7 +1,7 @@
 // Author: Jon Maken, All Rights Reserved
 // License: 3-clause BSD
 
-package exec
+package env
 
 import (
 	"fmt"
@@ -10,8 +10,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-
-	"bitbucket.org/jonforums/uru/env"
 )
 
 // switcher script templates
@@ -35,7 +33,7 @@ export PATH=%s
 
 // CreateSwitcherScript creates an environment switcher script customized to the
 // type of shell calling the uru runtime.
-func CreateSwitcherScript(ctx *env.Context, path *[]string, gemHome string) (scriptName string, err error) {
+func CreateSwitcherScript(ctx *Context, path *[]string, gemHome string) (scriptName string, err error) {
 	scriptType := os.Getenv(`URU_INVOKER`)
 
 	var script string
@@ -116,8 +114,8 @@ func winPathToNix(path *[]string) (nix []string) {
 
 	for _, p := range *path {
 		// pass the Canary on through untouched
-		if p == env.Canary {
-			nix = append(nix, env.Canary)
+		if p == Canary {
+			nix = append(nix, Canary)
 			continue
 		}
 

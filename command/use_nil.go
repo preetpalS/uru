@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"bitbucket.org/jonforums/uru/env"
-	"bitbucket.org/jonforums/uru/exec"
 )
 
 func useNil(ctx *env.Context) (err error) {
@@ -30,7 +29,7 @@ func useNil(ctx *env.Context) (err error) {
 	newPath := strings.Split(curPath[1], string(os.PathListSeparator))
 
 	// TODO handle pre-existing "system" GEM_HOME via URU_ORIGINAL_GEM_HOME envar
-	exec.CreateSwitcherScript(ctx, &newPath, "")
+	env.CreateSwitcherScript(ctx, &newPath, "")
 
 	return
 }
