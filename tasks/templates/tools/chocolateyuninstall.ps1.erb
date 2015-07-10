@@ -9,6 +9,6 @@ try {
   if (Test-Path ($uruWrapperPs1)) { Remove-Item $uruWrapperPs1 -force }
 
 } catch {
-  Write-ChocolateyFailure "$packageName" "$($_.Exception.Message)"
-  throw
+  Write-Host "---> error while uninstalling uru"
+  throw $_.Exception
 }

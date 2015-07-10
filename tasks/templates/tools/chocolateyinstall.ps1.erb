@@ -54,8 +54,7 @@ if (`$env:URU_HOME) {
     $sw.Dispose()
   }
 
-  Write-ChocolateySuccess "$packageName"
 } catch {
-  Write-ChocolateyFailure "$packageName" "$($_.Exception.Message)"
-  throw
+  Write-Host "---> error while uninstalling uru"
+  throw $_.Exception
 }
