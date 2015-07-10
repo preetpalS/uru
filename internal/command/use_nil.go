@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"bitbucket.org/jonforums/uru/env"
+	"bitbucket.org/jonforums/uru/internal/env"
 )
 
 func useNil(ctx *env.Context) (err error) {

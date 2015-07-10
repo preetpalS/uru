@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"bitbucket.org/jonforums/uru/env"
+	"bitbucket.org/jonforums/uru/internal/env"
 )
 
 func TestCommandInit(t *testing.T) {

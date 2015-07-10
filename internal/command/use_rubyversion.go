@@ -14,7 +14,7 @@ import (
 	"runtime"
 	"strings"
 
-	"bitbucket.org/jonforums/uru/env"
+	"bitbucket.org/jonforums/uru/internal/env"
 )
 
 type rbVersionFunc func(ctx *env.Context, dir string) (tags env.RubyMap, err error)

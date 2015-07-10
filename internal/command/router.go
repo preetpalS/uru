@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 
-	"bitbucket.org/jonforums/uru/env"
+	"bitbucket.org/jonforums/uru/internal/env"
 )
 
 type HandlerFunc func(*env.Context)

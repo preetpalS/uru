@@ -12,7 +12,7 @@ import (
 	"runtime"
 	"strings"
 
-	"bitbucket.org/jonforums/uru/env"
+	"bitbucket.org/jonforums/uru/internal/env"
 )
 
 var CmdRouter *Router = NewRouter(use)

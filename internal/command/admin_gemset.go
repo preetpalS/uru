@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"bitbucket.org/jonforums/uru/env"
+	"bitbucket.org/jonforums/uru/internal/env"
 )
 
 var adminGemsetCmd *Command = &Command{

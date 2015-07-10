@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"os"
 
-	"bitbucket.org/jonforums/uru/env"
+	"bitbucket.org/jonforums/uru/internal/env"
 )
 
 var useCmd *Command = &Command{

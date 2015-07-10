@@ -12,7 +12,7 @@ args = ARGV.dup
 URU_OPTS = {}
 URU_OPTS[:devbuild] = args.delete('--dev-build')  # create development build packages
 
-VER = /AppVersion\s*=\s*\`(\d{1,2}\.\d{1,2}\.\d{1,2})(\.\w+)?/.match(File.read('env/ui.go')) do |m|
+VER = /AppVersion\s*=\s*\`(\d{1,2}\.\d{1,2}\.\d{1,2})(\.\w+)?/.match(File.read('internal/env/ui.go')) do |m|
   if m[2] != nil then m[1] + m[2] else m[1] end
 end || 'NA'
 

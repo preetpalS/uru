@@ -9,7 +9,7 @@ import (
 	"regexp"
 	"testing"
 
-	"bitbucket.org/jonforums/uru/env"
+	"bitbucket.org/jonforums/uru/internal/env"
 )
 
 func TestRouterConfig(t *testing.T) {

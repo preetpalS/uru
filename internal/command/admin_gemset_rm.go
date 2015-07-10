@@ -8,7 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"bitbucket.org/jonforums/uru/env"
+	"bitbucket.org/jonforums/uru/internal/env"
 )
 
 // Implements the functionality for the incredibly dangerous user command

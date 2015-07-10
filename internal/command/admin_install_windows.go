@@ -9,7 +9,7 @@ import (
 	"os"
 	"os/exec"
 
-	"bitbucket.org/jonforums/uru/env"
+	"bitbucket.org/jonforums/uru/internal/env"
 )
 
 var adminInstallCmd *Command = &Command{

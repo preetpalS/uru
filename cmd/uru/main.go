@@ -10,8 +10,8 @@ import (
 	"log"
 	"os"
 
-	"bitbucket.org/jonforums/uru/command"
-	"bitbucket.org/jonforums/uru/env"
+	"bitbucket.org/jonforums/uru/internal/command"
+	"bitbucket.org/jonforums/uru/internal/env"
 )
 
 func main() {

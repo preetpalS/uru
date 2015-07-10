@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"runtime"
 
-	"bitbucket.org/jonforums/uru/env"
+	"bitbucket.org/jonforums/uru/internal/env"
 )
 
 var versionCmd *Command = &Command{

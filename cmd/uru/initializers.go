@@ -12,7 +12,7 @@ import (
 	"runtime"
 	"strings"
 
-	"bitbucket.org/jonforums/uru/env"
+	"bitbucket.org/jonforums/uru/internal/env"
 )
 
 // Initialize uru's home directory, creating if necessary.

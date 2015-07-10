@@ -10,7 +10,7 @@ import (
 	"sort"
 	"strings"
 
-	"bitbucket.org/jonforums/uru/env"
+	"bitbucket.org/jonforums/uru/internal/env"
 )
 
 var helpCmd *Command = &Command{

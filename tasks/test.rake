@@ -13,12 +13,12 @@ namespace :test do
   end
 
   task :env do
-    puts "\n---> testing `env` package"
-    system "go test #{GO_PKG_ROOT}/env"
+    puts "\n---> testing internal `env` package"
+    system "go test #{GO_PKG_ROOT}/internal/env"
   end
 
   task :command do
-    puts "\n---> testing `command` package"
-    system "go test #{GO_PKG_ROOT}/command"
+    puts "\n---> testing internal `command` package"
+    system "go test #{GO_PKG_ROOT}/internal/command"
   end
 end
