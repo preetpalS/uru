@@ -22,8 +22,7 @@ func init() {
 
 func ruby(ctx *env.Context) {
 	ctx.SetCmd(`ruby`)
-	err := rubyExec(ctx)
-	if err != nil {
+	if err := rubyExec(ctx); err != nil {
 		// TODO implement me
 	}
 }

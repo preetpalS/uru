@@ -21,8 +21,7 @@ func init() {
 }
 
 func gem(ctx *env.Context) {
-	err := rubyExec(ctx)
-	if err != nil {
+	if err := rubyExec(ctx); err != nil {
 		// TODO implement me
 	}
 }

@@ -98,8 +98,7 @@ func gemsetInit(ctx *env.Context, ruby, gemset string) (err error) {
 
 	fmt.Printf("---> initializing project gemset for ruby matching `%s` label\n", ruby)
 
-	_, serr := os.Stat(dir)
-	if os.IsNotExist(serr) {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		log.Printf("[DEBUG] creating gemset dir `%s`\n", dir)
 		os.MkdirAll(dir, os.ModeDir|0750)
 	}

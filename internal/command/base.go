@@ -74,8 +74,7 @@ func rubyExec(ctx *env.Context) (err error) {
 		}
 
 		// set env vars in current process to be inherited by the child process
-		err = os.Setenv(`PATH`, strings.Join(pth, string(os.PathListSeparator)))
-		if err != nil {
+		if err = os.Setenv(`PATH`, strings.Join(pth, string(os.PathListSeparator))); err != nil {
 			fmt.Printf("[ERROR] setting PATH, unable to run `%s %s`\n\n", ctx.Cmd(),
 				strings.Join(ctx.CmdArgs(), " "))
 			break
@@ -84,8 +83,7 @@ func rubyExec(ctx *env.Context) (err error) {
 			// XXX oddly, GEM_HOME must be set in current process so that users .gemrc
 			// is consulted. Setting os/exec's `Command.Env` causes users .gemrc to
 			// be ignored.
-			err = os.Setenv(`GEM_HOME`, info.GemHome)
-			if err != nil {
+			if err = os.Setenv(`GEM_HOME`, info.GemHome); err != nil {
 				fmt.Printf("[ERROR] setting GEM_HOME, unable to run `%s %s`\n\n", ctx.Cmd(),
 					strings.Join(ctx.CmdArgs(), " "))
 				break
@@ -111,8 +109,7 @@ func rubyExec(ctx *env.Context) (err error) {
 		runner.Stdout = os.Stdout
 		runner.Stderr = os.Stderr
 
-		err = runner.Run()
-		if err != nil {
+		if err = runner.Run(); err != nil {
 			fmt.Printf("---> unable to run `%s %s`\n\n", ctx.Cmd(),
 				strings.Join(ctx.CmdArgs(), " "))
 			log.Printf("[DEBUG] === returned error message ===\n%s\n\n", err.Error())

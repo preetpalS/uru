@@ -29,8 +29,7 @@ func initHome(ctx *env.Context) {
 	}
 	log.Printf("[DEBUG] uru HOME is %s\n", ctx.Home())
 
-	_, err := os.Stat(ctx.Home())
-	if os.IsNotExist(err) {
+	if _, err := os.Stat(ctx.Home()); os.IsNotExist(err) {
 		log.Printf("[DEBUG] creating %s\n", ctx.Home())
 		os.Mkdir(ctx.Home(), os.ModeDir|0750)
 	}
@@ -49,8 +48,7 @@ func initHome(ctx *env.Context) {
 // Import all installed rubies that have been registered with uru.
 func initRubies(ctx *env.Context) {
 	rubies := filepath.Join(ctx.Home(), `rubies.json`)
-	_, err := os.Stat(rubies)
-	if os.IsNotExist(err) {
+	if _, err := os.Stat(rubies); os.IsNotExist(err) {
 		log.Printf("[DEBUG] %s does not exist\n", rubies)
 		return
 	}

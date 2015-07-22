@@ -27,8 +27,7 @@ func init() {
 }
 
 func adminInstall(ctx *env.Context) {
-	_, err := exec.LookPath("uru_rt")
-	if err != nil {
+	if _, err := exec.LookPath("uru_rt"); err != nil {
 		fmt.Printf("[ERROR] uru_rt must be present in a directory on PATH\n")
 		os.Exit(1)
 	}

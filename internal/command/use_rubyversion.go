@@ -58,8 +58,7 @@ func useRubyVersionFile(ctx *env.Context, verFunc rbVersionFunc) (tags env.RubyM
 		}
 
 		absCwd = filepath.Dir(absCwd)
-		err = os.Chdir(absCwd)
-		if err != nil {
+		if err = os.Chdir(absCwd); err != nil {
 			return nil, err
 		}
 
@@ -81,8 +80,7 @@ func useRubyVersionFile(ctx *env.Context, verFunc rbVersionFunc) (tags env.RubyM
 				return
 			}
 
-			err = os.Chdir(userHome)
-			if err != nil {
+			if err = os.Chdir(userHome); err != nil {
 				return nil, err
 			}
 

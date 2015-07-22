@@ -26,8 +26,7 @@ func init() {
 }
 
 func adminInstall(ctx *env.Context) {
-	_, err := exec.LookPath("uru_rt.exe")
-	if err != nil {
+	if _, err := exec.LookPath("uru_rt.exe"); err != nil {
 		fmt.Printf("[ERROR] uru_rt.exe must be present in a directory on PATH\n")
 		os.Exit(1)
 	}
@@ -39,18 +38,15 @@ func adminInstall(ctx *env.Context) {
 		return
 	}
 
-	_, err = os.Stat("uru_rt.exe")
-	if os.IsNotExist(err) {
+	if _, err := os.Stat("uru_rt.exe"); os.IsNotExist(err) {
 		fmt.Printf("[ERROR] must install from same directory as uru_rt.exe\n")
 		os.Exit(1)
 	}
 
 	for _, v := range []string{"uru.bat", "uru.ps1"} {
-		_, err := os.Stat(v)
-		if err == nil {
+		if _, err := os.Stat(v); err == nil {
 			log.Printf("[DEBUG] creating backup of `%s`\n", v)
-			_, e := env.CopyFile(fmt.Sprintf("%s.bak", v), v)
-			if e != nil {
+			if _, e := env.CopyFile(fmt.Sprintf("%s.bak", v), v); e != nil {
 				log.Printf("[DEBUG] failed to backup `%s`; continuing", v)
 			}
 		}
@@ -71,8 +67,7 @@ func adminInstall(ctx *env.Context) {
 		}
 		defer script.Close()
 
-		_, err = script.WriteString(v)
-		if err != nil {
+		if _, err = script.WriteString(v); err != nil {
 			panic(fmt.Sprintf("failed to write `%s` script wrapper", k))
 		}
 	}
