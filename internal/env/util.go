@@ -90,7 +90,7 @@ func TagLabelToTag(ctx *Context, label string) (tags RubyMap, err error) {
 	if len(tags) == 0 {
 		return nil, errors.New(fmt.Sprintf("---> unable to find ruby matching `%s`\n", label))
 	}
-	log.Printf("[DEBUG] tags matching `%s`\n%v\n", label, tags)
+	log.Printf("[DEBUG] tags matching `%s`\n%#v\n", label, tags)
 
 	return
 }
@@ -138,7 +138,7 @@ func PathListForTag(ctx *Context, tag string) (path []string, err error) {
 
 		path = append(head, tail...)
 	}
-	log.Printf("[DEBUG] === path list ===\n  %v\n", path)
+	log.Printf("[DEBUG] === path list ===\n  %#v\n", path)
 
 	return
 }

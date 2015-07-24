@@ -15,6 +15,10 @@ import (
 	"bitbucket.org/jonforums/uru/internal/env"
 )
 
+func init() {
+	log.SetOutput(ioutil.Discard)
+}
+
 // Initialize uru's home directory, creating if necessary.
 func initHome(ctx *env.Context) {
 	uruHome := os.Getenv(`URU_HOME`)
@@ -64,5 +68,5 @@ func initRubies(ctx *env.Context) {
 		log.Printf("[DEBUG] unable to unmarshal %s\n", rubies)
 		panic("unable to unmarshal the JSON ruby registry")
 	}
-	log.Printf("[DEBUG] === ctx.Registry.Rubies ===\n%+v", ctx.Registry.Rubies)
+	log.Printf("[DEBUG] === ctx.Registry.Rubies ===\n%#v", ctx.Registry.Rubies)
 }

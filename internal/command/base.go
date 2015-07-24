@@ -101,7 +101,7 @@ func rubyExec(ctx *env.Context) (err error) {
 			// on windows, bypass gem.bat wrapper; always run gem via ruby exe
 			cmdArgs = append([]string{filepath.Join(info.Home, `gem`)}, cmdArgs...)
 		}
-		log.Printf("[DEBUG] === exec.Command args ===\n  cmd: %s\n  cmdArgs: %v\n",
+		log.Printf("[DEBUG] === exec.Command args ===\n  cmd: %s\n  cmdArgs: %#v\n",
 			cmd, cmdArgs)
 
 		runner := exec.Command(cmd, cmdArgs...)

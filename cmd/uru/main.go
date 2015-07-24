@@ -6,7 +6,6 @@
 package main
 
 import (
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -15,26 +14,29 @@ import (
 )
 
 func main() {
-	var debug, needHelp bool
+	args := os.Args[:]
+
+	var needHelp bool
 	var cmd string
 
-	if len(os.Args) == 1 {
+	if len(args) == 1 {
 		needHelp = true
 	}
 	for _, a := range os.Args {
 		switch a {
 		case "-h", "--help":
 			needHelp = true
-		case "--debug":
-			debug = true
+		// Internal only option; if used, it must be the final cmd line option
+		case "--debug-uru":
+			log.SetOutput(os.Stderr)
+			args = os.Args[:(len(os.Args)-1)]
+			if len(os.Args) == 2 {
+				needHelp = true
+			}
 		}
 	}
 
-	if !debug {
-		log.SetOutput(ioutil.Discard)
-	}
 	log.Printf("[DEBUG] initializing uru v%s\n", env.AppVersion)
-
 	ctx := env.NewContext()
 	initHome(ctx)
 	initRubies(ctx)
@@ -42,13 +44,13 @@ func main() {
 	if needHelp {
 		cmd = "help"
 	} else {
-		cmd = os.Args[1]
-		if len(os.Args) > 2 {
-			ctx.SetCmdArgs(os.Args[2:])
+		cmd = args[1]
+		if len(args) > 2 {
+			ctx.SetCmdArgs(args[2:])
 		}
 	}
 	ctx.SetCmd(cmd)
-	log.Printf("[DEBUG] cmd = %s\n", cmd)
+	log.Printf("[DEBUG] cmd = %s, args = %#v\n", cmd, ctx.CmdArgs())
 
 	command.CmdRouter.Dispatch(ctx, cmd)
 }
