@@ -31,12 +31,18 @@ func admin(ctx *env.Context) {
 		return
 	}
 	subCmd := cmdArgs[0]
+	ctx.SetCmd(subCmd)
 	ctx.SetCmdArgs(cmdArgs[1:])
 
 	adminRouter.Dispatch(ctx, subCmd)
 }
 
 func defAdminHandler(ctx *env.Context) {
-	fmt.Printf("[ERROR] I don't understand the `%s` admin sub-command\n\n", ctx.CmdArgs()[0])
+	subCmd := ctx.Cmd()
+	if subCmd == `help` {
+		fmt.Println("---> Use `uru help admin` for admin sub-command help")
+	} else {
+		fmt.Printf("[ERROR] I don't understand the `%s` admin sub-command\n\n", subCmd)
+	}
 	os.Exit(1)
 }
