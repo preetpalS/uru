@@ -47,6 +47,7 @@ func useRubyVersionFile(ctx *env.Context, verFunc rbVersionFunc) (tags env.RubyM
 	atRoot := false
 	for !atRoot {
 		// TODO stdlib have anything more robust than string compare?
+		// TODO why is this here?
 		if absCwd == userHome {
 			absCwd = filepath.Dir(absCwd)
 			continue
@@ -112,9 +113,7 @@ func versionator(ctx *env.Context, dir string) (tags env.RubyMap, err error) {
 		return nil, err
 	}
 
-	b = bytes.Trim(b, " \r\n")
-	b = bytes.ToLower(b)
-	rbVer := bytes.NewBuffer(b).String()
+	rbVer := string(bytes.ToLower(bytes.Trim(b, " \r\n")))
 	log.Printf("[DEBUG] .ruby-version data: %s\n", rbVer)
 
 	return env.TagLabelToTag(ctx, rbVer)
