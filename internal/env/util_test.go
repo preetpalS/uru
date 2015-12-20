@@ -105,7 +105,7 @@ func TestTagInfoSorter(t *testing.T) {
 	}
 
 	expected := []string{`3091568265`, `444332046`, `3577244517`}
-	actual := []string{ti[0].tag, ti[1].tag, ti[2].tag}
+	actual := []string{ti[0].tagHash, ti[1].tagHash, ti[2].tagHash}
 	if !reflect.DeepEqual(actual, expected) {
 		t.Errorf("tagInfoSorter incorrectly sorted\n  want: `%v`\n  got: `%v`",
 			expected, actual)

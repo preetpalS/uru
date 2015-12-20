@@ -63,10 +63,10 @@ func rubyExec(ctx *env.Context) (err error) {
 	curPath := os.Getenv(`PATH`)
 	curGemHome := os.Getenv(`GEM_HOME`)
 
-	for tag, info := range ctx.Registry.Rubies {
+	for tagHash, info := range ctx.Registry.Rubies {
 		fmt.Printf("\n%s\n\n", info.Description)
 
-		pth, err := env.PathListForTag(ctx, tag)
+		pth, err := env.PathListForTagHash(ctx, tagHash)
 		if err != nil {
 			fmt.Printf("[ERROR] getting path list, unable to run `%s %s`\n\n", ctx.Cmd(),
 				strings.Join(ctx.CmdArgs(), " "))

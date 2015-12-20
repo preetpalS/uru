@@ -30,6 +30,9 @@ var (
 		Canary, string(os.PathListSeparator))
 )
 
+// The string uru uses to identify a particular Ruby is known as the ruby's
+// "tag hash". The tag hash is a non-user, internal token generated when the
+// user registers a ruby with uru.
 type RubyMap map[string]Ruby
 
 type MarshalFunc func(ctx *Context) error

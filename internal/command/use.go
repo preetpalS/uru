@@ -45,27 +45,27 @@ func use(ctx *env.Context) {
 		}
 	}
 
-	tag := ``
+	tagHash := ``
 	if len(tags) == 1 {
 		// XXX less convoluted way to get the key of a 1 element map?
 		for t, _ := range tags {
-			tag = t
+			tagHash = t
 			break
 		}
 	} else {
 		// multiple rubies match the given tag label, ask the user for the
 		// correct one.
-		tag, err = env.SelectRubyFromList(tags, cmd, `use`)
+		tagHash, err = env.SelectRubyFromList(tags, cmd, `use`)
 		if err != nil {
 			os.Exit(1)
 		}
 	}
 
-	newRb := ctx.Registry.Rubies[tag]
+	newRb := ctx.Registry.Rubies[tagHash]
 
-	newPath, err := env.PathListForTag(ctx, tag)
+	newPath, err := env.PathListForTagHash(ctx, tagHash)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "---> unable to use ruby tagged as `%s`\n", tag)
+		fmt.Fprintf(os.Stderr, "---> unable to use ruby internally known as `%s`\n", tagHash)
 		os.Exit(1)
 	}
 
@@ -76,5 +76,5 @@ func use(ctx *env.Context) {
 	if newRb.TagLabel != `` {
 		tagAlias = fmt.Sprintf("tagged as `%s`", newRb.TagLabel)
 	}
-	fmt.Printf("---> Now using %s %s %s\n", newRb.Exe, newRb.ID, tagAlias)
+	fmt.Printf("---> now using %s %s %s\n", newRb.Exe, newRb.ID, tagAlias)
 }

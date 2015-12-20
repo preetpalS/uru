@@ -18,7 +18,7 @@ import (
 )
 
 type tagInfo struct {
-	tag      string // unique internal identifier for a particular ruby
+	tagHash  string // unique internal identifier for a particular ruby
 	tagLabel string // modifiable, user friendly name for a particular ruby
 }
 
@@ -95,8 +95,10 @@ func TagLabelToTag(ctx *Context, label string) (tags RubyMap, err error) {
 	return
 }
 
-// PathListForTag returns a PATH list appropriate for a given ruby tag.
-func PathListForTag(ctx *Context, tag string) (path []string, err error) {
+// PathListForTagHash returns a PATH list appropriate for a given registered
+// ruby's tag hash. A tag hash is an uru internal indentifier used for indexing
+// a user's registered rubies.
+func PathListForTagHash(ctx *Context, tagHash string) (path []string, err error) {
 	// get current PATH and split it on the canary separator demarcating the
 	// head (current ruby path) and tail (base path):
 	//
@@ -118,7 +120,7 @@ func PathListForTag(ctx *Context, tag string) (path []string, err error) {
 		tmp = paths[1]
 	}
 
-	newRb := ctx.Registry.Rubies[tag]
+	newRb := ctx.Registry.Rubies[tagHash]
 	tail := strings.Split(tmp, string(os.PathListSeparator))
 
 	if SysRbRegex.MatchString(newRb.TagLabel) {
@@ -143,8 +145,8 @@ func PathListForTag(ctx *Context, tag string) (path []string, err error) {
 	return
 }
 
-// SortTagsByTagLabel returns a string slice of tags sorted by tag label.
-func SortTagsByTagLabel(rubyMap *RubyMap) (tags []string, err error) {
+// SortTagsByTagLabel returns a string slice of tag hashes sorted by tag label.
+func SortTagsByTagLabel(rubyMap *RubyMap) (sortedTagHashes []string, err error) {
 	if len(*rubyMap) == 0 {
 		return nil, errors.New("nothing in input RubyMap; no sorted tags to return")
 	}
@@ -152,14 +154,14 @@ func SortTagsByTagLabel(rubyMap *RubyMap) (tags []string, err error) {
 	tis := new(tagInfoSorter)
 	tis.tags = []tagInfo{}
 	for t, ri := range *rubyMap {
-		tis.tags = append(tis.tags, tagInfo{tag: t, tagLabel: ri.TagLabel})
+		tis.tags = append(tis.tags, tagInfo{tagHash: t, tagLabel: ri.TagLabel})
 	}
 	sort.Sort(tis)
 
 	for _, ti := range tis.tags {
-		tags = append(tags, ti.tag)
+		sortedTagHashes = append(sortedTagHashes, ti.tagHash)
 	}
-	if len(tags) == 0 {
+	if len(sortedTagHashes) == 0 {
 		return nil, errors.New("no sorted tags to return")
 	}
 
