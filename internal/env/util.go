@@ -62,8 +62,8 @@ func CopyFile(dst, src string) (written int64, err error) {
 	return
 }
 
-// NewTag generates a new tag value used to identify a specific ruby.
-func NewTag(ctx *Context, rb Ruby) (tag string, err error) {
+// NewTag generates a new tag hash value used to identify a specific ruby.
+func NewTag(ctx *Context, rb Ruby) (tagHash string, err error) {
 	hash := fnv.New32a()
 	b := bytes.NewBufferString(fmt.Sprintf("%s%s", rb.Description, rb.Home))
 

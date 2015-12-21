@@ -39,7 +39,7 @@ var (
 		},
 	}
 	testTagLabels = []string{`211`, `179`, `1710`}
-	testTags      = []string{`3577244517`, `444332046`, `3091568265`}
+	testTagHashes = []string{`3577244517`, `444332046`, `3091568265`}
 )
 
 func init() {
@@ -52,9 +52,9 @@ func TestNewTag(t *testing.T) {
 
 	for i, rb := range testRubies {
 		rv, _ := NewTag(ctx, rb)
-		if rv != testTags[i] {
+		if rv != testTagHashes[i] {
 			t.Errorf("NewTag not returning correct value\n  want: `%v`\n  got: `%v`",
-				testTags[i],
+				testTagHashes[i],
 				rv)
 		}
 	}
@@ -65,9 +65,9 @@ func TestTagLabelToTag(t *testing.T) {
 	ctx.Registry = RubyRegistry{
 		Version: RubyRegistryVersion,
 		Rubies: RubyMap{
-			testTags[0]: testRubies[0],
-			testTags[1]: testRubies[1],
-			testTags[2]: testRubies[2],
+			testTagHashes[0]: testRubies[0],
+			testTagHashes[1]: testRubies[1],
+			testTagHashes[2]: testRubies[2],
 		},
 	}
 
@@ -83,19 +83,19 @@ func TestTagLabelToTag(t *testing.T) {
 		if err != nil {
 			t.Error("TagLabelToTag() should not return error for valid tag label")
 		}
-		if tags[testTags[i]].ID != rb.ID {
+		if tags[testTagHashes[i]].ID != rb.ID {
 			t.Errorf("TagLabelToTag() not returning correct value\n  want: `%v`\n  got: `%v`",
 				rb.ID,
-				tags[testTags[i]].ID)
+				tags[testTagHashes[i]].ID)
 		}
 	}
 }
 
 func TestTagInfoSorter(t *testing.T) {
 	ti := []tagInfo{
-		{testTags[0], testTagLabels[0]},
-		{testTags[1], testTagLabels[1]},
-		{testTags[2], testTagLabels[2]},
+		{testTagHashes[0], testTagLabels[0]},
+		{testTagHashes[1], testTagLabels[1]},
+		{testTagHashes[2], testTagLabels[2]},
 	}
 	tis := &tagInfoSorter{ti}
 
@@ -114,9 +114,9 @@ func TestTagInfoSorter(t *testing.T) {
 
 func TestSortTagsByTagLabel(t *testing.T) {
 	rubyMap := &RubyMap{
-		testTags[0]: testRubies[0],
-		testTags[1]: testRubies[1],
-		testTags[2]: testRubies[2],
+		testTagHashes[0]: testRubies[0],
+		testTagHashes[1]: testRubies[1],
+		testTagHashes[2]: testRubies[2],
 	}
 
 	expected := []string{`3091568265`, `444332046`, `3577244517`}

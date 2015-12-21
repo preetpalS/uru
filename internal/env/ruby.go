@@ -82,9 +82,9 @@ func init() {
 	KnownRubies = []string{`rbx`, `ruby`, `jruby`}
 }
 
-// CurrentRubyInfo returns the identifying tag and metadata information for the
-// ruby currently in use.
-func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
+// CurrentRubyInfo returns the internal identifying tag hash and metadata info
+// for the currently activated, registered ruby.
+func CurrentRubyInfo(ctx *Context) (tagHash string, info Ruby, err error) {
 	envPath := os.Getenv(`PATH`)
 	if envPath == `` {
 		err = errors.New("Unable to read PATH environment variable")
@@ -108,7 +108,7 @@ func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
 		}
 		for _, v := range KnownRubies {
 			tstRb := []string{curRbPath, v}
-			tag, info, err = RubyInfo(ctx, strings.Join(tstRb, string(os.PathSeparator)))
+			tagHash, info, err = RubyInfo(ctx, strings.Join(tstRb, string(os.PathSeparator)))
 			if err == nil {
 				break
 			}
@@ -126,20 +126,20 @@ func CurrentRubyInfo(ctx *Context) (tag string, info Ruby, err error) {
 		}
 		for t, ri := range tags {
 			if ri.TagLabel == `system` {
-				tag = t
+				tagHash = t
 				break
 			}
 		}
-		info = ctx.Registry.Rubies[tag]
+		info = ctx.Registry.Rubies[tagHash]
 	}
 
 	return
 }
 
-// RubyInfo returns an identifying tag and metadata information about a specific
-// ruby. It accepts a string of either the simple name of the ruby executable, or
-// the ruby executables absolute path.
-func RubyInfo(ctx *Context, ruby string) (tag string, info Ruby, err error) {
+// RubyInfo returns an internal identifying tag hash and metadata information
+// about a specific ruby. It accepts a string of either the simple name of the
+// ruby executable, or the ruby executable's absolute path.
+func RubyInfo(ctx *Context, ruby string) (tagHash string, info Ruby, err error) {
 	rb, err := exec.LookPath(ruby)
 	if err != nil {
 		return
@@ -173,7 +173,7 @@ func RubyInfo(ctx *Context, ruby string) (tag string, info Ruby, err error) {
 			info.ID = fmt.Sprintf("%s-%s", res[2], patch)
 		}
 		info.TagLabel = strings.Replace(strings.Replace(info.ID, `.`, ``, -1), `-`, ``, -1)
-		tag, err = NewTag(ctx, info)
+		tagHash, err = NewTag(ctx, info)
 		if err != nil {
 			// TODO implement
 			panic("unable to create new tag for ruby")
@@ -183,7 +183,7 @@ func RubyInfo(ctx *Context, ruby string) (tag string, info Ruby, err error) {
 		err = errors.New("unable to parse ruby name and version info")
 		return
 	}
-	log.Printf("[DEBUG] tag: %s, %+v\n", tag, info)
+	log.Printf("[DEBUG] tag hash: %s, %+v\n", tagHash, info)
 
 	return
 }

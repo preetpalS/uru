@@ -51,14 +51,14 @@ func SelectRubyFromList(tags RubyMap, label, verb string) (tagHash string, err e
 
 	// sort the tags by user provided TagLabel to enable stable iteration
 	// display of matching rubies
-	sortedTags, err := SortTagsByTagLabel(&tags)
+	sortedTagHashes, err := SortTagsByTagLabel(&tags)
 	if err != nil {
 		return ``, errors.New("error: unable to sort matching rubies")
 	}
 
 	// ask user to select from matching rubies
 	fmt.Printf("---> these rubies match your `%s` tag:\n\n", label)
-	for _, k := range sortedTags {
+	for _, k := range sortedTagHashes {
 		i++
 		choices[i] = k
 		fmt.Printf(" [%d] %-12.12s: %s\n%sHome: %s\n",

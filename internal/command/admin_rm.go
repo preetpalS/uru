@@ -57,23 +57,23 @@ func adminRemove(ctx *env.Context) {
 			os.Exit(1)
 		}
 
-		tag := ``
+		tagHash := ``
 		if len(tags) == 1 {
 			// XXX less convoluted way to get the key of a 1 element map?
 			for t, _ := range tags {
-				tag = t
+				tagHash = t
 				break
 			}
 		} else {
 			// multiple rubies match the given tag label, ask the user for the
 			// correct one.
-			tag, err = env.SelectRubyFromList(tags, tagLabel, `deregister`)
+			tagHash, err = env.SelectRubyFromList(tags, tagLabel, `deregister`)
 			if err != nil {
 				os.Exit(1)
 			}
 		}
 
-		rb := ctx.Registry.Rubies[tag]
+		rb := ctx.Registry.Rubies[tagHash]
 
 		resp, err := env.UIYesConfirm(fmt.Sprintf("\nOK to deregister `%s`?", rb.Description))
 		if err != nil {
@@ -84,7 +84,7 @@ func adminRemove(ctx *env.Context) {
 			return
 		}
 
-		delete(ctx.Registry.Rubies, tag)
+		delete(ctx.Registry.Rubies, tagHash)
 	}
 
 	err := ctx.Registry.Marshal(ctx)

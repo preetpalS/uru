@@ -38,13 +38,13 @@ func list(ctx *env.Context) {
 		}
 	}
 
-	tag, _, err := env.CurrentRubyInfo(ctx)
+	tagHash, _, err := env.CurrentRubyInfo(ctx)
 	if err != nil {
 		fmt.Printf("---> unable to list rubies; try again (%s)\n", err)
 		os.Exit(1)
 	}
 
-	sortedTags, err := env.SortTagsByTagLabel(&ctx.Registry.Rubies)
+	sortedTagHashes, err := env.SortTagsByTagLabel(&ctx.Registry.Rubies)
 	if err != nil {
 		fmt.Printf("---> unable to list sorted rubies; try again (%s)\n", err)
 		os.Exit(1)
@@ -52,10 +52,10 @@ func list(ctx *env.Context) {
 
 	var me, desc string
 	indent := fmt.Sprintf("%17.17s", ``)
-	for _, t := range sortedTags {
+	for _, t := range sortedTagHashes {
 		ri := ctx.Registry.Rubies[t]
 
-		if t == tag {
+		if t == tagHash {
 			me = `=>`
 		} else {
 			me = "  "

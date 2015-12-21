@@ -153,7 +153,7 @@ func registerRuby(ctx *env.Context, location string, tagAlias string, regType in
 		}
 	}
 
-	tag, rbInfo, err := env.RubyInfo(ctx, rbPath)
+	tagHash, rbInfo, err := env.RubyInfo(ctx, rbPath)
 	if err != nil {
 		fmt.Printf("---> Unable to register `%s` due to missing ruby info\n", rbPath)
 		return
@@ -182,7 +182,7 @@ func registerRuby(ctx *env.Context, location string, tagAlias string, regType in
 	if regType == SINGLE_REGISTRATION {
 		for t, i := range ctx.Registry.Rubies {
 			// default tag labels are the same but tag (description/home hash) is different
-			if rbInfo.TagLabel == i.TagLabel && tag != t {
+			if rbInfo.TagLabel == i.TagLabel && tagHash != t {
 				if tagAlias != `` {
 					rbInfo.TagLabel = tagAlias
 				} else {
@@ -210,7 +210,7 @@ func registerRuby(ctx *env.Context, location string, tagAlias string, regType in
 		rbInfo.GemHome = os.Getenv(`GEM_HOME`) // user configured value or empty
 	}
 
-	ctx.Registry.Rubies[tag] = rbInfo
+	ctx.Registry.Rubies[tagHash] = rbInfo
 
 	// persist the new and existing registered rubies to the filesystem
 	// XXX marshall for each --recurse invocation?

@@ -48,7 +48,7 @@ func adminRefresh(ctx *env.Context) {
 
 		rb := filepath.Join(info.Home, info.Exe)
 
-		newTag, freshInfo, err := env.RubyInfo(ctx, rb)
+		newTagHash, freshInfo, err := env.RubyInfo(ctx, rb)
 		if err != nil {
 			fmt.Printf("---> unable to refresh %s tagged as `%s`; deregistering\n",
 				info.Exe, info.TagLabel)
@@ -73,7 +73,7 @@ func adminRefresh(ctx *env.Context) {
 		}
 
 		fmt.Printf("---> refreshing %s tagged as `%s`\n", info.Exe, info.TagLabel)
-		freshRubies[newTag] = freshInfo
+		freshRubies[newTagHash] = freshInfo
 	}
 
 	log.Printf("[DEBUG] === fresh ruby metadata ===\n%+v\n", freshRubies)

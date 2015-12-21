@@ -45,23 +45,23 @@ func adminRetag(ctx *env.Context) {
 		os.Exit(1)
 	}
 
-	tag := ``
+	tagHash := ``
 	if len(tags) == 1 {
 		// XXX less convoluted way to get the key of a 1 element map?
 		for t, _ := range tags {
-			tag = t
+			tagHash = t
 			break
 		}
 	} else {
 		// multiple rubies match the given tag label, ask the user for the
 		// correct one.
-		tag, err = env.SelectRubyFromList(tags, oldLabel, `retag`)
+		tagHash, err = env.SelectRubyFromList(tags, oldLabel, `retag`)
 		if err != nil {
 			os.Exit(1)
 		}
 	}
 
-	rb := ctx.Registry.Rubies[tag]
+	rb := ctx.Registry.Rubies[tagHash]
 	origLabel := rb.TagLabel
 
 	if rsvd, word := isTagLabelReserved(newLabel); rsvd == true {
@@ -70,7 +70,7 @@ func adminRetag(ctx *env.Context) {
 	}
 
 	rb.TagLabel = newLabel
-	ctx.Registry.Rubies[tag] = rb
+	ctx.Registry.Rubies[tagHash] = rb
 
 	err = ctx.Registry.Marshal(ctx)
 	if err != nil {
