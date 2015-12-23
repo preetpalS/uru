@@ -6,8 +6,10 @@ package env
 import (
 	"io/ioutil"
 	"log"
+	"os"
 	"reflect"
 	"sort"
+	"strings"
 	"testing"
 )
 
@@ -45,6 +47,101 @@ var (
 func init() {
 	// silence any logging done in the package files
 	log.SetOutput(ioutil.Discard)
+}
+
+func TestGetUruChunk(t *testing.T) {
+	prefix := strings.Join(
+		[]string{`/fake/tool/bin`, `/bogus/app/bin`},
+		string(os.PathListSeparator))
+	uruChunk := strings.Join(
+		[]string{
+			canary[0],
+			`/fake/.gem/ruby/2.2.0/bin`, `/fake/ruby/bin`,
+			canary[1]},
+		string(os.PathListSeparator))
+	base := strings.Join(
+		[]string{`/usr/local/sbin`, `/usr/local/bin`, `/usr/sbin`, `/usr/bin`, `/sbin`},
+		string(os.PathListSeparator))
+
+	// scenario: valid uru enhanced PATH
+	actual, ok := GetUruChunk(
+		strings.Join([]string{prefix, uruChunk, base}, string(os.PathListSeparator)))
+	if ok == false {
+		t.Error("GetUruChunk() should not return false for a valid uru enhanced PATH")
+	}
+
+	if actual != uruChunk {
+		t.Errorf("GetUruChunk() not returning correct value\n  want: `%v`\n  got: `%v`",
+			uruChunk,
+			actual)
+	}
+
+	// scenario: no uru enhanced PATH (no canaries)
+	badChunk := strings.Join(
+		[]string{`/fake/.gem/ruby/2.2.0/bin`, `/fake/ruby/bin`},
+		string(os.PathListSeparator))
+	actual, ok = GetUruChunk(
+		strings.Join([]string{prefix, badChunk, base}, string(os.PathListSeparator)))
+	if ok == true {
+		t.Error("GetUruChunk() should return false for non uru enhanced PATH")
+	}
+
+	// scenario: invalid uru enhanced PATH (missing start canary)
+	badChunk = strings.Join(
+		[]string{`/fake/.gem/ruby/2.2.0/bin`, `/fake/ruby/bin`, canary[1]},
+		string(os.PathListSeparator))
+	actual, ok = GetUruChunk(
+		strings.Join([]string{prefix, badChunk, base}, string(os.PathListSeparator)))
+	if ok == true {
+		t.Error("GetUruChunk() should return false for missing start PATH canary")
+	}
+
+	// scenario: invalid uru enhanced PATH (missing stop canary)
+	badChunk = strings.Join(
+		[]string{canary[0], `/fake/.gem/ruby/2.2.0/bin`, `/fake/ruby/bin`},
+		string(os.PathListSeparator))
+	actual, ok = GetUruChunk(
+		strings.Join([]string{prefix, badChunk, base}, string(os.PathListSeparator)))
+	if ok == true {
+		t.Error("GetUruChunk() should return false for missing stop PATH canary")
+	}
+
+	// scenario: invalid uru enhanced PATH (stop before start canary sequence)
+	badChunk = strings.Join(
+		[]string{canary[1], `/fake/.gem/ruby/2.2.0/bin`, `/fake/ruby/bin`, canary[0]},
+		string(os.PathListSeparator))
+	actual, ok = GetUruChunk(
+		strings.Join([]string{prefix, badChunk, base}, string(os.PathListSeparator)))
+	if ok == true {
+		t.Error("GetUruChunk() should return false for out-of-sequence PATH canaries")
+	}
+}
+
+func TestDelUruChunk(t *testing.T) {
+	prefix := []string{`/fake/tool/bin`, `/bogus/app/bin`}
+	uruChunk := []string{
+		canary[0],
+		`/fake/.gem/ruby/2.2.0/bin`, `/fake/ruby/bin`,
+		canary[1]}
+	base := []string{`/usr/local/sbin`, `/usr/local/bin`, `/usr/sbin`, `/usr/bin`, `/sbin`}
+
+	// scenario: uru chunk at beginning of path
+	actual := DelUruChunk(
+		strings.Join(uruChunk, string(os.PathListSeparator)),
+		strings.Join(append(uruChunk, base...), string(os.PathListSeparator)))
+	if !reflect.DeepEqual(actual, base) {
+		t.Errorf("DelUruChunk() not returning correct value\n  want: `%v`\n  got: `%v`",
+			base, actual)
+	}
+
+	// scenario: uru chunk prefixed by user path mods
+	actual = DelUruChunk(
+		strings.Join(uruChunk, string(os.PathListSeparator)),
+		strings.Join(append(append(prefix, uruChunk...), base...), string(os.PathListSeparator)))
+	if !reflect.DeepEqual(actual, append(prefix, base...)) {
+		t.Errorf("DelUruChunk() not returning correct value\n  want: `%v`\n  got: `%v`",
+			append(prefix, base...), actual)
+	}
 }
 
 func TestNewTag(t *testing.T) {
