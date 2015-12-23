@@ -113,9 +113,9 @@ func winPathToNix(path *[]string) (nix []string) {
 	replacements := []string{"\\", "/", "(", "\\(", ")", "\\)", " ", "\\ "}
 
 	for _, p := range *path {
-		// pass the Canary on through untouched
-		if p == Canary {
-			nix = append(nix, Canary)
+		// pass uru's PATH canaries on through untouched
+		if p == canary[0] || p == canary[1] {
+			nix = append(nix, p)
 			continue
 		}
 

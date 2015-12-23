@@ -18,7 +18,6 @@ import (
 )
 
 const (
-	Canary              = `_U_`
 	RubyRegistryVersion = `1.0.0`
 )
 
@@ -26,8 +25,7 @@ var (
 	rbRegex, rbVerRegex, RbMajMinRegex, SysRbRegex *regexp.Regexp
 	KnownRubies                                    []string
 
-	CanaryToken = fmt.Sprintf("%s%s%s", string(os.PathListSeparator),
-		Canary, string(os.PathListSeparator))
+	canary = []string{`_U1_`, `_U2_`}
 )
 
 // The string uru uses to identify a particular Ruby is known as the ruby's
@@ -85,27 +83,35 @@ func init() {
 // CurrentRubyInfo returns the internal identifying tag hash and metadata info
 // for the currently activated, registered ruby.
 func CurrentRubyInfo(ctx *Context) (tagHash string, info Ruby, err error) {
-	envPath := os.Getenv(`PATH`)
-	if envPath == `` {
-		err = errors.New("Unable to read PATH environment variable")
+	path := os.Getenv(`PATH`)
+	if path == `` {
+		err = errors.New("Unable to read PATH envar value")
 		return
 	}
+	log.Printf("[DEBUG] CurrentRubyInfo's PATH: %q\n", path)
 
-	log.Printf("[DEBUG] CurrentRubyInfo's envPath: %q\n", envPath)
-	if strings.Index(envPath, Canary) != -1 {
-		// prepended PATH looks like this, where the GEM_HOME element is optional:
-		//   GEM_HOME;RUBY_DIR;{{Canary}};... -or- GEM_HOME:RUBY_DIR:{{Canary}}:...
-		head := strings.Split(envPath, string(os.PathListSeparator))[:3]
+	uruChunk, ok := GetUruChunk(path)
+	if ok == true {
+		// Parse out the full path for the currently activated ruby from the uru
+		// chunk extracted from the uru enhanced PATH.
+		//
+		// The uru chunk has the format
+		//
+		//     canary[0]:[GEM_HOME_BIN_DIR]:RUBY_BIN_DIR:canary[1]
+		paths := strings.Split(uruChunk, string(os.PathListSeparator))
 		var curRbPath string
-		// if the last element of the 2-element `head` slice is the Canary, then
-		// GEM_HOME wasn't prepended to PATH
-		if head[1] == Canary {
-			// scenario: RUBY_DIR;{{Canary}};... -or- RUBY_DIR:{{Canary}}:...
-			curRbPath = head[0]
-		} else {
-			// scenario: GEM_HOME;RUBY_DIR;{{Canary}};... -or- GEM_HOME:RUBY_DIR:{{Canary}}:...
-			curRbPath = head[1]
+		switch len(paths) {
+		case 4:
+			// scenario: canary[0]:GEM_HOME_BIN_DIR:RUBY_BIN_DIR:canary[1]
+			curRbPath = paths[2]
+		case 3:
+			// scenario: canary[0]:RUBY_BIN_DIR:canary[1]
+			curRbPath = paths[1]
+		default:
+			err = errors.New("Invalid uru chunk")
+			return
 		}
+		// Get metadata for currently active ruby
 		for _, v := range KnownRubies {
 			tstRb := []string{curRbPath, v}
 			tagHash, info, err = RubyInfo(ctx, strings.Join(tstRb, string(os.PathSeparator)))
@@ -114,6 +120,8 @@ func CurrentRubyInfo(ctx *Context) (tagHash string, info Ruby, err error) {
 			}
 		}
 	} else {
+		// The PATH does not include an uru chunk corresponding to an activated
+		// ruby. Check for a registered "system" ruby.
 		tags, err := TagLabelToTag(ctx, `system`)
 		if err != nil {
 			if len(ctx.Registry.Rubies) > 0 {
