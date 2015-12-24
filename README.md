@@ -50,7 +50,7 @@ Windows users may also install uru
 # uru_rt was extracted to ~/bin already on your PATH, install uru like
 $ cd ~/bin && chmod +x uru_rt
 
-# Append to ~/.profile on Ubuntu, or to ~/.zshrc on Zsh
+# Append to ~/.profile on Ubuntu, or to ~/.zshenv on Zsh
 $ echo 'eval "$(uru_rt admin install)"' >> ~/.bash_profile
 
 # [OPTIONAL] If you have a pre-existing ruby already on PATH from bash/Zsh
