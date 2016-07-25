@@ -113,6 +113,7 @@ func versionator(ctx *env.Context, dir string) (tags env.RubyMap, err error) {
 		return nil, err
 	}
 
+	// TODO support both ASCII and non-ASCII .ruby-version files
 	rbVer := string(bytes.ToLower(bytes.Trim(b, " \r\n")))
 	log.Printf("[DEBUG] .ruby-version data: %s\n", rbVer)
 
