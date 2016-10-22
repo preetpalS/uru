@@ -60,6 +60,10 @@ $ uru_rt admin add system
 
 # Restart the shell
 $ exec $SHELL --login
+
+# If the `uru` command is not available when using bash via your desktop
+# environment's terminal emulator, append this to your .bashrc file.
+$(declare -F uru > /dev/null) || eval "$(uru_rt admin install)"
 ~~~
 
 # Easy to Use
