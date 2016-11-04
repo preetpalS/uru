@@ -83,6 +83,7 @@ func CreateSwitcherScript(ctx *Context, path *[]string, gemHome string) (scriptN
 	} else {
 		content = fmt.Sprintf(script, strings.Join(*path, sep), gemHome)
 	}
+	log.Printf("[DEBUG] === CreateSwitcherScript content ===\n%#v\n", content)
 
 	_, err = f.WriteString(content)
 	if err != nil {
@@ -132,6 +133,7 @@ func winPathToNix(path *[]string) (nix []string) {
 
 		nix = append(nix, strings.Join(parts, ``))
 	}
+	log.Printf("[DEBUG] === winPathToNix path list ===\n%#v\n", nix)
 
 	return
 }
