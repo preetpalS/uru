@@ -32,7 +32,7 @@ func adminInstall(ctx *env.Context) {
 	}
 
 	// generate uru wrapper shell function on stdout for bash-on-Windows environments
-	// such as cygwin, msysgit, and msys2 bash
+	// such as cygwin, msysgit, and MSYS2 bash
 	if shlvl := os.Getenv("SHLVL"); shlvl != `` {
 		fmt.Printf(env.WinBashWrapper)
 		return

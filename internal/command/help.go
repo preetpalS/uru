@@ -45,7 +45,7 @@ func help(ctx *env.Context) {
 func printCommandSummary() {
 	keys, cmds := []string{}, *CmdRouter.Commands()
 
-	for k, _ := range cmds {
+	for k := range cmds {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
@@ -58,7 +58,7 @@ func printCommandSummary() {
 func printAdminCommandSummary() {
 	keys, cmds := []string{}, *adminRouter.Commands()
 
-	for k, _ := range cmds {
+	for k := range cmds {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)

@@ -112,9 +112,10 @@ func CurrentRubyInfo(ctx *Context) (tagHash string, info Ruby, err error) {
 			return
 		}
 		// Get metadata for currently active ruby
+		sep := string(os.PathSeparator)
 		for _, v := range KnownRubies {
 			tstRb := []string{curRbPath, v}
-			tagHash, info, err = RubyInfo(ctx, strings.Join(tstRb, string(os.PathSeparator)))
+			tagHash, info, err = RubyInfo(ctx, strings.Join(tstRb, sep))
 			if err == nil {
 				break
 			}

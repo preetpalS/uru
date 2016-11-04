@@ -29,7 +29,7 @@ func main() {
 		// Internal only option; if used, it must be the final cmd line option
 		case "--debug-uru":
 			log.SetOutput(os.Stderr)
-			args = os.Args[:(len(os.Args)-1)]
+			args = os.Args[:(len(os.Args) - 1)]
 			if len(os.Args) == 2 {
 				needHelp = true
 			}

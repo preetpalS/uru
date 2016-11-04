@@ -64,16 +64,16 @@ func CreateSwitcherScript(ctx *Context, path *[]string, gemHome string) (scriptN
 	}
 
 	// modify the bash script to suppress GEM_HOME creation when nonexistent
+	sep := string(os.PathListSeparator)
 	var content string
 	if scriptType == `bash` {
 		if gemHome != `` {
 			script = strings.Join([]string{script, "export GEM_HOME=%s\n"}, ``)
-			content = fmt.Sprintf(script, strings.Join(*path, string(os.PathListSeparator)), gemHome)
+			content = fmt.Sprintf(script, strings.Join(*path, sep), gemHome)
 		} else {
 			script = strings.Join([]string{script, "unset GEM_HOME\n"}, ``)
 
 			// morph PATH on bash-on-windows environments to *nix style
-			sep := string(os.PathListSeparator)
 			if runtime.GOOS == `windows` {
 				sep = `:`
 				*path = winPathToNix(path)
@@ -81,7 +81,7 @@ func CreateSwitcherScript(ctx *Context, path *[]string, gemHome string) (scriptN
 			content = fmt.Sprintf(script, strings.Join(*path, sep))
 		}
 	} else {
-		content = fmt.Sprintf(script, strings.Join(*path, string(os.PathListSeparator)), gemHome)
+		content = fmt.Sprintf(script, strings.Join(*path, sep), gemHome)
 	}
 
 	_, err = f.WriteString(content)

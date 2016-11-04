@@ -118,10 +118,10 @@ func DelUruChunk(uruChunk, basePath string) (cleanPath []string) {
 	tmp := strings.Split(basePath, splitStr)
 
 	if uruStartsPath {
-		cleanPath = strings.Split(tmp[1], string(os.PathListSeparator))
+		cleanPath = strings.Split(tmp[1], sep)
 	} else {
-		head := strings.Split(tmp[0], string(os.PathListSeparator))
-		tail := strings.Split(tmp[1], string(os.PathListSeparator))
+		head := strings.Split(tmp[0], sep)
+		tail := strings.Split(tmp[1], sep)
 		cleanPath = append(head, tail...)
 	}
 

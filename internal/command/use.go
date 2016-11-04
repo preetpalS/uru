@@ -48,7 +48,7 @@ func use(ctx *env.Context) {
 	tagHash := ``
 	if len(tags) == 1 {
 		// XXX less convoluted way to get the key of a 1 element map?
-		for t, _ := range tags {
+		for t := range tags {
 			tagHash = t
 			break
 		}
