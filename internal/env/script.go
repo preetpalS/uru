@@ -114,8 +114,8 @@ func winPathToNix(path *[]string) (nix []string) {
 	replacements := []string{"\\", "/", "(", "\\(", ")", "\\)", " ", "\\ "}
 
 	for _, p := range *path {
-		// pass uru's PATH canaries on through untouched
-		if p == canary[0] || p == canary[1] {
+		// pass uru's PATH canaries on through untouched when not on MSYS
+		if (p == canary[0] || p == canary[1]) && !isMsys {
 			nix = append(nix, p)
 			continue
 		}

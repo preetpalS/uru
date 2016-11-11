@@ -6,7 +6,9 @@ package env
 import (
 	"errors"
 	"fmt"
+	"os"
 	"regexp"
+	"runtime"
 )
 
 const (
@@ -15,7 +17,8 @@ const (
 )
 
 var (
-	yResp *regexp.Regexp
+	yResp  *regexp.Regexp
+	isMsys bool = (runtime.GOOS == `windows` && os.Getenv(`SHLVL`) != "")
 )
 
 func init() {

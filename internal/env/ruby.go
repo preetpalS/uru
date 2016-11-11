@@ -25,7 +25,7 @@ var (
 	rbRegex, rbVerRegex, RbMajMinRegex, SysRbRegex *regexp.Regexp
 	KnownRubies                                    []string
 
-	canary = []string{`_U1_`, `_U2_`}
+	canary = []string{`/_U1_`, `/_U2_`}
 )
 
 // The string uru uses to identify a particular Ruby is known as the ruby's
@@ -78,6 +78,11 @@ func init() {
 
 	// list of known ruby executables
 	KnownRubies = []string{`rbx`, `ruby`, `jruby`}
+
+	// modify PATH canaries when running in MSYS2 environment on Windows
+	if isMsys {
+		canary = []string{`U:\_U1_`, `U:\_U2_`}
+	}
 }
 
 // CurrentRubyInfo returns the internal identifying tag hash and metadata info
