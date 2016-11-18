@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
 	"bitbucket.org/jonforums/uru/internal/env"
 )
@@ -32,5 +33,11 @@ func adminInstall(ctx *env.Context) {
 		os.Exit(1)
 	}
 
-	fmt.Printf(env.BashWrapper)
+	switch sh := os.Getenv("SHELL"); {
+	default:
+		fmt.Printf(env.BashWrapper)
+	case strings.Contains(sh, "fish"):
+		fmt.Printf(env.FishWrapper)
+	}
+
 }

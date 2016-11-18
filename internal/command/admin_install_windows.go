@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	"bitbucket.org/jonforums/uru/internal/env"
 )
@@ -31,10 +32,15 @@ func adminInstall(ctx *env.Context) {
 		os.Exit(1)
 	}
 
-	// generate uru wrapper shell function on stdout for bash-on-Windows environments
-	// such as cygwin, msysgit, and MSYS2 bash
+	// generate uru wrapper shell function on stdout for bash-like and fish shells
+	// in Windows environments such as cygwin and MSYS2
 	if shlvl := os.Getenv("SHLVL"); shlvl != `` {
-		fmt.Printf(env.WinBashWrapper)
+		switch sh := os.Getenv("SHELL"); {
+		default:
+			fmt.Printf(env.BashWrapper)
+		case strings.Contains(sh, "fish"):
+			fmt.Printf(env.FishWrapper)
+		}
 		return
 	}
 

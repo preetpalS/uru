@@ -1,8 +1,6 @@
 // Author: Jon Maken, All Rights Reserved
 // License: 3-clause BSD
 
-// +build !windows
-
 package env
 
 var BashWrapper = `uru()
@@ -22,4 +20,18 @@ var BashWrapper = `uru()
     fi
   fi
 }
+`
+
+var FishWrapper = `function uru -d "Manage your ruby versions"
+  set -x URU_INVOKER fish
+
+  # uru_rt must already be on PATH
+  uru_rt $argv
+
+  if test -d "$URU_HOME" -a -f "$URU_HOME/uru_lackee.fish"
+    source "$URU_HOME/uru_lackee.fish"
+  else if test -f "$HOME/.uru/uru_lackee.fish"
+    source "$HOME/.uru/uru_lackee.fish"
+  end
+end
 `
