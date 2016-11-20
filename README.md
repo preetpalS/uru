@@ -41,7 +41,7 @@ Windows users may also install `uru`
 * Using the [Chocolatey][chocolatey] package manager
 * In Cygwin or MSYS2 [bash-like environments][bashonwindows] while remaining
   compatible with `cmd.exe` and `powershell` usage
-* In Fish shells on Cygwin or MSYS2 by placing `uru_rt.exe` on Fish's `PATH`
+* In [Fish shells][fish] on Cygwin or MSYS2 by placing `uru_rt.exe` on Fish's `PATH`
   and doing a one time install via `echo 'uru_rt admin install | source' >> ~/.config/fish/config.fish`
 
 
@@ -70,7 +70,7 @@ $(declare -F uru > /dev/null) || eval "$(uru_rt admin install)"
 
 Linux and OS X users may also install `uru`
 
-* In Fish shells by placing `uru_rt` on Fish's `PATH` and doing a one time
+* In [Fish shells][fish] by placing `uru_rt` on Fish's `PATH` and doing a one time
   install via `echo 'uru_rt admin install | source' >> ~/.config/fish/config.fish`
 
 # Easy to Use
@@ -154,6 +154,7 @@ Hello You!
 [examples]: https://bitbucket.org/jonforums/uru/wiki/Examples
 [chocolatey]: https://bitbucket.org/jonforums/uru/wiki/Chocolatey
 [bashonwindows]: https://bitbucket.org/jonforums/uru/wiki/BashOnWindows
+[fish]: https://bitbucket.org/jonforums/uru/wiki/FishShell
 
 [1]: https://rvm.io/
 [2]: https://github.com/sstephenson/rbenv
