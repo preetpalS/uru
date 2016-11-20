@@ -1,6 +1,6 @@
 # Unleash Ruby
 
-**Current Version:** 0.8.2  
+**Current Version:** 0.8.3  
 **News:** [latest][news]  
 **Downloads:** [latest][download]
 
@@ -14,7 +14,7 @@ provide different levels of awesomeness. In contrast, [uru][5] is a micro-kernel
 It provides a core set of minimal complexity, multi-platform ruby use enhancers.
 
 In many cases, Ruby is a multi-platform joy to use. Shouldn't your ruby environment
-manager also be multi-platform?
+manager also be?
 
 # Easy to Install
 
@@ -36,11 +36,13 @@ C:\tools>uru_rt admin install
 C:\tools>uru_rt admin add system
 ~~~
 
-Windows users may also install uru
+Windows users may also install `uru`
 
 * Using the [Chocolatey][chocolatey] package manager
 * In Cygwin or MSYS2 [bash-like environments][bashonwindows] while remaining
   compatible with `cmd.exe` and `powershell` usage
+* In Fish shells on Cygwin or MSYS2 by placing `uru_rt.exe` on Fish's `PATH`
+  and doing a one time install via `echo 'uru_rt admin install | source' >> ~/.config/fish/config.fish`
 
 
 ## Linux and OS X systems
@@ -65,6 +67,11 @@ $ exec $SHELL --login
 # environment's terminal emulator, append this to your .bashrc file.
 $(declare -F uru > /dev/null) || eval "$(uru_rt admin install)"
 ~~~
+
+Linux and OS X users may also install `uru`
+
+* In Fish shells by placing `uru_rt` on Fish's `PATH` and doing a one time
+  install via `echo 'uru_rt admin install | source' >> ~/.config/fish/config.fish`
 
 # Easy to Use
 

@@ -47,7 +47,6 @@ namespace :choco do
     FileUtils.touch("#{choco_root}/tools/uru_rt.exe.ignore")
   end
 
-  # needs to be run with admin privs
   desc 'build uru *.nupkg chocolatey package'
   task :package => [:prep, :templates] do
     Dir.chdir(choco_root) do
