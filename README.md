@@ -1,6 +1,6 @@
 # Unleash Ruby
 
-**Current Version:** 0.8.3  
+**Current Version:** 0.8.4  
 **News:** [latest][news]  
 **Downloads:** [latest][download]
 
