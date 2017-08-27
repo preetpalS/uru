@@ -109,7 +109,7 @@ if Module.constants.include?(:DEPLOY_MODE) && DEPLOY_MODE
         res = http.request(req)
         res_msg = JSON.load(res.body)
         puts '...OK' if res_msg['result']
-        abort "---> FAILED to set download defaults for #{f}" if res_msg['error']
+        abort "\n---> FAILED to set download defaults for #{f}" if res_msg['error']
       end
     end
 
