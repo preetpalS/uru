@@ -40,8 +40,9 @@ var (
 			Description: `jruby 1.7.10 (1.9.3p392) 2014-01-09 c4ecd6b on Java HotSpot(TM) 64-Bit Server VM 1.7.0_45-b18 [Windows 8-amd64]`,
 		},
 	}
-	testTagLabels = []string{`211`, `179`, `1710`}
-	testTagHashes = []string{`3577244517`, `444332046`, `3091568265`}
+	testVersionFragments = []string{`44443`, `1.7.9`, `2014-01-09`}
+	testTagLabels        = []string{`211`, `179`, `1710`}
+	testTagHashes        = []string{`3577244517`, `444332046`, `3091568265`}
 )
 
 func init() {
@@ -153,6 +154,30 @@ func TestNewTag(t *testing.T) {
 			t.Errorf("NewTag not returning correct value\n  want: `%v`\n  got: `%v`",
 				testTagHashes[i],
 				rv)
+		}
+	}
+}
+
+func TestVersionFragmentToTag(t *testing.T) {
+	ctx := NewContext()
+	ctx.Registry = RubyRegistry{
+		Version: RubyRegistryVersion,
+		Rubies: RubyMap{
+			testTagHashes[0]: testRubies[0],
+			testTagHashes[1]: testRubies[1],
+			testTagHashes[2]: testRubies[2],
+		},
+	}
+
+	for i, rb := range testRubies {
+		tags, err := VersionFragmentToTag(ctx, testVersionFragments[i])
+		if err != nil {
+			t.Error("VersionFragmentToTag() should not return error for valid tag label")
+		}
+		if tags[testTagHashes[i]].ID != rb.ID {
+			t.Errorf("VersionFragmentToTag() not returning correct value\n  want: `%v`\n  got: `%v`",
+				rb.ID,
+				tags[testTagHashes[i]].ID)
 		}
 	}
 }

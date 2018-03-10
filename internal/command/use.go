@@ -38,7 +38,7 @@ func use(ctx *env.Context) {
 		useNil(ctx)
 		os.Exit(0)
 	default:
-		tags, err = env.TagLabelToTag(ctx, cmd)
+		tags, err = env.VersionFragmentToTag(ctx, cmd)
 		if err != nil {
 			fmt.Printf("---> unable to find registered ruby matching `%s`\n", cmd)
 			os.Exit(1)

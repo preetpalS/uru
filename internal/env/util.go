@@ -138,14 +138,44 @@ func NewTag(ctx *Context, rb Ruby) (tagHash string, err error) {
 	return fmt.Sprintf("%d", hash.Sum32()), err
 }
 
+// VersionFragmentToTag returns a map of registered ruby tag's whose TagLabel or
+// Description fields fuzzy that match the given version fragment string.
+//
+// VersionFragmentToTag is less strict than its related TagLabelToTag function in
+// that it fuzzy matches first against TagLabel and then against Description.
+func VersionFragmentToTag(ctx *Context, fragment string) (tags RubyMap, err error) {
+	tags = make(RubyMap, 4)
+
+	// TODO support both ASCII and non-ASCII comparisons for both .ruby-version
+	//      files and user supplied version fragments
+	for t, ri := range ctx.Registry.Rubies {
+		switch {
+		// fuzzy match on TagLabel aka user specified version tag
+		case strings.Contains(ri.TagLabel, fragment):
+			tags[t] = ri
+		// fuzzy match on Description aka `ruby --version` string
+		case strings.Contains(ri.Description, fragment):
+			tags[t] = ri
+		}
+	}
+	if len(tags) == 0 {
+		return nil, errors.New(fmt.Sprintf("---> unable to find ruby matching `%s`\n", fragment))
+	}
+	log.Printf("[DEBUG] tags matching `%s`\n%#v\n", fragment, tags)
+
+	return
+}
+
 // TagLabelToTag returns a map of registered ruby tags whose TagLabel's match that
 // of the specified tag label string.
+//
+// TODO review for refactoring with VersionFragmentToTag
 func TagLabelToTag(ctx *Context, label string) (tags RubyMap, err error) {
 	tags = make(RubyMap, 4)
 
 	for t, ri := range ctx.Registry.Rubies {
 		switch {
-		// fuzzy match on TagLabel
+		// fuzzy match on TagLabel aka user specified version tag
 		case strings.Contains(ri.TagLabel, label):
 			tags[t] = ri
 		// full match on ID
