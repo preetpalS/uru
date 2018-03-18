@@ -38,10 +38,11 @@ C:\tools>uru_rt admin add system
 
 Windows users may also install `uru`
 
-* Using the [Chocolatey][chocolatey] package manager
-* In Cygwin or MSYS2 [bash-like environments][bashonwindows] while remaining
+* by using [Scoop][scoop] to install via `scoop install https://bitbucket.org/jonforums/uru/downloads/uru.json`
+* by using the [Chocolatey][chocolatey] package manager
+* in Cygwin or MSYS2 [bash-like environments][bashonwindows] while remaining
   compatible with `cmd.exe` and `powershell` usage
-* In [Fish shells][fish] on Cygwin or MSYS2 by placing `uru_rt.exe` on Fish's `PATH`
+* in [Fish shells][fish] on Cygwin or MSYS2 by placing `uru_rt.exe` on Fish's `PATH`
   and doing a one time install via `echo 'uru_rt admin install | source' >> ~/.config/fish/config.fish`
 
 
@@ -70,7 +71,7 @@ $(declare -F uru > /dev/null) || eval "$(uru_rt admin install)"
 
 Linux and OS X users may also install `uru`
 
-* In [Fish shells][fish] by placing `uru_rt` on Fish's `PATH` and doing a one time
+* in [Fish shells][fish] by placing `uru_rt` on Fish's `PATH` and doing a one time
   install via `echo 'uru_rt admin install | source' >> ~/.config/fish/config.fish`
 
 # Easy to Use
@@ -152,6 +153,7 @@ Hello You!
 [download]: https://bitbucket.org/jonforums/uru/wiki/Downloads
 [usage]: https://bitbucket.org/jonforums/uru/wiki/Usage
 [examples]: https://bitbucket.org/jonforums/uru/wiki/Examples
+[scoop]: https://bitbucket.org/jonforums/uru/wiki/Scoop
 [chocolatey]: https://bitbucket.org/jonforums/uru/wiki/Chocolatey
 [bashonwindows]: https://bitbucket.org/jonforums/uru/wiki/BashOnWindows
 [fish]: https://bitbucket.org/jonforums/uru/wiki/FishShell
