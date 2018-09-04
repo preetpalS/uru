@@ -7,6 +7,11 @@
     "url": "<%= data[:url] %>",
     "hash": "<%= data[:chksum] %>",
 
+    "checkver": {
+        "url": "https://bitbucket.org/jonforums/uru/downloads/",
+        "re": "uru-([\\d\\.]+)-windows-x86\\.7z"
+    },
+
     "post_install": "
         Write-Host \"---> Writing uru v<%= data[:ver] %> wrapper scripts to $(shimdir)\"
 
